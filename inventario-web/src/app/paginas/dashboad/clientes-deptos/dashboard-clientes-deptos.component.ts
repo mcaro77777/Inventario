@@ -23,8 +23,8 @@ import { ChartData, ChartOptions } from 'chart.js';
     <div class="dashboard-page">
       <header class="page-header">
         <div>
-          <h1><i class="pi pi-users"></i> Clientes y Departamentos</h1>
-          <p class="subtitle">Análisis de consumo interno</p>
+          <h1><i class="pi pi-users"></i> Consumo y análisis</h1>
+          <p class="subtitle">Quién consume, cuánto cuesta y cómo cambia en el tiempo</p>
         </div>
       </header>
 
@@ -32,25 +32,10 @@ import { ChartData, ChartOptions } from 'chart.js';
       <app-filter-bar></app-filter-bar>
 
       <section class="charts-grid">
-        <div class="chart-card">
+        <div class="chart-card chart-wide">
           <div class="chart-header">
             <div class="chart-title">
-              <h3>Consumo por Departamento (Unidades)</h3>
-              <i class="pi pi-question-circle help-icon"
-                 pTooltip="📊 ¿Qué muestra? Cantidad de unidades consumidas por cada departamento.
-
-💡 ¿Para qué sirve? Identificar qué áreas tienen mayor consumo de productos.
-
-📌 Compara con el presupuesto asignado a cada área."
-                 tooltipPosition="bottom" [escape]="false"></i>
-            </div>
-          </div>
-          <app-base-chart [title]="''" [type]="'bar'" [data]="deptoData" [options]="horizontalBarOptions"></app-base-chart>
-        </div>
-        <div class="chart-card">
-          <div class="chart-header">
-            <div class="chart-title">
-              <h3>Gasto por Departamento ($)</h3>
+              <h3>¿Qué áreas concentran el consumo valorizado?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Valor monetario del consumo por departamento.
 
@@ -65,7 +50,7 @@ import { ChartData, ChartOptions } from 'chart.js';
         <div class="chart-card chart-wide">
           <div class="chart-header">
             <div class="chart-title">
-              <h3>Tendencia de Gasto por Departamento</h3>
+              <h3>¿El consumo está creciendo o disminuyendo?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Evolución mensual del gasto de los 5 departamentos principales.
 
@@ -80,7 +65,7 @@ import { ChartData, ChartOptions } from 'chart.js';
         <div class="chart-card chart-wide">
           <div class="chart-header">
             <div class="chart-title">
-              <h3>Matriz: Departamento × Categoría (Unidades)</h3>
+              <h3>¿Qué categorías consume cada departamento?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Tabla cruzada de consumo: qué categorías consume cada departamento.
 

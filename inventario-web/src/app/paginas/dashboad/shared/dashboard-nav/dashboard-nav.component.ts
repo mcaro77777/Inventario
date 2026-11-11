@@ -183,9 +183,7 @@ export class DashboardNavComponent {
     { label:'Flujo operativo', icon:'pi pi-sync', items:[
       { label:'Movimientos', route:'movimientos', icon:'' }, { label:'Solicitudes', route:'solicitudes', icon:'' }, { label:'Compras', route:'compras', icon:'' }
     ]},
-    { label:'Análisis', icon:'pi pi-chart-bar', items:[
-      { label:'Clientes', route:'clientes-deptos', icon:'' }, { label:'Tendencias', route:'ejecutivo', icon:'' }
-    ]}
+    { label:'Consumo', icon:'pi pi-chart-bar', route:'clientes-deptos' }
   ];
 
   constructor() {

@@ -25,7 +25,7 @@ import { ChartData, ChartOptions } from 'chart.js';
       <header class="page-header">
         <div>
           <h1><i class="pi pi-shopping-cart"></i> Compras e Ingresos</h1>
-          <p class="subtitle">Control de gasto y análisis de proveedores</p>
+          <p class="subtitle">Concentración de compras, evolución y trazabilidad</p>
         </div>
       </header>
 
@@ -40,7 +40,7 @@ import { ChartData, ChartOptions } from 'chart.js';
         <div class="chart-card">
           <div class="chart-header">
             <div class="chart-title">
-              <h3>Gasto por Proveedor (Top 10)</h3>
+              <h3>¿En qué proveedores se concentra el gasto?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Los 10 proveedores con mayor gasto acumulado en el periodo.
 
@@ -52,25 +52,10 @@ import { ChartData, ChartOptions } from 'chart.js';
           </div>
           <app-base-chart [title]="''" [type]="'bar'" [data]="proveedorData" [options]="horizontalBarOptions"></app-base-chart>
         </div>
-        <div class="chart-card">
-          <div class="chart-header">
-            <div class="chart-title">
-              <h3>Distribución de Gasto por Proveedor</h3>
-              <i class="pi pi-question-circle help-icon"
-                 pTooltip="📊 ¿Qué muestra? Proporción del gasto entre los principales proveedores.
-
-💡 ¿Para qué sirve? Visualizar dependencia de proveedores específicos.
-
-📌 Alta concentración en un proveedor = mayor riesgo de desabastecimiento."
-                 tooltipPosition="bottom" [escape]="false"></i>
-            </div>
-          </div>
-          <app-base-chart [title]="''" [type]="'pie'" [data]="pieProveedorData" [options]="pieOptions"></app-base-chart>
-        </div>
         <div class="chart-card chart-wide">
           <div class="chart-header">
             <div class="chart-title">
-              <h3>Gasto Mensual por Categoría</h3>
+              <h3>¿Cómo evoluciona el gasto y qué categorías lo explican?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Evolución del gasto mensual separado por categoría de producto.
 
@@ -86,7 +71,7 @@ import { ChartData, ChartOptions } from 'chart.js';
 
       <section class="table-section">
         <div class="section-header">
-          <h3>Detalle de Ingresos</h3>
+          <h3>Detalle de compras para auditoría</h3>
           <div class="section-actions">
             <span class="count-badge">{{ ingresos.length }} registros</span>
             <button class="btn-export" (click)="exportToExcel()"><i class="pi pi-file-excel"></i> Exportar</button>

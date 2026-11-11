@@ -71,7 +71,7 @@ interface StockRow {
         <div class="chart-card">
           <div class="chart-header">
             <div class="chart-title">
-              <h3>Stock Disponible por Categoría</h3>
+              <h3>¿Dónde se concentra el stock disponible?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Cantidad de unidades disponibles agrupadas por categoría.
 
@@ -88,28 +88,11 @@ interface StockRow {
           <app-base-chart [title]="''" [type]="'bar'" [data]="barCategoriaData" [options]="barHorizontalOptions" (chartClick)="onCategoriaChartClick($event)"></app-base-chart>
         </div>
 
-        <!-- Barras: Composición de Stock -->
-        <div class="chart-card">
-          <div class="chart-header">
-            <div class="chart-title">
-              <h3>Composición de Stock</h3>
-              <i class="pi pi-question-circle help-icon"
-                 pTooltip="📊 ¿Qué muestra? Distribución del inventario en tres estados: Disponible, Reservado y Consumido.
-
-💡 ¿Para qué sirve? Entender cómo se distribuye el stock y si hay mucho comprometido en reservas.
-
-📌 Alerta: Si 'Reservado' es muy alto, podrías tener problemas de disponibilidad."
-                 tooltipPosition="bottom" [escape]="false"></i>
-            </div>
-          </div>
-          <app-base-chart [title]="''" [type]="'bar'" [data]="barComposicionData" [options]="barOptions"></app-base-chart>
-        </div>
-
         <!-- Productos Sin Movimiento (dinero estancado) -->
         <div class="chart-card">
           <div class="chart-header">
             <div class="chart-title">
-              <h3><i class="pi pi-pause-circle" style="color:#f59e0b"></i> Sin Movimiento (60+ días)</h3>
+              <h3><i class="pi pi-pause-circle" style="color:#f59e0b"></i> ¿Dónde está inmovilizado el capital?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Productos con stock que NO se han consumido en 60+ días.
 
@@ -127,7 +110,7 @@ interface StockRow {
         <div class="chart-card">
           <div class="chart-header">
             <div class="chart-title">
-              <h3><i class="pi pi-chart-pie" style="color:#3b82f6"></i> Análisis ABC (Valor Inventario)</h3>
+              <h3><i class="pi pi-chart-pie" style="color:#3b82f6"></i> ¿Qué clases requieren mayor control?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Clasificación de productos por su valor económico en el inventario.
 
@@ -152,7 +135,7 @@ interface StockRow {
       <!-- Matriz de productos -->
       <section class="matrix-section">
         <div class="section-header">
-          <h3>Matriz de Stock por Producto</h3>
+          <h3>Excepciones y cobertura por producto</h3>
           <div class="section-actions">
             <span class="count-badge">{{ stockRows.length }} productos</span>
             <button class="btn-export" (click)="exportToExcel()"><i class="pi pi-file-excel"></i> Exportar</button>

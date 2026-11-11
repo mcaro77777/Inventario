@@ -37,7 +37,7 @@ interface SolicitudRow {
       <header class="page-header">
         <div>
           <h1><i class="pi pi-inbox"></i> Solicitudes</h1>
-          <p class="subtitle">Análisis de solicitudes y consumo por departamento</p>
+          <p class="subtitle">Demanda interna, pendientes y tiempos de atención</p>
         </div>
       </header>
 
@@ -54,7 +54,7 @@ interface SolicitudRow {
         <div class="chart-card">
           <div class="chart-header">
             <div class="chart-title">
-              <h3>Top Productos Más Solicitados</h3>
+              <h3>¿Qué productos tienen mayor demanda?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Los 10 productos con mayor cantidad de unidades solicitadas y aprobadas.
 
@@ -69,22 +69,7 @@ interface SolicitudRow {
         <div class="chart-card">
           <div class="chart-header">
             <div class="chart-title">
-              <h3>Gasto por Departamento ($)</h3>
-              <i class="pi pi-question-circle help-icon"
-                 pTooltip="📊 ¿Qué muestra? Valor monetario de las solicitudes aprobadas por cada departamento.
-
-💡 ¿Para qué sirve? Controlar el presupuesto y detectar departamentos con alto consumo.
-
-📌 Útil para asignar presupuestos y negociar con proveedores."
-                 tooltipPosition="bottom" [escape]="false"></i>
-            </div>
-          </div>
-          <app-base-chart [title]="''" [type]="'bar'" [data]="gastoDeptoData" [options]="horizontalBarMoneyOptions"></app-base-chart>
-        </div>
-        <div class="chart-card">
-          <div class="chart-header">
-            <div class="chart-title">
-              <h3>Solicitudes por Departamento</h3>
+              <h3>¿Dónde se origina la carga de solicitudes?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Cantidad de solicitudes (pendientes + aprobadas) por departamento.
 
@@ -101,7 +86,7 @@ interface SolicitudRow {
       <!-- Tabla de solicitudes pendientes -->
       <section class="table-section">
         <div class="section-header">
-          <h3>Solicitudes Pendientes</h3>
+          <h3>Solicitudes que requieren atención</h3>
           <div class="section-actions">
             <span class="count-badge">{{ solicitudes.length }} solicitudes</span>
             <button class="btn-export" (click)="exportToExcel()"><i class="pi pi-file-excel"></i> Exportar</button>

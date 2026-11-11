@@ -25,8 +25,8 @@ import { ChartData, ChartOptions } from 'chart.js';
     <div class="dashboard-page">
       <header class="page-header">
         <div>
-          <h1><i class="pi pi-chart-line"></i> Movimientos y Tendencias</h1>
-          <p class="subtitle">Análisis temporal de ingresos, consumos y tendencias</p>
+          <h1><i class="pi pi-chart-line"></i> Flujo de inventario</h1>
+          <p class="subtitle">Qué entró, qué salió y qué productos explican el movimiento</p>
         </div>
       </header>
 
@@ -43,7 +43,7 @@ import { ChartData, ChartOptions } from 'chart.js';
         <div class="chart-card chart-wide">
           <div class="chart-header">
             <div class="chart-title">
-              <h3>Ingresos vs Consumos en el Tiempo</h3>
+              <h3>¿El abastecimiento acompaña al consumo?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Evolución temporal de ingresos (entradas) vs consumos (salidas).
 
@@ -56,26 +56,10 @@ import { ChartData, ChartOptions } from 'chart.js';
           <app-base-chart [title]="''" [type]="'line'" [data]="timelineData" [options]="lineOptions"></app-base-chart>
         </div>
 
-        <div class="chart-card">
+        <div class="chart-card chart-wide">
           <div class="chart-header">
             <div class="chart-title">
-              <h3>Distribución por Tipo de Movimiento</h3>
-              <i class="pi pi-question-circle help-icon"
-                 pTooltip="📊 ¿Qué muestra? Proporción de movimientos: Ingresos, Pendientes, Aprobados y Rechazados.
-
-💡 ¿Para qué sirve? Ver la composición de la actividad del inventario.
-
-📌 Muchos 'Pendientes' puede indicar cuellos de botella en aprobaciones."
-                 tooltipPosition="bottom" [escape]="false"></i>
-            </div>
-          </div>
-          <app-base-chart [title]="''" [type]="'doughnut'" [data]="tipoData" [options]="doughnutOptions"></app-base-chart>
-        </div>
-
-        <div class="chart-card">
-          <div class="chart-header">
-            <div class="chart-title">
-              <h3>Top Productos por Movimiento</h3>
+              <h3>¿Qué productos concentran la rotación?</h3>
               <i class="pi pi-question-circle help-icon"
                  pTooltip="📊 ¿Qué muestra? Los 10 productos con mayor cantidad de unidades movidas.
 
@@ -92,7 +76,7 @@ import { ChartData, ChartOptions } from 'chart.js';
       <!-- Tabla de movimientos recientes -->
       <section class="table-section">
         <div class="section-header">
-          <h3>Movimientos Recientes</h3>
+          <h3>Detalle reciente para auditoría</h3>
           <div class="section-actions">
             <span class="count-badge">{{ movimientos.length }} registros</span>
             <button class="btn-export" (click)="exportToExcel()"><i class="pi pi-file-excel"></i> Exportar</button>

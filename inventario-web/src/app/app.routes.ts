@@ -32,8 +32,8 @@ export const routes: Routes = [
       },
       {
         path: 'tabla-resumen2',
-        loadComponent: () =>
-          import('./paginas/dashboad/tabla-resumen2/tabla-resumen2.component').then(m => m.TablaResumen2Component)
+        redirectTo: 'dashboard-bi/resumen',
+        pathMatch: 'full'
       },
       // Dashboard BI (estilo Power BI)
       {
@@ -82,8 +82,8 @@ export const routes: Routes = [
           },
           {
             path: 'ejecutivo',
-            loadComponent: () =>
-              import('./paginas/dashboad/ejecutivo/dashboard-ejecutivo.component').then(m => m.DashboardEjecutivoComponent)
+            redirectTo: 'resumen',
+            pathMatch: 'full'
           }
         ]
       },
