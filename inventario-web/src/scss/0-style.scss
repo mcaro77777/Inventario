@@ -1,0 +1,196 @@
+@use '1-tokens'                   as *;
+@use '2-layout'                   as *;
+@use '3-navbar'                   as *;
+@use '4-componentes.primeng'      as *;
+@use '5-componentes.primeng.dark' as *;
+@use '7-dialogos'                 as *;
+@use '8-formulario'               as *;
+
+/* ============================================================================
+   Comfort: menos brillo global en paneles, formularios e inputs (modo claro)
+   ========================================================================== */
+   body.light-comfort:not(.dark-theme){
+    /* Paneles y tarjetas */
+    .panel,
+    .mantenedor-form,
+    .mantenedor-table2{
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+      border-color: var(--border-soft);
+      box-shadow: var(--shadow-1);
+    }
+  
+    /* Headers más mates */
+    .panel-header,
+    .card-header{
+      background: linear-gradient(180deg,
+                   color-mix(in oklab, var(--panel-top) 88%, transparent),
+                   var(--panel-bot));
+      border-bottom: 1px solid var(--border-soft);
+      box-shadow: none;
+    }
+  
+    /* Inputs y selects: menos “glass” */
+    .p-inputtext,
+    .form-control,
+    .p-dropdown,
+    .p-select{
+      background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+      border-color: var(--border-soft);
+      box-shadow: var(--inner-emboss), 0 4px 10px rgba(16,24,40,.05);
+    }
+  
+    /* Foco menos intrusivo (pero visible) */
+    .p-inputtext:enabled:focus,
+    .form-control:focus,
+    .p-dropdown.p-focus,
+    .p-select.p-focus{
+      outline: none;
+      border-color: color-mix(in oklab, var(--accent-2) 65%, var(--border-soft));
+      box-shadow:
+        inset 0 1px 2px rgba(0,0,0,.04),
+        0 0 0 2px var(--focus-ring);
+    }
+  
+    /* Tipografía apenas mayor para lectura */
+    font-size: 15.5px;
+  }
+  
+  
+  /* =========================
+     Toast PrimeNG: texto negro SOLO en modo claro
+     ========================= */
+     body:not(.dark-theme) {
+      /* Para temas recientes que usan CSS variables */
+      --p-toast-text-color: #0f172a;
+      --p-toast-icon-color: #0f172a;
+      --p-toast-close-icon-color: #0f172a;
+    }
+    
+    /* Para todos los temas (más específico que el tema base) */
+    body:not(.dark-theme) .p-toast .p-toast-message,
+    body:not(.dark-theme) .p-toast .p-toast-message .p-toast-message-content,
+    body:not(.dark-theme) .p-toast .p-toast-message .p-toast-message-text,
+    body:not(.dark-theme) .p-toast .p-toast-message .p-toast-summary,
+    body:not(.dark-theme) .p-toast .p-toast-message .p-toast-detail,
+    body:not(.dark-theme) .p-toast .p-toast-message .p-toast-message-detail,
+    body:not(.dark-theme) .p-toast .p-toast-message .p-toast-message-icon,
+    body:not(.dark-theme) .p-toast .p-toast-icon-close {
+      color: #0f172a !important;
+    }
+    
+    /* Asegurar todas las variantes */
+    body:not(.dark-theme) .p-toast .p-toast-message-error,
+    body:not(.dark-theme) .p-toast .p-toast-message-warn,
+    body:not(.dark-theme) .p-toast .p-toast-message-info,
+    body:not(.dark-theme) .p-toast .p-toast-message-success {
+      color: #0f172a !important;
+    }
+    
+    /* Por si hay estilos internos que siguen imponiendo blanco */
+    body:not(.dark-theme) .p-toast .p-toast-message .p-toast-message-text > *,
+    body:not(.dark-theme) .p-toast .p-toast-message .p-toast-message-content * {
+      color: #0f172a !important;
+    }
+
+/* ============================================================================
+   Listbox highlight fix para modo oscuro (filtros dashboard)
+   ========================================================================== */
+body.dark-theme .p-listbox li.p-highlight,
+body.dark-theme .p-listbox li[aria-selected="true"],
+body.dark-theme .p-listbox .p-listbox-item.p-highlight,
+body.dark-theme .p-listbox .p-listbox-option.p-highlight,
+body.dark-theme .p-listbox [data-pc-section="option"].p-highlight,
+body.dark-theme .p-listbox [data-pc-section="option"][aria-selected="true"] {
+  background: #10b981 !important;
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+}
+body.dark-theme .p-listbox li.p-highlight *,
+body.dark-theme .p-listbox li[aria-selected="true"] *,
+body.dark-theme .p-listbox .p-listbox-item.p-highlight *,
+body.dark-theme .p-listbox .p-listbox-option.p-highlight *,
+body.dark-theme .p-listbox [data-pc-section="option"].p-highlight *,
+body.dark-theme .p-listbox [data-pc-section="option"][aria-selected="true"] * {
+  color: #ffffff !important;
+}
+
+/* Botones outlined en modo oscuro */
+body.dark-theme .p-button-outlined,
+body.dark-theme .p-button.p-button-outlined {
+  color: #ffffff !important;
+  border-color: rgba(255,255,255,0.3) !important;
+}
+body.dark-theme .p-button-outlined .p-button-label,
+body.dark-theme .p-button-outlined .p-button-icon {
+  color: #ffffff !important;
+}
+
+/* Botones bookmark/granularity (Día, Semana, Mes, 7 días, etc) en modo oscuro */
+body.dark-theme .bookmark-btns button,
+body.dark-theme .granularity-btns button,
+body.dark-theme .bookmark-btn {
+  color: #ffffff !important;
+  background: transparent !important;
+  border-color: rgba(255,255,255,0.2) !important;
+}
+body.dark-theme .bookmark-btns button.active,
+body.dark-theme .granularity-btns button.active,
+body.dark-theme .bookmark-btn.active {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  border-color: #10b981 !important;
+}
+
+/* Texto blanco en headers de dashboard en modo oscuro */
+body.dark-theme .dashboard-header h1,
+body.dark-theme .dashboard-header h2,
+body.dark-theme .dashboard-header .subtitle,
+body.dark-theme .dashboard-header p,
+body.dark-theme .header-actions,
+body.dark-theme .header-actions label,
+body.dark-theme .header-actions span {
+  color: #ffffff !important;
+}
+
+/* Texto blanco general en modo oscuro - dashboard */
+body.dark-theme .page-header h1,
+body.dark-theme .page-header h2,
+body.dark-theme .page-header .subtitle,
+body.dark-theme .page-header p,
+body.dark-theme .chart-header h3,
+body.dark-theme .chart-header span,
+body.dark-theme .chart-hint,
+body.dark-theme .kpi-card,
+body.dark-theme .kpi-label,
+body.dark-theme .kpi-value,
+body.dark-theme .filter-label,
+body.dark-theme .period-label,
+body.dark-theme .filter-chip,
+body.dark-theme .active-filters span,
+body.dark-theme label,
+body.dark-theme .p-checkbox-label,
+body.dark-theme .p-radiobutton-label,
+body.dark-theme .chart-card h3,
+body.dark-theme .chart-card span,
+body.dark-theme .chart-card label,
+body.dark-theme .card-header,
+body.dark-theme .card-title,
+body.dark-theme .section-title,
+body.dark-theme .panel-title {
+  color: #ffffff !important;
+}
+
+/* Checkboxes y toggles en modo oscuro */
+body.dark-theme .p-checkbox .p-checkbox-label,
+body.dark-theme .p-togglebutton .p-button-label,
+body.dark-theme .p-selectbutton .p-button-label {
+  color: #ffffff !important;
+}
+
+/* Botón btn-nav en modo oscuro */
+body.dark-theme .btn-nav {
+  color: #ffffff !important;
+}
+body.dark-theme .btn-nav i {
+  color: #ffffff !important;
+}

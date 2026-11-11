@@ -1,0 +1,19 @@
+/* Checkbox nativo y p-checkbox en modo claro */
+body:not(.dark-theme) .mantenedor-form .form-label > input[type="checkbox"]{
+  appearance:none; width:14px; height:14px; margin-right:.5rem;
+  border:1.5px solid var(--border-soft); border-radius:3px; background:#fff;
+  position:relative; vertical-align:middle;
+}
+body:not(.dark-theme) .mantenedor-form .form-label > input[type="checkbox"]:checked::after{
+  content:""; position:absolute; left:3px; top:0px; width:4px; height:8px;
+  border:2px solid var(--accent-2); border-top:0; border-left:0; transform: rotate(45deg);
+}
+body:not(.dark-theme) .mantenedor-form .p-checkbox .p-checkbox-box{
+  background:#fff !important; border:1.5px solid var(--border-soft) !important; border-radius:3px;
+}
+body:not(.dark-theme) .mantenedor-form .p-checkbox.p-highlight .p-checkbox-box{
+  background:#fff !important; border-color: var(--accent-2) !important;
+}
+body:not(.dark-theme) .mantenedor-form .p-checkbox .p-checkbox-box .p-checkbox-icon{
+  color: var(--accent-2) !important;
+}

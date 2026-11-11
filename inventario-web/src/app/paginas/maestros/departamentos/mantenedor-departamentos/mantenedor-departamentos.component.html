@@ -1,0 +1,72 @@
+<main>
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
+  <!-- Barra de acciones -->
+  <div class="actions-bar">
+    <div class="actions-left">
+      <button pButton type="button" class="btn-strong-amber" icon="pi pi-plus" label="Nuevo" (click)="modoCrear()"></button>
+      <button pButton type="button" class="btn-strong-green" icon="pi pi-file-excel" label="Exportar a Excel" (click)="exportarExcel()"></button>
+      <button pButton type="button" class="btn-strong-navy" icon="pi pi-filter-slash" label="Limpiar Filtros" (click)="clearFilters()"></button>
+    </div>
+    <span class="total-registros" *ngIf="dt">
+      Total de registros: {{ dt.filteredValue?.length ?? items().length }}
+    </span>
+  </div>
+    <p-dialog header="Departamento" [(visible)]="showDialog" [modal]="true" [closable]="true" [closeOnEscape]="true" [draggable]="false" [resizable]="false" (onHide)="cancelar()" [style]="{width:'50vw'}" [breakpoints]="{ '960px':'85vw', '640px':'95vw' }" styleClass="app-dialog">
+      <p-progressBar *ngIf="saving()" mode="indeterminate" style="height: 4px; margin: 0 0 .5rem 0;"></p-progressBar>
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        <div class="form-grid" *ngIf="formHabilitado()">
+          <div class="form-field">
+            <label>Nombre<span class="required-asterisk">*</span></label>
+            <input pInputText class="p-inputtext-sm" formControlName="nombre" />
+          </div>
+        </div>
+
+    <input type="hidden" formControlName="id" />
+
+    <div class="botones-form flex flex-wrap gap-2" style="margin-top:0.5rem;">
+      <button *ngIf="formHabilitado() && form.value.id === 0" pButton type="submit" class="p-button-sm btn-strong-navy" [disabled]="saving()" label="Guardar" icon="pi pi-save"></button>
+      <button *ngIf="formHabilitado() && form.value.id !== 0" pButton type="submit" class="p-button-sm btn-strong-navy" [disabled]="saving()" label="Actualizar" icon="pi pi-refresh"></button>
+      <button *ngIf="formHabilitado() && form.value.id !== 0" pButton type="button" class="p-button-sm btn-strong-red" [disabled]="saving()" label="Eliminar" icon="pi pi-trash" (click)="eliminarSeleccionado()"></button>
+      <button *ngIf="formHabilitado()" pButton type="button" class="p-button-secondary p-button-sm" [disabled]="saving()" label="Cancelar" icon="pi pi-times" (click)="cancelar()"></button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Tabla -->
+<p-progressBar *ngIf="loading()" mode="indeterminate" style="height: 6px; margin: .25rem 0 .5rem 0;"></p-progressBar>
+<div class="col-12">
+  <p-table #dt [value]="items()" dataKey="id" scrollable="true" [virtualScroll]="true"
+    [virtualScrollOptions]="{ itemSize: 48, scrollHeight: 'calc(100vh - 220px)' }" [rows]="30" [virtualScrollDelay]="0"
+           sortMode="multiple" selectionMode="single" [selection]="seleccionado()" (selectionChange)="seleccionado.set($event)"
+           [size]="'small'" [rowHover]="true" styleClass="mantenedor-datatable p-datatable-sm"
+           [loading]="loading()" (onRowSelect)="seleccionar($event.data)">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+      </tr>
+      <tr>
+        <th>
+          <input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar nombre" (click)="$event.stopPropagation()"
+                 (input)="dt.filter($any($event.target).value, 'nombre', 'contains')" />
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr [pSelectableRow]="row" [ngClass]="{'fila-seleccionada': (seleccionado()?.id) === row.id}">
+        <td>{{ row.nombre }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="1" class="text-center">No hay registros encontrados.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+</main>

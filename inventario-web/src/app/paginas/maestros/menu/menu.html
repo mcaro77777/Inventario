@@ -1,0 +1,98 @@
+
+<div class="mantenedores-dashboard is-compact">
+  <!-- ===== HERO / Cabecera ===== -->
+  <section class="dashboard-header drone-hero" aria-labelledby="home-title">
+    <h1 class="dashboard-title" id="home-title">
+      <svg class="svg-icon" width="28" height="28" aria-hidden="true"><use href="#i-building"></use></svg>
+      Maestros
+    </h1>
+    <p class="dashboard-subtitle">
+      Administra y organiza perfiles.
+    </p>
+  </section>
+
+  <!-- ===== Buscador + Toggle ===== -->
+  <div class="search-section">
+    <div class="search-container" role="search">
+      <span class="search-icon" aria-hidden="true">🔎</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Buscar opción"
+        [(ngModel)]="searchTerm"
+        (input)="filterOptions()"
+        aria-label="Buscar en maestros"
+      />
+    </div>
+
+    <div class="view-toggle" role="tablist" aria-label="Modo de vista">
+      <button class="toggle-btn"
+              [class.active]="viewMode==='grid'"
+              [class.accent-active]="viewMode==='grid'"
+              role="tab" [attr.aria-selected]="viewMode==='grid'"
+              (click)="setView('grid')">
+        <svg class="nav-svg" width="16" height="16" aria-hidden="true"><use href="#i-clipboard"></use></svg>
+        <span>Grid</span>
+      </button>
+      <button class="toggle-btn"
+              [class.active]="viewMode==='list'"
+              [class.accent-active]="viewMode==='list'"
+              role="tab" [attr.aria-selected]="viewMode==='list'"
+              (click)="setView('list')">
+        <svg class="nav-svg" width="16" height="16" aria-hidden="true"><use href="#i-mail"></use></svg>
+        <span>Lista</span>
+      </button>
+    </div>
+
+    <!-- Acento Azul / Verde -->
+    <button class="nav-item accent-toggle" (click)="toggleAccent()" aria-label="Cambiar tema de color">
+      <span class="accent-dot blue" [class.active]="accent==='blue'"></span>
+      <span class="accent-label">Azul</span>
+      <span class="accent-dot green" [class.active]="accent==='green'"></span>
+      <span class="accent-label">Verde</span>
+    </button>
+
+    <!-- Modo Confort -->
+    <button class="nav-item comfort-toggle"
+            (click)="toggleComfort()"
+            [class.active]="comfortMode"
+            [attr.aria-pressed]="comfortMode"
+            aria-label="Alternar modo confort">
+      <svg class="nav-svg" width="16" height="16" aria-hidden="true"><use href="#i-sun"></use></svg>
+      <span>Confort</span>
+    </button>
+  </div>
+
+  <!-- ===== Secciones / Categorías ===== -->
+  <div class="categories-container" [ngClass]="{'grid-view': viewMode==='grid', 'list-view': viewMode==='list'}">
+    <!-- Maestros -->
+    <section class="category-section" *ngIf="hasCategoryOptions('maestros')" aria-labelledby="maestros-title">
+      <h2 class="category-title" id="maestros-title">
+        <span class="category-icon" aria-hidden="true">🧩</span>
+        Maestros
+      </h2>
+      <div class="options-grid">
+        <article class="maintenance-option"
+                 *ngFor="let opt of getOptionsByCategory('maestros')"
+                 (click)="open(opt)"
+                 (keyup.enter)="open(opt)"
+                 tabindex="0"
+                 role="button"
+                 [attr.aria-label]="opt.title">
+          <div class="option-icon">
+            <ng-container *ngIf="opt.iconId; else emojiIcon">
+              <svg class="svg-icon" width="28" height="28" aria-hidden="true">
+                <use [attr.href]="'#' + opt.iconId"></use>
+              </svg>
+            </ng-container>
+            <ng-template #emojiIcon>
+              <span class="emoji-icon" aria-hidden="true">{{ opt.icon || '📋' }}</span>
+            </ng-template>
+          </div>
+          <h3>{{ opt.title }}</h3>
+          <p>{{ opt.description }}</p>
+        </article>
+      </div>
+    </section>
+  </div>
+</div>

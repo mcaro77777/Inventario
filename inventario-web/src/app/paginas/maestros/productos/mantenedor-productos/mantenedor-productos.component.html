@@ -1,0 +1,128 @@
+<main>
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
+  <!-- Barra de acciones -->
+  <div class="actions-bar">
+    <div class="actions-left">
+      <button pButton type="button" class="btn-strong-amber" icon="pi pi-plus" label="Nuevo" (click)="modoCrear()"></button>
+      <button pButton type="button" class="btn-strong-green" icon="pi pi-file-excel" label="Exportar a Excel" (click)="exportarExcel()"></button>
+      <button pButton type="button" class="btn-strong-navy" icon="pi pi-filter-slash" label="Limpiar Filtros" (click)="clearFilters()"></button>
+    </div>
+    <span class="total-registros" *ngIf="dt">
+      Total de registros: {{ dt.filteredValue?.length ?? (productos() ? productos().length : 0) }}
+    </span>
+  </div>
+
+  <!-- ❶ Formulario de producto en diálogo -->
+  <p-dialog header="Producto" [(visible)]="showDialog" [modal]="true" [closable]="true" [closeOnEscape]="true" [draggable]="false" [resizable]="false" [maximizable]="false" (onHide)="cancelar()" [style]="{width:'60vw'}" [breakpoints]="{ '960px':'85vw', '640px':'95vw' }" styleClass="app-dialog">
+    <p-progressBar *ngIf="saving()" mode="indeterminate" style="height: 4px; margin: 0 0 .5rem 0;"></p-progressBar>
+    <form [formGroup]="productoForm" (ngSubmit)="guardar()">
+      <div class="form-grid" *ngIf="formHabilitado()">
+        <div class="form-field">
+          <label>Nombre<span class="required-asterisk">*</span></label>
+          <input pInputText class="p-inputtext-sm" formControlName="nombre" />
+        </div>
+        <div class="form-field">
+          <label>SKU</label>
+          <input pInputText class="p-inputtext-sm" formControlName="sku" />
+        </div>
+        <div class="form-field">
+          <label>Categoría</label>
+          <p-select [styleClass]="'p-inputtext-sm'" formControlName="categoria" [options]="categorias()" optionLabel="nombre" optionValue="id"
+            [filter]="true" filterPlaceholder="Buscar..." placeholder="Seleccione categoría"
+            showClear="true" appendTo="body"></p-select>
+        </div>
+        <div class="form-field">
+          <label>Unidad de Medida</label>
+          <p-select [styleClass]="'p-inputtext-sm'" formControlName="unidadMedida" [options]="unidades()" optionLabel="descripcion" optionValue="id"
+            [filter]="true" filterPlaceholder="Buscar..." placeholder="Seleccione unidad"
+            showClear="true" appendTo="body"></p-select>
+        </div>
+        <div class="form-field">
+          <label>Marca</label>
+          <input pInputText class="p-inputtext-sm" formControlName="marca" />
+        </div>
+        <div class="form-field">
+          <label>Modelo</label>
+          <input pInputText class="p-inputtext-sm" formControlName="modelo" />
+        </div>
+        <div class="form-field">
+          <label>Stock Mínimo</label>
+          <p-inputNumber formControlName="stockMinimo" mode="decimal" inputId="stockMin" [inputStyleClass]="'p-inputtext-sm'"></p-inputNumber>
+        </div>
+        <div class="form-field">
+          <label>Proveedor habitual</label>
+          <p-select [styleClass]="'p-inputtext-sm'" formControlName="proveedor" [options]="proveedores()" optionLabel="nombre" optionValue="id"
+            placeholder="Seleccione proveedor" [filter]="true" filterPlaceholder="Buscar..."
+            showClear="true" appendTo="body"></p-select>
+        </div>
+      </div>
+      <input type="hidden" formControlName="id" />
+
+      <div class="flex-row flex-wrap" style="margin-top:1rem; gap: 0.75rem;">
+        <button *ngIf="formHabilitado() && productoForm.value.id===0" pButton type="submit" label="Guardar" class="p-button-sm btn-strong-navy"
+          [disabled]="saving()" icon="pi pi-save"></button>
+        <button *ngIf="formHabilitado() && productoForm.value.id!==0" pButton type="submit" label="Actualizar" class="p-button-sm btn-strong-navy"
+          icon="pi pi-refresh" [disabled]="saving() || !formHabilitado() || productoForm.value.id===0">
+        </button>
+        <button *ngIf="formHabilitado() && productoForm.value.id!==0" pButton type="button" label="Eliminar" icon="pi pi-trash"
+          class="p-button-sm btn-strong-red" [disabled]="saving()" (click)="confirmarEliminar()"></button>
+        <button *ngIf="formHabilitado()" pButton type="button" label="Cancelar" icon="pi pi-times"
+          class="p-button-secondary p-button-sm" [disabled]="saving()" (click)="cancelar()"></button>
+      </div>
+    </form>
+  </p-dialog>
+
+  <!-- Indicador de carga -->
+  <p-progressBar *ngIf="loading()" mode="indeterminate" style="height: 6px; margin: .25rem 0 .5rem 0;"></p-progressBar>
+
+  <!-- Tabla productos (estructura y ajustes como stock) -->
+  <p-table #dt [selection]="productoSeleccionado()" (selectionChange)="productoSeleccionado.set($event)" [value]="productos()" dataKey="id_producto" scrollable="true" styleClass="mantenedor-datatable p-datatable-sm"
+    [virtualScroll]="true" [virtualScrollItemSize]="40" [scrollHeight]="'calc(100vh - 220px)'" [rows]="50"
+    [virtualScrollDelay]="0" sortMode="multiple" selectionMode="single" [size]="'small'" [rowHover]="true"
+    [loading]="loading()"
+    (onRowSelect)="seleccionarProducto($event.data)">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+        <th pSortableColumn="sku">SKU <p-sortIcon field="sku"></p-sortIcon></th>
+        <th pSortableColumn="categoriaNombre">Categoría <p-sortIcon field="id_category"></p-sortIcon></th>
+        <th pSortableColumn="unidad_medida">Unidad de Medida <p-sortIcon field="id_unidad_medida"></p-sortIcon></th>
+        <th pSortableColumn="marca">Marca <p-sortIcon field="marca"></p-sortIcon></th>
+        <th pSortableColumn="modelo">Modelo <p-sortIcon field="modelo"></p-sortIcon></th>
+        <th pSortableColumn="stockMinimo">Stock Mínimo <p-sortIcon field="stockMinimo"></p-sortIcon></th>
+      </tr>
+      <tr>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value,'nombre','contains')" /></th>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value,'sku','contains')" /></th>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value,'categoriaNombre','contains')" /></th>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value,'unidad_medida','contains')" /></th>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value,'marca','contains')" /></th>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value,'modelo','contains')" /></th>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value,'stockMinimo','contains')" /></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr [pSelectableRow]="row" [ngClass]="{'fila-seleccionada': productoSeleccionado === row}">
+        <td>{{row.nombre}}</td>
+        <td>{{row.sku}}</td>
+        <td>{{row.categoriaNombre}}</td>
+        <td>{{row.unidad_medida}}</td>
+        <td>{{row.marca}}</td>
+        <td>{{row.modelo}}</td>
+        <td>{{row.stockMinimo}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+</main>

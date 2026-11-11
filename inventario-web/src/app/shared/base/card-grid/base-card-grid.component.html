@@ -1,0 +1,24 @@
+<div class="stats">
+  <div class="stat" *ngFor="let s of items" (click)="itemClick.emit(s)" style="cursor:pointer">
+    <div class="icon" [attr.data-color]="s.colorKey">
+      <i [class]="s.icon"></i>
+    </div>
+
+    <div class="info">
+      <span class="label">{{ s.label }}</span>
+      <div class="value-row">
+        <ng-container *ngIf="s.value !== 'Cargando…'; else skeleton">
+          <h3>{{ s.value }}</h3>
+        </ng-container>
+        <ng-template #skeleton>
+          <div class="skeleton skeleton-text" aria-hidden="true"></div>
+        </ng-template>
+
+        <span class="trend" *ngIf="s.trend" [ngClass]="s.trend === 'Error' ? 'down' : (s.trendPositive ? 'up' : 'down')">
+          <i class="pi" [ngClass]="s.trend === 'Error' ? 'pi-times' : (s.trendPositive ? 'pi-arrow-up' : 'pi-arrow-down')"></i>
+          {{ s.trend }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

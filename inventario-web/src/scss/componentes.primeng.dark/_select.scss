@@ -1,0 +1,222 @@
+/* PrimeNG Select/Dropdown: estilo oscuro en modo dark */
+
+/* Controles cerrados (trigger) */
+body.dark-theme .p-select,
+body.dark-theme .p-dropdown{
+  /* Fondo oscuro base suavizado */
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--f-bg) 80%, #ffffff 20%),
+    color-mix(in oklab, var(--f-bg-2) 80%, #ffffff 20%)
+  );
+  /* Borde/relieve futurista: doble capa para simular marco iluminado */
+  border: 1px solid transparent;
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+  background-image:
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--f-bg) 80%, #ffffff 20%),
+      color-mix(in oklab, var(--f-bg-2) 80%, #ffffff 20%)
+    ),
+    linear-gradient(135deg,
+      color-mix(in oklab, var(--f-border) 35%, transparent) 0%,
+      color-mix(in oklab, rgb(var(--accent-rgb)) 10%, transparent) 50%,
+      color-mix(in oklab, var(--f-border) 35%, transparent) 100%);
+  color: var(--f-text);
+  /* Relieve interior más claro */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.18);
+  position: relative;
+  transition: box-shadow .18s ease, filter .18s ease;
+}
+body.dark-theme .p-select .p-select-label,
+body.dark-theme .p-dropdown .p-dropdown-label{ color: #ffffff !important; }
+body.dark-theme .p-select .p-select-label:not(.p-placeholder),
+body.dark-theme .p-dropdown .p-dropdown-label:not(.p-placeholder){ color: #ffffff !important; }
+body.dark-theme .p-select span[data-pc-section="label"],
+body.dark-theme .p-dropdown span[data-pc-section="label"]{ color: #ffffff !important; }
+
+/* Esquinas con highlights sutiles (reflejos) */
+body.dark-theme .p-select::after,
+body.dark-theme .p-dropdown::after{
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  background:
+    radial-gradient(12px 12px at 0 0, rgba(255,255,255,.07), transparent 62%),
+    radial-gradient(12px 12px at 100% 0, rgba(255,255,255,.05), transparent 62%),
+    radial-gradient(12px 12px at 0 100%, rgba(255,255,255,.05), transparent 62%),
+    radial-gradient(12px 12px at 100% 100%, rgba(255,255,255,.07), transparent 62%);
+}
+
+/* Hover: leve halo exterior del color de acento */
+body.dark-theme .p-select:hover,
+body.dark-theme .p-dropdown:hover{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16), inset 0 -1px 0 rgba(0,0,0,.28),
+    0 0 0 2px color-mix(in oklab, rgb(var(--accent-rgb)) 12%, transparent);
+}
+
+/* Focus: anillo visible y borde más brillante */
+body.dark-theme .p-select.p-focus,
+body.dark-theme .p-dropdown.p-focus{
+  filter: brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18), inset 0 -1px 0 rgba(0,0,0,.28),
+    0 0 0 2px color-mix(in oklab, rgb(var(--accent-rgb)) 14%, transparent),
+    0 0 0 4px color-mix(in oklab, rgb(var(--accent-rgb)) 06%, transparent);
+}
+
+/* Disabled: sin halo y menos contraste */
+body.dark-theme .p-select.p-disabled,
+body.dark-theme .p-dropdown.p-disabled,
+body.dark-theme .p-select[aria-disabled="true"],
+body.dark-theme .p-dropdown[aria-disabled="true"]{
+  filter: grayscale(.1) brightness(.96);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04), inset 0 -1px 0 rgba(0,0,0,.3) !important;
+}
+
+/* Paneles de overlay: fondo oscuro y texto claro */
+body.dark-theme .p-connected-overlay,
+body.dark-theme .p-connected-overlay > .p-component,
+body.dark-theme .p-select-panel,
+body.dark-theme .p-dropdown-panel{
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--f-bg) 78%, #ffffff 22%),
+    color-mix(in oklab, var(--f-bg-2) 78%, #ffffff 22%)
+  ) !important;
+  color: var(--f-text) !important;
+  border: 1px solid var(--f-border) !important;
+  --p-overlay-content-background: var(--f-bg) !important;
+  --p-overlay-content-color: var(--f-text) !important;
+  --p-content-background: var(--f-bg) !important;
+  --p-content-color: var(--f-text) !important;
+}
+
+/* Cabecera y filtro del panel */
+body.dark-theme .p-select-panel .p-select-header,
+body.dark-theme .p-dropdown-panel .p-dropdown-header{
+  background: linear-gradient(180deg, var(--f-bg), var(--f-bg-2)) !important;
+  border-bottom: 1px solid var(--f-border) !important;
+}
+body.dark-theme .p-select-panel .p-select-filter,
+body.dark-theme .p-dropdown-panel .p-dropdown-filter{
+  color: var(--f-text) !important;
+  background: linear-gradient(180deg, var(--f-bg), var(--f-bg-2)) !important;
+  border: 1px solid var(--f-border) !important;
+}
+body.dark-theme .p-select-panel .p-select-filter::placeholder,
+body.dark-theme .p-dropdown-panel .p-dropdown-filter::placeholder{ color: var(--f-muted) !important; }
+
+/* Listas y opciones */
+body.dark-theme .p-select-panel ul[role="listbox"],
+body.dark-theme .p-dropdown-panel ul[role="listbox"],
+body.dark-theme .p-select-panel .p-select-list,
+body.dark-theme .p-dropdown-panel .p-dropdown-items{
+  background: linear-gradient(180deg, var(--f-bg), var(--f-bg-2)) !important;
+  color: var(--f-text) !important;
+}
+body.dark-theme .p-select-panel .p-select-option,
+body.dark-theme .p-dropdown-panel .p-dropdown-item{
+  background: transparent !important;
+  color: var(--f-text) !important;
+}
+body.dark-theme .p-select-panel .p-select-option *,
+body.dark-theme .p-dropdown-panel .p-dropdown-item *{ color: var(--f-text) !important; }
+
+/* Hover y seleccionado */
+body.dark-theme .p-select-panel .p-select-option:not(.p-highlight):hover,
+body.dark-theme .p-dropdown-panel .p-dropdown-item:not(.p-highlight):hover{
+  background: color-mix(in oklab, rgb(var(--accent-rgb)) 12%, var(--f-bg-2)) !important;
+}
+body.dark-theme .p-select-panel .p-select-option.p-highlight,
+body.dark-theme .p-dropdown-panel .p-dropdown-item.p-highlight{
+  background: color-mix(in oklab, rgb(var(--accent-rgb)) 18%, var(--f-bg-2)) !important;
+  color: var(--f-text) !important;
+}
+
+/* PrimeNG 20 (data-pc-*) */
+body.dark-theme [data-pc-name="select"][data-pc-section="panel"],
+body.dark-theme .p-connected-overlay [data-pc-name="select"][data-pc-section="panel"]{
+  background: linear-gradient(180deg, var(--f-bg), var(--f-bg-2)) !important;
+  color: var(--f-text) !important;
+  border: 1px solid var(--f-border) !important;
+}
+body.dark-theme [data-pc-name="select"][data-pc-section="content"],
+body.dark-theme [data-pc-name="select"][data-pc-section="items"],
+body.dark-theme [data-pc-name="select"][data-pc-section="list"]{
+  background: linear-gradient(180deg, var(--f-bg), var(--f-bg-2)) !important;
+  color: var(--f-text) !important;
+}
+body.dark-theme [data-pc-name="select"][data-pc-section="header"]{
+  background: linear-gradient(180deg, var(--f-bg), var(--f-bg-2)) !important;
+  border-bottom: 1px solid var(--f-border) !important;
+}
+body.dark-theme [data-pc-name="select"][data-pc-section="filter"]{
+  color: var(--f-text) !important;
+  background: linear-gradient(180deg, var(--f-bg), var(--f-bg-2)) !important;
+  border:1px solid var(--f-border) !important;
+}
+body.dark-theme [data-pc-name="select"][data-pc-section="option"],
+body.dark-theme [data-pc-name="select"][data-pc-section="option"] *,
+body.dark-theme [data-pc-name="select"][data-pc-section="optionlabel"],
+body.dark-theme [data-pc-name="select"][data-pc-section="optioncontent"]{
+  color: var(--f-text) !important;
+}
+body.dark-theme [data-pc-name="select"][data-pc-section="option"]:not(.p-highlight):hover{
+  background: color-mix(in oklab, rgb(var(--accent-rgb)) 12%, var(--f-bg-2)) !important;
+}
+body.dark-theme [data-pc-name="select"][data-pc-section="option"].p-highlight{
+  background: color-mix(in oklab, rgb(var(--accent-rgb)) 18%, var(--f-bg-2)) !important;
+  color: var(--f-text) !important;
+}
+
+/* ========================================================================= */
+/* Overrides específicos: selects con clase 'pill-select' (look blanco/verde) */
+/* Aplica a p-select / p-dropdown cuando se pasa [styleClass]="'pill-select'"   */
+/* ========================================================================= */
+body.dark-theme .pill-select.p-select,
+body.dark-theme .pill-select.p-dropdown{
+  background: #ffffff !important;
+  background-image: none !important; /* anular gradientes del dark */
+  color: #2e7d32 !important;
+  border: 2px solid #2e7d32 !important;
+  border-radius: 9999px !important;
+  box-shadow: none !important;
+}
+body.dark-theme .pill-select.p-select .p-select-label,
+body.dark-theme .pill-select.p-dropdown .p-dropdown-label{
+  color: #2e7d32 !important;
+  font-weight: 700;
+}
+body.dark-theme .pill-select.p-select .p-select-trigger,
+body.dark-theme .pill-select.p-dropdown .p-dropdown-trigger{
+  color: #2e7d32 !important;
+}
+body.dark-theme .pill-select.p-select.p-focus,
+body.dark-theme .pill-select.p-dropdown.p-focus{
+  box-shadow: 0 0 0 2px rgba(46,125,50,0.25) !important;
+  filter: none !important;
+}
+/* Disabled: mantener estilo pill sin desaturar */
+body.dark-theme .pill-select.p-select.p-disabled,
+body.dark-theme .pill-select.p-dropdown.p-disabled{
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* ========================================================================= */
+/* Fix: asegurar que el texto seleccionado sea visible en modo oscuro        */
+/* ========================================================================= */
+body.dark-theme .p-select .p-select-label,
+body.dark-theme .p-select [data-pc-section="label"],
+body.dark-theme .p-select-label,
+body.dark-theme .p-dropdown .p-dropdown-label,
+body.dark-theme .p-dropdown [data-pc-section="label"],
+body.dark-theme .p-dropdown-label {
+  color: #ffffff !important;
+}
+body.dark-theme .p-select .p-select-label.p-placeholder,
+body.dark-theme .p-dropdown .p-dropdown-label.p-placeholder {
+  color: rgba(255,255,255,0.6) !important;
+}

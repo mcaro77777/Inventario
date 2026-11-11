@@ -1,0 +1,6 @@
+.env
+.dev-uploads/
+inventario-api
+coverage.out
+ClientApp/*
+!ClientApp/README.md

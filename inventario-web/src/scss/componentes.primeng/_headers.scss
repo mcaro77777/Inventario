@@ -1,0 +1,13 @@
+/* Headers compactos en formularios y listas */
+.mantenedor-form > .panel-header,
+.mantenedor-table2 > .panel-header{
+  padding:6px 10px !important; min-height:34px; gap:8px;
+}
+.mantenedor-form > .panel-header .panel-title,
+.mantenedor-table2 > .panel-header .panel-title{
+  margin:0; line-height:1.2; font-size: var(--fs-1);
+}
+.mantenedor-form > .panel-header .panel-actions .btn,
+.mantenedor-table2 > .panel-header .panel-actions .btn{
+  padding:6px 10px; height:28px; line-height:1; font-size:12px; border-radius:10px;
+}

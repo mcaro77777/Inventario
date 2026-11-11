@@ -1,0 +1,126 @@
+<p-toast />
+
+<main>
+  <!-- ─── Selector de perfil ─── -->
+  <div class="perfil-selector">
+    <label class="selector-title">Perfil:</label>
+    <div class="perfil-radio-group">
+      @for (p of listaPerfiles(); track p.id) {
+        <div class="perfil-radio-item">
+          <p-radioButton
+            name="perfil"
+            [value]="p"
+            [ngModel]="perfilSeleccionado()"
+            (ngModelChange)="seleccionarPerfil($event)" />
+          <label>{{ p.nombre }}</label>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- ─── Barra de acciones ─── -->
+  <div class="actions-bar">
+    <div class="actions-left">
+      <p-button
+        icon="pi pi-filter-slash"
+        label="Limpiar Filtros"
+        styleClass="btn-strong-navy"
+        (onClick)="limpiarFiltros()"
+        [disabled]="loading()" />
+      <p-button
+        icon="pi pi-save"
+        label="Guardar Cambios"
+        styleClass="btn-strong-green"
+        (onClick)="guardarCambios()"
+        [disabled]="!perfilSeleccionado() || loading()" />
+    </div>
+    <span class="total-registros" style="font-size: 0.85rem; color: #64748b;">
+      @if (perfilSeleccionado()) {
+        Total de permisos: {{ listaPermisos().length }}
+      }
+    </span>
+  </div>
+
+  <!-- ─── Tabla de permisos ─── -->
+  <div class="tabla-wrapper">
+    @if (loading()) {
+      <div class="spinner-overlay">
+        <p-progressSpinner />
+      </div>
+    }
+
+    <p-table
+      #dt
+      [value]="listaPermisos()"
+      [paginator]="false"
+      dataKey="id_permiso"
+      scrollable
+      scrollHeight="calc(100vh - 280px)"
+      [virtualScroll]="true"
+      [virtualScrollItemSize]="46"
+      [size]="'small'"
+      sortMode="multiple"
+      styleClass="mantenedor-datatable p-datatable-sm">
+
+      <!-- Cabecera -->
+      <ng-template pTemplate="header">
+        <tr>
+          @for (col of columns; track col.field) {
+            <th [pSortableColumn]="col.field">
+              {{ col.header }}
+              <p-sortIcon [field]="col.field" />
+            </th>
+          }
+        </tr>
+
+        <!-- Fila de filtros -->
+        <tr class="filter-row">
+          @for (col of columns; track col.field) {
+            <th>
+              @if (col.filterType === 'multiSelect') {
+                <p-multiSelect
+                  [options]="filterOpts()[col.field]"
+                  [ngModel]="seleccionFiltro()[col.field]"
+                  (ngModelChange)="aplicarFiltro(col.field, $event)"
+                  [placeholder]="col.header"
+                  styleClass="w-full" />
+              }
+              @if (col.filterType === 'text') {
+                <input pInputText
+                       class="w-full p-inputtext-sm"
+                       [ngModel]="seleccionFiltro()[col.field]"
+                       (ngModelChange)="aplicarFiltro(col.field, $event)"
+                       [placeholder]="col.header" />
+              }
+            </th>
+          }
+        </tr>
+      </ng-template>
+
+      <!-- Cuerpo -->
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{ row.recurso }}</td>
+          <td>{{ row.tipo }}</td>
+          <td>{{ row.descripcion }}</td>
+          <td style="text-align: center;">
+            <p-checkbox [ngModel]="row.asignado" [binary]="true" (ngModelChange)="toggleAsignado(row)" />
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- Sin datos -->
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="columns.length" class="text-center">
+            @if (!perfilSeleccionado()) {
+              Seleccione un perfil para ver sus permisos
+            } @else {
+              Sin registros
+            }
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</main>

@@ -1,0 +1,229 @@
+<main>
+  <!-- Toasts + ConfirmDialog -->
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
+  <!-- Barra de acciones -->
+  <div class="actions-bar">
+    <div class="actions-left">
+      <button pButton type="button" class="btn-strong-amber" icon="pi pi-plus" label="Nuevo" (click)="modoCrear()"></button>
+      <button pButton type="button" class="btn-strong-green" icon="pi pi-file-excel" label="Exportar a Excel" (click)="exportarExcel()"></button>
+      <button pButton type="button" class="btn-strong-navy" icon="pi pi-filter-slash" label="Limpiar Filtros" (click)="clearFilters()"></button>
+    </div>
+    <span class="total-registros" *ngIf="dt">
+      Total de registros: {{ dt.filteredValue?.length ?? proveedores().length }}
+    </span>
+  </div>
+
+  <!-- Formulario de proveedor en diálogo -->
+  <p-dialog header="Proveedor" [(visible)]="showDialog" [modal]="true" [closable]="true" [closeOnEscape]="true" [draggable]="false" [resizable]="false" [maximizable]="false" (onHide)="cancelar()" [style]="{width:'60vw'}" [breakpoints]="{ '960px':'85vw', '640px':'95vw' }" styleClass="app-dialog">
+  <p-progressBar *ngIf="saving()" mode="indeterminate" style="height: 4px; margin: 0 0 .5rem 0;"></p-progressBar>
+  <form [formGroup]="proveedorForm" (ngSubmit)="guardar()">
+
+    <div class="form-grid" *ngIf="formHabilitado()">
+      <!-- Nombre -->
+      <div class="form-field">
+        <label>Nombre<span class="required-asterisk">*</span></label>
+        <input
+          pInputText class="p-inputtext-sm"
+          formControlName="nombre"
+          />
+      </div>
+
+      <!-- RUT — solo formato “1–2 dígitos . 3 dígitos . 3 dígitos – DV” -->
+      <div class="form-field">
+        <label>RUT<span class="required-asterisk">*</span></label>
+        <input
+          pInputText class="p-inputtext-sm"
+          formControlName="rut"
+          placeholder="12.701.164-1"
+
+          (blur)="onRutBlur()" />
+        <small
+          *ngIf="rutControl?.errors?.['rutFormato'] && rutControl?.touched"
+          class="p-error">
+          Formato inválido, debe ser “12.345.678-5”
+        </small>
+        <small
+          *ngIf="rutControl?.errors?.['rutDigito'] && rutControl?.touched"
+          class="p-error">
+          Dígito verificador incorrecto
+        </small>
+      </div>
+
+      <!-- Teléfono -->
+      <div class="form-field">
+        <label>Teléfono<span class="required-asterisk">*</span></label>
+        <p-inputMask
+          formControlName="telefono"
+          mask="999999999"
+          slotChar=""
+          placeholder="999999999"
+         >
+        </p-inputMask>
+
+        <small
+          *ngIf="proveedorForm.get('telefono')?.invalid && proveedorForm.get('telefono')?.touched"
+          class="p-error">
+          Teléfono inválido, debe tener 9 dígitos numéricos
+        </small>
+      </div>
+
+      <!-- Tipo proveedor -->
+      <div class="form-field">
+        <label>Tipo</label>
+        <p-select
+          formControlName="tipoProveedor"
+          [options]="tiposProveedor"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccione tipo"
+          [appendTo]="'body'"
+          [styleClass]="'p-inputtext-sm'"
+          [filter]="true"
+          filterPlaceholder="Buscar..."
+          showClear="true"
+         >
+        </p-select>
+      </div>
+    </div>
+
+    <input type="hidden" formControlName="id" />
+
+    <!-- Botones de acción (sin 'Nuevo' aquí) -->
+    <div class="botones-form flex-row flex-wrap" style="margin-top:1rem; gap: 0.75rem;">
+      <button
+        *ngIf="formHabilitado() && proveedorForm.value.id === 0"
+        pButton class="p-button-sm btn-strong-navy"
+        type="submit"
+        label="Guardar"
+        [disabled]="saving()"
+        icon="pi pi-save">
+      </button>
+
+      <button
+        *ngIf="formHabilitado() && proveedorForm.value.id !== 0"
+        pButton class="p-button-sm btn-strong-navy"
+        type="submit"
+        label="Actualizar"
+        [disabled]="saving()"
+        icon="pi pi-refresh">
+      </button>
+
+      <button
+        *ngIf="formHabilitado() && proveedorForm.value.id !== 0"
+        pButton class="p-button-sm btn-strong-red"
+        type="button"
+        label="Eliminar"
+        icon="pi pi-trash"
+        [disabled]="saving()"
+        (click)="confirmarEliminar()">
+      </button>
+
+      <button
+        *ngIf="formHabilitado()"
+        pButton class="p-button-secondary p-button-sm"
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        [disabled]="saving()"
+        (click)="cancelar()">
+      </button>
+    </div>
+  </form>
+  </p-dialog>
+
+  <!-- Indicador de carga -->
+  <p-progressBar *ngIf="loading()" mode="indeterminate" style="height: 6px; margin: .25rem 0 .5rem 0;"></p-progressBar>
+
+  <!-- Tabla de proveedores -->
+  <p-table
+    #dt
+    [value]="proveedores()"
+    dataKey="id"
+    scrollable="true"
+    [virtualScroll]="true"
+    [virtualScrollItemSize]="40"
+    [scrollHeight]="'calc(100vh - 220px)'"
+    [rows]="50"
+    [virtualScrollDelay]="0"
+    [size]="'small'" [rowHover]="true"
+    sortMode="multiple"
+    styleClass="mantenedor-datatable p-datatable-sm"
+    selectionMode="single"
+    [selection]="proveedorSeleccionado()"
+    [loading]="loading()"
+    (selectionChange)="proveedorSeleccionado.set($event)"
+    (onRowSelect)="seleccionarProveedor($event.data)">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="nombre">
+          Nombre <p-sortIcon field="nombre"></p-sortIcon>
+        </th>
+        <th pSortableColumn="rut">
+          RUT <p-sortIcon field="rut"></p-sortIcon>
+        </th>
+        <th pSortableColumn="telefono">
+          Teléfono <p-sortIcon field="telefono"></p-sortIcon>
+        </th>
+        <th pSortableColumn="tipoProveedor">
+          Tipo <p-sortIcon field="tipoProveedor"></p-sortIcon>
+        </th>
+      </tr>
+      <tr>
+        <th>
+          <input
+            pInputText
+            class="w-full p-inputtext-sm"
+            placeholder="Filtrar nombre"
+            (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value, 'nombre', 'contains')" />
+        </th>
+        <th>
+          <input
+            pInputText
+            class="w-full p-inputtext-sm"
+            placeholder="Filtrar RUT"
+            (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value, 'rut', 'contains')" />
+        </th>
+        <th>
+          <input
+            pInputText
+            class="w-full p-inputtext-sm"
+            placeholder="Filtrar teléfono"
+            (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value, 'telefono', 'contains')" />
+        </th>
+        <th>
+          <input
+            pInputText
+            class="w-full p-inputtext-sm"
+            placeholder="Filtrar tipo"
+            (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value, 'tipoProveedor', 'contains')" />
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr
+        [pSelectableRow]="row"
+        [ngClass]="{ 'fila-seleccionada': (proveedorSeleccionado()?.id) === row.id }">
+        <td>{{ row.nombre }}</td>
+        <td>{{ row.rut }}</td>
+        <td>{{ row.telefono }}</td>
+        <td>{{ row.tipoProveedor }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4" class="text-center">
+          No hay registros encontrados.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</main>

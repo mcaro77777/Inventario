@@ -1,0 +1,151 @@
+<p-toast></p-toast>
+
+  <p-confirmDialog></p-confirmDialog>
+
+<!-- Barra de acciones -->
+<div class="actions-bar">
+  <div class="actions-left">
+    <button pButton type="button" class="btn-strong-amber" icon="pi pi-plus" label="Nuevo" (click)="modoCrear()"></button>
+    <button pButton type="button" class="btn-strong-green" icon="pi pi-file-excel" label="Exportar a Excel" (click)="exportarExcel()"></button>
+    <button pButton type="button" class="btn-strong-navy" icon="pi pi-filter-slash" label="Limpiar Filtros" (click)="clearFilters()"></button>
+  </div>
+  <span class="total-registros" *ngIf="dt">
+    Total de registros: {{ dt.filteredValue?.length ?? clientes().length }}
+  </span>
+</div>
+
+<!-- Formulario de cliente en diálogo -->
+<p-dialog header="Cliente" [(visible)]="showDialog" [modal]="true" [closable]="true" [closeOnEscape]="true" [draggable]="false" [resizable]="false" [maximizable]="false" (onHide)="cancelar()" [style]="{width:'60vw'}" [breakpoints]="{ '960px':'85vw', '640px':'95vw' }" styleClass="app-dialog">
+  <p-progressBar *ngIf="saving()" mode="indeterminate" style="height: 4px; margin: 0 0 .5rem 0;"></p-progressBar>
+  <form [formGroup]="clienteForm" (ngSubmit)="guardar()">
+    <div class="form-grid" *ngIf="formHabilitado()">
+      <div class="form-field">
+        <label>Nombre<span class="required-asterisk">*</span></label>
+        <input pInputText class="p-inputtext-sm" formControlName="nombre" />
+      </div>
+      <div class="form-field">
+        <label>RUT</label>
+        <input pInputText class="p-inputtext-sm" formControlName="rut" [ngClass]="{'ng-invalid': clienteForm.get('rut')?.hasError('rutDuplicado')}" />
+        <small class="p-error" *ngIf="clienteForm.get('rut')?.hasError('rutDuplicado')">
+          Ya existe un cliente con este RUT.
+        </small>
+      </div>
+
+      <div class="form-field">
+        <label>Usuario<span class="required-asterisk">*</span></label>
+        <input pInputText class="p-inputtext-sm" formControlName="usuario" />
+      </div>
+
+      <div class="form-field">
+        <label>Clave<span class="required-asterisk">*</span></label>
+        <input pInputText class="p-inputtext-sm" type="password" formControlName="clave" />
+      </div>
+
+      <div class="form-field">
+        <label>Perfil</label>
+        <p-select
+          [options]="perfiles"
+          optionLabel="nombre"
+          optionValue="id"
+          placeholder="Seleccione"
+          formControlName="id_perfil"
+          [appendTo]="'body'"
+          [styleClass]="'p-inputtext-sm'"
+          [filter]="true"
+          filterPlaceholder="Buscar..."
+          showClear="true">
+        </p-select>
+      </div>
+
+      <div class="form-field">
+        <label>Departamento<span class="required-asterisk">*</span></label>
+        <p-select
+          [options]="departamentos"
+          optionLabel="nombre"
+          optionValue="id"
+          placeholder="Seleccione"
+          formControlName="id_departamento"
+          [appendTo]="'body'"
+          [styleClass]="'p-inputtext-sm'"
+          [filter]="true"
+          filterPlaceholder="Buscar..."
+          showClear="true">
+        </p-select>
+      </div>
+
+    </div>
+
+    <input type="hidden" formControlName="id" />
+
+    <!-- Botones de acción (sin 'Nuevo' aquí) -->
+    <div class="botones-form flex flex-wrap gap-2" style="margin-top:0.5rem;">
+      <button *ngIf="formHabilitado() && clienteForm.value.id === 0" pButton class="p-button-sm btn-strong-navy" type="submit" label="Guardar"
+        [disabled]="saving()" icon="pi pi-save"></button>
+
+      <button *ngIf="formHabilitado() && clienteForm.value.id !== 0" pButton class="p-button-sm btn-strong-navy" type="submit" label="Actualizar"
+        [disabled]="saving()" icon="pi pi-refresh"></button>
+
+      <button *ngIf="formHabilitado() && clienteForm.value.id !== 0" pButton type="button" label="Eliminar"
+        [disabled]="saving()" icon="pi pi-trash" class="p-button-sm btn-strong-red" (click)="confirmarEliminar()"></button>
+
+      <button *ngIf="formHabilitado()" pButton type="button" label="Cancelar" icon="pi pi-times"
+        class="p-button-secondary p-button-sm" [disabled]="saving()" (click)="cancelar()"></button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Indicador de carga -->
+<p-progressBar *ngIf="loading()" mode="indeterminate" style="height: 6px; margin: .25rem 0 .5rem 0;"></p-progressBar>
+
+<!-- Tabla de clientes con virtual scroll y filtros -->
+<div class="col-12">
+  <p-table #dt [value]="clientes()" dataKey="id" scrollable="true" [virtualScroll]="true"
+    [virtualScrollOptions]="{ itemSize: 48, scrollHeight: 'calc(100vh - 220px)' }" [rows]="30" [virtualScrollDelay]="0"
+    sortMode="multiple" selectionMode="single" [selection]="clienteSeleccionado()" (selectionChange)="clienteSeleccionado.set($event)"
+    [size]="'small'" [rowHover]="true" styleClass="mantenedor-datatable p-datatable-sm"
+    [loading]="loading()"
+    [globalFilterFields]="['nombre','rut','usuario','id_perfil','id_departamento']" (onRowSelect)="seleccionarCliente($event.data)">
+
+    <!-- Encabezado -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+        <th pSortableColumn="rut">RUT <p-sortIcon field="rut"></p-sortIcon></th>
+        <th pSortableColumn="usuario">Usuario <p-sortIcon field="usuario"></p-sortIcon></th>
+        <th pSortableColumn="id_perfil">Perfil <p-sortIcon field="id_perfil"></p-sortIcon></th>
+        <th pSortableColumn="id_departamento">Departamento <p-sortIcon field="id_departamento"></p-sortIcon></th>
+      </tr>
+      <!-- Filtros -->
+      <tr>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar nombre" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value, 'nombre', 'contains')" /></th>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar RUT" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value, 'rut', 'contains')" /></th>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar usuario" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value, 'usuario', 'contains')" /></th>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar perfil" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value, 'nombrePerfil', 'contains')" /></th>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar departamento" (click)="$event.stopPropagation()"
+            (input)="dt.filter($any($event.target).value, 'nombreDepartamento', 'contains')" /></th>
+      </tr>
+    </ng-template>
+
+    <!-- Cuerpo -->
+    <ng-template pTemplate="body" let-row>
+      <tr [pSelectableRow]="row" [ngClass]="{'fila-seleccionada': (clienteSeleccionado()?.id) === row.id}">
+        <td>{{ row.nombre }}</td>
+        <td>{{ row.rut }}</td>
+        <td>{{ row.usuario }}</td>
+        <td>{{ nombrePerfil(row.id_perfil) }}</td>
+        <td>{{ nombreDepartamento(row.id_departamento) }}</td>
+      </tr>
+    </ng-template>
+
+    <!-- Mensaje vacío -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center">No hay registros encontrados.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

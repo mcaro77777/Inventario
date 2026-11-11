@@ -1,0 +1,57 @@
+/* Helpers de layout de formulario: ancho por caracteres (w-ch) y stretch */
+
+/* =====================  w-ch (ancho real por caracteres)  ====================
+   Recupera el comportamiento previo: sin mínimo de 220px y cálculo en 1em
+   para que los campos queden más “generosos” visualmente.
+   -------------------------------------------------------------------------- */
+.form-field.w-ch{
+  justify-self: start;   /* legacy/inofensivo con flex */
+  --ch: 20;              /* default 20ch (override inline con style="--ch:N") */
+  width: max-content;    /* quita el clamp y usa el ancho real del control */
+}
+
+/* El control interno adopta el ancho por caracteres + padding (24px) */
+.form-field.w-ch input,
+.form-field.w-ch select,
+.form-field.w-ch textarea{
+  width: calc(var(--ch) * 1em + 24px);
+}
+
+/* Grupos de radios: usar contenedor .radio-group para adoptar el ancho por caracteres */
+.form-field.w-ch .radio-group{
+  width: calc(var(--ch) * 1em + 24px);
+}
+
+/* PrimeNG: aplicar w-ch a selects (p-dropdown / p-select) */
+.form-field.w-ch .p-dropdown,
+.form-field.w-ch .p-select{
+  width: calc(var(--ch) * 1em + 24px) !important; /* ganar a width:100% de p-fluid */
+  min-width: 0;  /* evitar clamps del tema */
+}
+/* Asegurar que el contenido no force el ancho más allá del calculado */
+.form-field.w-ch .p-dropdown .p-dropdown-label,
+.form-field.w-ch .p-select .p-select-label{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Estirar (ocupar toda la fila) — útil para textareas o combos largos */
+.form-field.-stretch{
+  flex: 1 1 100%;
+  width: 100%;
+}
+
+/* Helpers opcionales por escala (si prefieres clases en vez de style="--ch") */
+.form-field.w-ch-6  { --ch: 6;  width: max-content; }
+.form-field.w-ch-8  { --ch: 8;  width: max-content; }
+.form-field.w-ch-10 { --ch: 10; width: max-content; }
+.form-field.w-ch-12 { --ch: 12; width: max-content; }
+.form-field.w-ch-16 { --ch: 16; width: max-content; }
+.form-field.w-ch-20 { --ch: 20; width: max-content; }
+.form-field.w-ch-30 { --ch: 30; width: max-content; }
+
+/* (Opcional) si usas w-ch en filtros de p-table */
+.p-datatable .filters-row .form-field.w-ch{
+  width: max-content;
+}

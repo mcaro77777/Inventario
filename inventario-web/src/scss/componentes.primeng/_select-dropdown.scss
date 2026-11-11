@@ -1,0 +1,176 @@
+// Global compact styling for PrimeNG p-select components
+// Applies smaller font sizes, heights, and paddings to make selects look more compact app-wide.
+
+// Base select control
+.p-select {
+  min-height: 16px; // ultra compact height
+
+  .p-select-label {
+    font-size: .76rem !important; // force ultra small label text
+    padding: .02rem .08rem !important; // tighter padding
+    line-height: 2.5;
+  }
+.body:not(.dark-theme) .header-mini-fields .pill-select.p-select,
+body:not(.dark-theme) .header-mini-fields .pill-select.p-dropdown,
+body:not(.dark-theme) .pill-select.p-select,
+body:not(.dark-theme) .pill-select.p-dropdown {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #2e7d32 !important;
+  border: 2px solid #2e7d32 !important;
+  border-radius: 9999px !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+/* Ultra-específico: host element p-select con clases generadas por PrimeNG */
+body:not(.dark-theme) .header-mini-fields p-select.p-select.pill-select.p-component.p-inputwrapper,
+body:not(.dark-theme) .form-field p-select.p-select.pill-select.p-component.p-inputwrapper,
+body:not(.dark-theme) p-select.p-select.pill-select.p-component.p-inputwrapper {
+  background: #ffffff !important;
+  border: 2px solid #2e7d32 !important;
+  border-radius: 9999px !important;
+  color: #2e7d32 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* PrimeNG 20+ root selectors to out-specify theme rules */
+.pill-select[data-pc-name="select"][data-pc-section="root"],
+.pill-select[data-pc-name="dropdown"][data-pc-section="root"],
+.header-mini-fields .pill-select[data-pc-name="select"][data-pc-section="root"],
+.header-mini-fields .pill-select[data-pc-name="dropdown"][data-pc-section="root"] {
+  background: #ffffff !important;
+  border: 2px solid #2e7d32 !important;
+  border-radius: 9999px !important;
+  color: #2e7d32 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.pill-select[data-pc-name="select"][data-pc-section="root"].p-focus,
+.pill-select[data-pc-name="dropdown"][data-pc-section="root"].p-focus {
+  box-shadow: 0 0 0 2px rgba(46,125,50,0.25) !important;
+  outline: none !important;
+}
+.pill-select[data-pc-name="select"][data-pc-section="root"]:focus-within,
+.pill-select[data-pc-name="dropdown"][data-pc-section="root"]:focus-within {
+  box-shadow: 0 0 0 2px rgba(46,125,50,0.25) !important;
+  outline: none !important;
+}
+
+/* Wrapper focus states (PrimeNG adds these): keep green halo and border */
+.pill-select.p-inputwrapper-focus,
+.pill-select.p-focus,
+.header-mini-fields .pill-select.p-inputwrapper-focus,
+.header-mini-fields .pill-select.p-focus {
+  border-color: #2e7d32 !important;
+  box-shadow: 0 0 0 2px rgba(46,125,50,0.25) !important;
+  outline: none !important;
+}
+/* Remove any inner outline inside pill */
+.pill-select *:focus,
+.pill-select *:focus-visible { outline: none !important; }
+
+/* ==========================================================
+   Pill white/green style (light mode) for selects/dropdowns
+   Apply with [styleClass]="'pill-select'" on p-select/p-dropdown
+   ========================================================== */
+.header-mini-fields .pill-select.p-select,
+.header-mini-fields .pill-select.p-dropdown,
+.pill-select.p-select,
+.pill-select.p-dropdown {
+  background: #ffffff !important;
+  background-image: none !important; /* remove any gradients */
+  color: #2e7d32 !important;            /* green text */
+  border: 2px solid #2e7d32 !important; /* green border */
+  border-radius: 9999px !important;     /* pill shape */
+  box-shadow: none !important;
+  outline: none !important;
+}
+.header-mini-fields .pill-select.p-select .p-select-label,
+.header-mini-fields .pill-select.p-dropdown .p-dropdown-label,
+.pill-select.p-select .p-select-label,
+.pill-select.p-dropdown .p-dropdown-label {
+  color: #2e7d32 !important;
+  font-weight: 700;
+}
+.header-mini-fields .pill-select.p-select .p-select-trigger,
+.header-mini-fields .pill-select.p-dropdown .p-dropdown-trigger,
+.pill-select.p-select .p-select-trigger,
+.pill-select.p-dropdown .p-dropdown-trigger { color: #2e7d32 !important; }
+body:not(.dark-theme) .header-mini-fields .pill-select.p-select .p-select-label,
+body:not(.dark-theme) .header-mini-fields .pill-select.p-dropdown .p-dropdown-label,
+body:not(.dark-theme) .pill-select.p-select .p-select-label,
+body:not(.dark-theme) .pill-select.p-dropdown .p-dropdown-label { color: #2e7d32 !important; font-weight: 700; }
+body:not(.dark-theme) .header-mini-fields .pill-select.p-select .p-select-trigger,
+body:not(.dark-theme) .header-mini-fields .pill-select.p-dropdown .p-dropdown-trigger,
+body:not(.dark-theme) .pill-select.p-select .p-select-trigger,
+body:not(.dark-theme) .pill-select.p-dropdown .p-dropdown-trigger { color: #2e7d32 !important; }
+.header-mini-fields .pill-select.p-select.p-focus,
+.header-mini-fields .pill-select.p-dropdown.p-focus,
+.pill-select.p-select.p-focus,
+.pill-select.p-dropdown.p-focus {
+  box-shadow: 0 0 0 2px rgba(46,125,50,0.25) !important; /* green halo */
+  outline: none !important;
+}
+body:not(.dark-theme) .header-mini-fields .pill-select.p-select.p-focus,
+body:not(.dark-theme) .header-mini-fields .pill-select.p-dropdown.p-focus,
+body:not(.dark-theme) .pill-select.p-select.p-focus,
+body:not(.dark-theme) .pill-select.p-dropdown.p-focus { box-shadow: 0 0 0 2px rgba(46,125,50,0.25) !important; outline:none !important; }
+.header-mini-fields .pill-select.p-select.p-disabled,
+.header-mini-fields .pill-select.p-dropdown.p-disabled,
+.pill-select.p-select.p-disabled,
+.pill-select.p-dropdown.p-disabled,
+.pill-select.p-select[aria-disabled="true"],
+.pill-select.p-dropdown[aria-disabled="true"] {
+  filter: none !important;
+  opacity: 1 !important;
+}
+body:not(.dark-theme) .header-mini-fields .pill-select.p-select.p-disabled,
+body:not(.dark-theme) .header-mini-fields .pill-select.p-dropdown.p-disabled,
+body:not(.dark-theme) .pill-select.p-select.p-disabled,
+body:not(.dark-theme) .pill-select.p-dropdown.p-disabled,
+body:not(.dark-theme) .pill-select.p-select[aria-disabled="true"],
+body:not(.dark-theme) .pill-select.p-dropdown[aria-disabled="true"] { filter:none !important; opacity:1 !important; }
+
+/* ==========================================================
+   Pill white/green style (light mode) for selects/dropdowns
+   Apply with [styleClass]="'pill-select'" on p-select/p-dropdown
+   ========================================================== */
+/* moved below to avoid scoping inside .p-select */
+
+  .p-select-trigger {
+    width: .46rem; // smaller caret zone
+  }
+
+  .p-select-clear {
+    width: .8rem;
+    height: 100%;
+  }
+}
+
+// Dropdown panel (overlay)
+.p-select-panel {
+  .p-select-header {
+    padding: .18rem .24rem; // tighter panel header
+
+    .p-select-filter {
+      .p-inputtext {
+        font-size: .48rem !important;
+        height: 18px !important;
+        padding: .04rem .12rem !important;
+      }
+    }
+  }
+
+  .p-select-items {
+    .p-select-item {
+      font-size: .48rem !important; // even smaller item font
+      padding: .10rem .16rem; // tighter item padding
+    }
+  }
+}
+
+// Ensure consistency when selects are placed inside denser layouts
+// Use :where to avoid specificity wars
+:where(.p-select) .p-select-label { font-size: .46rem !important; padding: .02rem .08rem !important; }
+:where(.p-select-panel .p-select-items .p-select-item) { font-size: .48rem !important; }

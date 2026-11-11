@@ -1,0 +1,172 @@
+<!-- =========================================================
+  ingresador-stock.component.html  –  Estilo MisAtenciones
+========================================================= -->
+
+<form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+  <!-- Indicador de guardado -->
+  <p-progressBar *ngIf="saving" mode="indeterminate" style="height: 4px; margin: 0 0 .75rem 0;"></p-progressBar>
+
+  <!-- Grid de formulario estilo MisAtenciones -->
+  <div class="ingreso-form-grid">
+
+    <!-- ═══ FILA 1: Datos del Producto | Datos del Proveedor ═══ -->
+    <div class="ingreso-row">
+
+      <!-- Panel: Datos del Producto -->
+      <div class="ingreso-panel">
+        <div class="p-panel-header">Datos del Producto</div>
+        <div class="p-panel-content">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="form-field">
+              <label class="form-label">Producto <span class="required-asterisk">*</span></label>
+              <p-select [options]="productos" optionLabel="nombre" optionValue="id" placeholder="Seleccione producto"
+                filter="true" showClear="true" formControlName="producto" styleClass="form-control-select" appendTo="body"></p-select>
+            </div>
+            <!-- Fecha, Estado -->
+            <div class="misat-flex-row-wrap">
+              <div class="form-field" style="flex: 1; min-width: 140px;">
+                <label class="form-label">Fecha <span class="required-asterisk">*</span></label>
+                <p-datepicker showIcon="true" dateFormat="dd/mm/yy" placeholder="dd/mm/aaaa" formControlName="fecha" styleClass="form-control-date"></p-datepicker>
+              </div>
+              <div class="form-field" style="flex: 1; min-width: 140px;">
+                <label class="form-label">Estado <span class="required-asterisk">*</span></label>
+                <p-select [options]="estados" optionLabel="nombre" optionValue="id" placeholder="Seleccione"
+                  filter="true" showClear="true" formControlName="estado" styleClass="form-control-select" appendTo="body"></p-select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel: Datos del Proveedor -->
+      <div class="ingreso-panel">
+        <div class="p-panel-header">Datos del Proveedor</div>
+        <div class="p-panel-content">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="form-field">
+              <label class="form-label">Proveedor <span class="required-asterisk">*</span></label>
+              <p-select [options]="proveedores" optionLabel="label" optionValue="id" placeholder="Seleccione proveedor"
+                filter="true" showClear="true" formControlName="proveedor" styleClass="form-control-select" appendTo="body"></p-select>
+            </div>
+            <!-- Cantidad, Descuento -->
+            <div class="misat-flex-row-wrap">
+              <div class="form-field" style="flex: 1; min-width: 100px;">
+                <label class="form-label">Cantidad <span class="required-asterisk">*</span></label>
+                <p-inputNumber formControlName="cantidad" placeholder="0" [locale]="'es-ES'" [useGrouping]="true" styleClass="form-control-number"></p-inputNumber>
+              </div>
+              <div class="form-field" style="flex: 1; min-width: 100px;">
+                <label class="form-label">Descuento (%)</label>
+                <p-inputNumber formControlName="descuento" placeholder="0" [locale]="'es-ES'" [minFractionDigits]="0" [maxFractionDigits]="2" styleClass="form-control-number"></p-inputNumber>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══ FILA 2: Valores y Totales ═══ -->
+    <div class="ingreso-row">
+      <div class="ingreso-panel" style="width: 100%;">
+        <div class="p-panel-header">Valores y Totales</div>
+        <div class="p-panel-content">
+          <div class="misat-flex-row-wrap" style="gap: 16px;">
+            <div class="form-field" style="flex: 1; min-width: 120px;">
+              <label class="form-label">Valor Unitario <span class="required-asterisk">*</span></label>
+              <p-inputNumber formControlName="valorUnitario" placeholder="0" [locale]="'es-ES'" [minFractionDigits]="2" [maxFractionDigits]="2" styleClass="form-control-number"></p-inputNumber>
+            </div>
+            <div class="form-field" style="flex: 1; min-width: 120px;">
+              <label class="form-label">Sub Total</label>
+              <p-inputNumber formControlName="subTotal" [locale]="'es-ES'" [minFractionDigits]="2" [maxFractionDigits]="2" [readonly]="true" [useGrouping]="true" styleClass="form-control-number readonly"></p-inputNumber>
+            </div>
+            <div class="form-field" style="flex: 1; min-width: 120px;">
+              <label class="form-label">Total c/IVA</label>
+              <p-inputNumber formControlName="subTotalIVA" [locale]="'es-ES'" [minFractionDigits]="2" [maxFractionDigits]="2" [readonly]="true" [useGrouping]="true" styleClass="form-control-number readonly"></p-inputNumber>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ FILA 3: Documentos Adjuntos ═══ -->
+    <div class="ingreso-row">
+      <div class="ingreso-panel" style="width: 100%;">
+        <div class="p-panel-header">Documentos Adjuntos</div>
+        <div class="p-panel-content">
+          <div class="misat-flex-row-wrap" style="gap: 24px;">
+            <div class="form-field" style="flex: 1; min-width: 180px;">
+              <label class="form-label">Orden de compra:</label>
+              <p-fileUpload mode="basic" chooseButtonStyleClass="btn-upload" name="ordenCompra" [customUpload]="true" [auto]="true"
+                (uploadHandler)="onUpload($event,'ordenCompra')" accept=".pdf,.jpg,.png"
+                chooseLabel="Seleccionar archivo" chooseIcon="pi pi-paperclip">
+              </p-fileUpload>
+              <small *ngIf="archivosAdjuntos['ordenCompra']" class="archivo-subido">
+                <i class="pi pi-check-circle"></i>
+                <a [href]="getArchivoUrl('ordenCompra')" target="_blank">{{ archivosAdjuntos['ordenCompra'].originalName }}</a>
+              </small>
+            </div>
+            <div class="form-field" style="flex: 1; min-width: 180px;">
+              <label class="form-label">Factura:</label>
+              <p-fileUpload mode="basic" chooseButtonStyleClass="btn-upload" name="factura" [customUpload]="true" [auto]="true"
+                (uploadHandler)="onUpload($event,'factura')" accept=".pdf,.jpg,.png"
+                chooseLabel="Seleccionar archivo" chooseIcon="pi pi-paperclip">
+              </p-fileUpload>
+              <small *ngIf="archivosAdjuntos['factura']" class="archivo-subido">
+                <i class="pi pi-check-circle"></i>
+                <a [href]="getArchivoUrl('factura')" target="_blank">{{ archivosAdjuntos['factura'].originalName }}</a>
+              </small>
+            </div>
+            <div class="form-field" style="flex: 1; min-width: 180px;">
+              <label class="form-label">Guía de despacho:</label>
+              <p-fileUpload mode="basic" chooseButtonStyleClass="btn-upload" name="guiaDespacho" [customUpload]="true" [auto]="true"
+                (uploadHandler)="onUpload($event,'guiaDespacho')" accept=".pdf,.jpg,.png"
+                chooseLabel="Seleccionar archivo" chooseIcon="pi pi-paperclip">
+              </p-fileUpload>
+              <small *ngIf="archivosAdjuntos['guiaDespacho']" class="archivo-subido">
+                <i class="pi pi-check-circle"></i>
+                <a [href]="getArchivoUrl('guiaDespacho')" target="_blank">{{ archivosAdjuntos['guiaDespacho'].originalName }}</a>
+              </small>
+            </div>
+            <div class="form-field" style="flex: 1; min-width: 180px;">
+              <label class="form-label">Nota Crédito/Débito:</label>
+              <p-fileUpload mode="basic" chooseButtonStyleClass="btn-upload" name="notaCreditoDebito" [customUpload]="true" [auto]="true"
+                (uploadHandler)="onUpload($event,'notaCreditoDebito')" accept=".pdf,.jpg,.png"
+                chooseLabel="Seleccionar archivo" chooseIcon="pi pi-paperclip">
+              </p-fileUpload>
+              <small *ngIf="archivosAdjuntos['notaCreditoDebito']" class="archivo-subido">
+                <i class="pi pi-check-circle"></i>
+                <a [href]="getArchivoUrl('notaCreditoDebito')" target="_blank">{{ archivosAdjuntos['notaCreditoDebito'].originalName }}</a>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de Gastos (si hay) -->
+    <div class="ingreso-row" *ngIf="gastos.length > 0">
+      <div class="ingreso-panel" style="width: 100%;">
+        <div class="p-panel-header">Gastos Adicionales</div>
+        <div class="p-panel-content">
+          <ul class="gastos-list">
+            <li *ngFor="let g of gastos; let i = index">
+              {{ g.desc }} — {{ g.valor | number:'1.2-2' }}
+              <button pButton icon="pi pi-times" class="p-button-text p-button-danger p-button-sm" (click)="removeGasto(i)"></button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ Footer con botones ═══ -->
+  <div class="dialog-footer-buttons">
+    <button pButton type="button" label="Cancelar" class="btn-secondary" [disabled]="saving" (click)="cerrarDialogo()"></button>
+    <button pButton type="button" label="Guardar" icon="pi pi-save" iconPos="right" class="btn-accent" [disabled]="saving" (click)="confirmarGuardar()"></button>
+  </div>
+
+</form>
+
+<p-toast position="top-right"></p-toast>
+<p-confirmDialog></p-confirmDialog>

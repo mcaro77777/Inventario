@@ -1,0 +1,80 @@
+
+<!-- ======================== HOME ======================== -->
+<div class="mantenedores-dashboard is-compact">
+  <!-- ===== HERO / Cabecera ===== -->
+  <section class="dashboard-header drone-hero" aria-labelledby="home-title">
+    <h1 class="dashboard-title" id="home-title">
+      <svg class="svg-icon" width="28" height="28" aria-hidden="true"><use href="#i-building"></use></svg>
+      Panel de Control
+    </h1>
+    <p class="dashboard-subtitle">
+      Gestiona y supervisa.
+    </p>
+    <!-- Si quieres arte: <img class="hero-robot" src="assets/hero-ufo.svg" alt="" aria-hidden="true" /> -->
+  </section>
+
+  <!-- ===== Buscador + Toggle ===== -->
+  <div class="search-section">
+    <div class="search-container" role="search">
+      <span class="search-icon" aria-hidden="true">🔎</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Buscar funcionalidades..."
+        [(ngModel)]="searchTerm"
+        (input)="filterOptions()"
+        aria-label="Buscar funcionalidades"
+      />
+    </div>
+
+    <div class="view-toggle" role="tablist" aria-label="Vista de panel">
+      <button class="toggle-btn"
+              [class.active]="viewMode==='dashboard'"
+              [class.accent-active]="viewMode==='dashboard'"
+              role="tab" [attr.aria-selected]="viewMode==='dashboard'"
+              (click)="setView('dashboard')">
+        <svg class="nav-svg" width="16" height="16" aria-hidden="true"><use href="#i-building"></use></svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="toggle-btn"
+              [class.active]="viewMode==='stats'"
+              [class.accent-active]="viewMode==='stats'"
+              role="tab" [attr.aria-selected]="viewMode==='stats'"
+              (click)="setView('stats')">
+        <svg class="nav-svg" width="16" height="16" aria-hidden="true"><use href="#i-clipboard"></use></svg>
+        <span>Estadísticas</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== Secciones / Categorías ===== -->
+  <div class="categories-container grid-view">
+    <!-- Operaciones Principales -->
+    <section class="category-section" *ngIf="hasCategoryOptions('operaciones')" aria-labelledby="op-title">
+      <h2 class="category-title" id="op-title">
+        <span class="category-icon" aria-hidden="true">🚚</span>
+        En construcción
+      </h2>
+      <!-- Aquí irán las tarjetas cuando estén listas -->
+    </section>
+
+    <!-- Configuración -->
+    <section class="category-section" aria-labelledby="cfg-title">
+      <h2 class="category-title" id="cfg-title">
+        <span class="category-icon" aria-hidden="true">⚙️</span>
+        Configuración
+      </h2>
+
+      <!-- Card/button to Dashboard -->
+      <a class="category-card" routerLink="/menu/dashboard" aria-label="Ir al Panel de Control">
+        <div class="card-content">
+          <div class="card-title">
+            <span class="card-icon" aria-hidden="true">🏢</span>
+            Panel de Control
+          </div>
+          <div class="card-desc">Gestiona y supervisa.</div>
+        </div>
+      </a>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+<main>
+    <!-- Barra de encabezado estilo panel -->
+    <header class="panel-header">
+        <div class="panel-header-left">
+            <i class="pi pi-shopping-cart panel-icon"></i>
+            <h3 class="panel-title">SOLICITAR PRODUCTOS</h3>
+        </div>
+        <div class="panel-header-right">
+            <button pButton type="button" class="btn-export" icon="pi pi-file-excel" label="Exportar a Excel" (click)="exportarExcel()"></button>
+            <button pButton type="button" class="btn-filter" icon="pi pi-filter-slash" label="Limpiar Filtros" (click)="clearFilters()"></button>
+        </div>
+    </header>
+
+    <!-- Indicadores de resumen -->
+    <div class="indicators-row">
+        <div class="indicator-card indicator-card--total"
+             [class.indicator-card--active]="filtroIndicador === 'TODOS'"
+             (click)="filtrarPorIndicador('TODOS')">
+            <div class="indicator-value">{{ totalProductos }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Total productos</span>
+                <span class="indicator-desc">Productos en inventario</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--green"
+             [class.indicator-card--active]="filtroIndicador === 'OK'"
+             (click)="filtrarPorIndicador('OK')">
+            <div class="indicator-value">{{ totalOk }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Stock OK</span>
+                <span class="indicator-desc">Sobre el mínimo</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--yellow"
+             [class.indicator-card--active]="filtroIndicador === 'BAJO'"
+             (click)="filtrarPorIndicador('BAJO')">
+            <div class="indicator-value">{{ totalBajo }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Stock Bajo</span>
+                <span class="indicator-desc">Bajo el mínimo</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--red"
+             [class.indicator-card--active]="filtroIndicador === 'CRITICO'"
+             (click)="filtrarPorIndicador('CRITICO')">
+            <div class="indicator-value">{{ totalCritico }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Sin Stock</span>
+                <span class="indicator-desc">Stock en cero</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="loading()" class="loading-spinner">
+        <p-progressSpinner strokeWidth="4" fill="transparent" animationDuration="1s"
+            styleClass="loading-icon"></p-progressSpinner>
+        <span>Procesando...</span>
+    </div>
+
+    <!-- Tabla con virtual scroll -->
+    <p-table #dt [value]="stockListado()" dataKey="id" scrollable="true" [virtualScroll]="true"
+        [virtualScrollOptions]="{ itemSize: rowItemSize, scrollHeight: tablaAltura }" [rows]="30" [virtualScrollDelay]="0"
+        [size]="'small'" [rowHover]="true" styleClass="mantenedor-datatable p-datatable-sm"
+        sortMode="multiple">
+
+        <!-- Cabecera -->
+        <ng-template pTemplate="header">
+            <tr>
+                <th *ngFor="let col of visibleColumns(); trackBy: trackCol" pSortableColumn="{{ col.field }}">
+                    {{ col.header }}
+                    <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+                </th>
+                <th>Acciones</th>
+            </tr>
+            <tr>
+                <th *ngFor="let col of visibleColumns(); trackBy: trackCol">
+                    <ng-container *ngIf="col.filterType === 'multiSelect'">
+                        <p-multiSelect [options]="filterOptions()[col.field]" [(ngModel)]="selectedFilters[col.field]"
+                            appendTo="body" (onChange)="applyFilter(col.field)" placeholder="{{ col.header }}"
+                            display="chip">
+                        </p-multiSelect>
+                    </ng-container>
+                    <ng-container *ngIf="col.filterType === 'text'">
+                        <input pInputText type="text" [(ngModel)]="selectedFilters[col.field]"
+                            (input)="applyFilter(col.field)" placeholder="{{ col.header }}">
+                    </ng-container>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+
+        <!-- Cuerpo -->
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td *ngFor="let col of visibleColumns(); trackBy: trackCol"
+                    [ngClass]="{'stock-minimo-cell': col.field === 'stockMinimo'}">
+                    <ng-container *ngIf="col.field === 'color'; else checkStockMinimo">
+                        <span class="estado-pill"
+                              [ngClass]="row['color'] === 1 ? 'OK' : row['color'] === 0 ? 'ALERTA' : 'DEFAULT'">
+                            {{ row['color'] === 1 ? 'OK' : row['color'] === 0 ? 'BAJO' : '—' }}
+                        </span>
+                    </ng-container>
+                    <ng-template #checkStockMinimo>
+                        <ng-container *ngIf="col.field === 'stockMinimo'; else checkStockActual">
+                            <span class="stock-minimo-badge">{{ row[col.field] }}</span>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template #checkStockActual>
+                        <ng-container *ngIf="col.field === 'stockActual'; else normalCell">
+                            <span class="stock-actual-badge">{{ row[col.field] }}</span>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template #normalCell>
+                        {{ row[col.field] }}
+                    </ng-template>
+                </td>
+                <td class="acciones-cell">
+                    <button pButton type="button" icon="pi pi-shopping-cart" label="Solicitar" class="p-button-text"
+                        pTooltip="Solicitar producto" tooltipPosition="top" (click)="abrirDialogoEgresos(row)"></button>
+                </td>
+            </tr>
+        </ng-template>
+
+        <!-- Sin resultados -->
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td [attr.colspan]="visibleColumns().length" class="text-center">No hay registros encontrados.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-toast></p-toast>
+</main>

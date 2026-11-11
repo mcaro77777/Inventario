@@ -1,0 +1,243 @@
+/* ===============================
+   TOKENS — colores, tipografía, espacios, elevación
+   Cambia valores aquí para re-tematizar toda la app.
+   (Unificado: conserva orden del token 1 + mejoras del token 2)
+   =============================== */
+
+/* ------------------------------------------------------------------
+   Guía rápida de uso
+   - Temas: agrega/quita `.app-theme-dark` (o `body.dark-theme`) en el root.
+   - Acentos: alterna `.accent-blue` / `.accent-green` (o `body.accent-*`).
+   - Modo claro cómodo: agrega `body.light-comfort` (sin dark).
+   - No hardcodear colores en componentes; usa `var(--token)`.
+------------------------------------------------------------------- */
+
+:root,
+.app-theme-light {
+  /* ===== Marca / acentos (básico) ===== */
+  --brand: #2e8fff;
+  --brand-ink: #0b2548;
+  --accent: var(--brand);          /* color de acento unificado (simple) */
+  --accent-ink: var(--brand-ink);
+
+  /* Paleta de acento extendida (default azul) */
+  --accent-0:#19a7ff; --accent-1:#6bd0ff; --accent-2:#0b74e0; --accent-3:#3198ff;
+  --accent-rgb: 26,162,255;
+
+  /* Alternativas de acento (togglear con clase en root) */
+  --accent-green: #16a34a;
+  --accent-green-ink: #064e3b;
+  --accent-blue: #2e8fff;
+  --accent-blue-ink: #0b2548;
+
+  /* ===== Texto ===== */
+  /* Tokens originales (compatibilidad) */
+  --ink-1: #111827;
+  --ink-2: #374151;
+  --muted: #6b7280;
+  /* Tokens ampliados */
+  --ink-0:#0f172a;
+  --ink-muted:#6b7280;
+  --placeholder: color-mix(in oklab, var(--ink-1) 48%, transparent);
+
+  /* ===== Superficies ===== */
+  /* Originales */
+  --surface-1: #ffffff;
+  --surface-2: #f7f9fc;
+  --surface-3: #eef2f7;
+  --surface-hover: #f3f5fa;
+  /* Ampliados */
+  --surface-0:#f5f7fb;
+
+  /* ===== Bordes / Glass ===== */
+  --border-soft:  color-mix(in oklab, #0f172a 12%, #ffffff 88%);
+  --border-strong:color-mix(in oklab, #0f172a 18%, #ffffff 82%);
+  --glass-blur: 10px;
+  --glass-tint: #ffffffcc;
+
+  /* ===== Estados / roles ===== */
+  /* Originales (compatibilidad) */
+  --ok: #10b981;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --danger-ink: #7f1d1d;
+  --warn-ink: #7c2d12;
+  --ok-ink: #065f46;
+  /* Ampliados (con soft/ring) */
+  --success: #16a34a;  /* light */
+  --warning: #d97706;
+  --error:   #dc2626;
+  --success-soft: color-mix(in oklab, var(--success) 14%, #ffffff);
+  --warning-soft: color-mix(in oklab, var(--warning) 14%, #ffffff);
+  --error-soft:   color-mix(in oklab, var(--error)   14%, #ffffff);
+  --success-ring: color-mix(in oklab, var(--success) 30%, transparent);
+  --warning-ring: color-mix(in oklab, var(--warning) 30%, transparent);
+  --error-ring:   color-mix(in oklab, var(--error)   30%, transparent);
+
+  /* ===== Tipografía y tamaño base ===== */
+  --ff-base: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  /* Tamaños originales */
+  --fs-0: 12px;
+  --fs-1: 14px;
+  --fs-2: 16px;
+  --fs-3: 18px;
+  --fs-4: 20px;
+  --lh-tight: 1.25;
+  --lh-base: 1.5;
+  /* Ampliación para inputs (compatibilidad con token 2) */
+  --fs-input: var(--fs-1);
+
+  /* ===== Espaciado (escala 8px) ===== */
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+
+  /* ===== Radios y sombras ===== */
+  /* Originales */
+  --radius-1: 8px;
+  --radius-2: 12px;
+  --elev-1: 0 2px 8px rgba(0,0,0,.06);
+  --elev-2: 0 6px 16px rgba(0,0,0,.10);
+  /* Ampliados */
+  --radius-xl:18px; --radius-lg:14px; --radius-md:12px; --radius-sm:10px;
+  --shadow-1: 0 1px 0 rgba(0,0,0,.08), 0 8px 20px rgba(15,23,42,.08);
+  --shadow-2: 0 2px 0 rgba(0,0,0,.08), 0 14px 32px rgba(15,23,42,.12);
+  --inner-emboss: inset 0 1px 0 rgba(255,255,255,.65), inset 0 -1px 0 rgba(0,0,0,.06);
+
+  /* ===== Z-index ===== */
+  --z-overlay: 1300;
+  --z-dialog: 1400;
+  --z-toast: 1500;
+
+  /* ===== Motion tokens ===== */
+  --dur-1: 80ms;
+  --dur-2: 160ms;
+  --dur-3: 240ms;
+  --ease-out-2: cubic-bezier(.17,.67,.39,.96);
+  /* Anillos y resplandores (light futurista) */
+  --focus-ring: color-mix(in oklab, var(--accent-2) 22%, transparent);
+  --glow: 0 0 18px color-mix(in oklab, var(--accent-0) 26%, transparent 74%);
+  --glow-soft: 0 0 12px color-mix(in oklab, var(--accent-1) 22%, transparent 78%);
+  --glow-strong: 0 0 24px color-mix(in oklab, var(--accent-0) 34%, transparent 66%);
+
+  /* ===== Layout / otros ===== */
+  --navbar-h: 64px;
+  --bp-mobile: 900px;
+  --footer-bg: #2E3B4E; /* preferencia del usuario */
+}
+
+/* ===== Tema oscuro (overrides) ===== */
+.app-theme-dark,
+body.dark-theme {
+  /* Texto */
+  --ink-1: #e5e7eb;
+  --ink-2: #cbd5e1;
+  --muted: #94a3b8;
+  --ink-0:#eaf2ff;
+  --ink-muted:#9aa8bc;
+  --placeholder: color-mix(in oklab, #b6c7e6 60%, transparent);
+
+  /* Superficies */
+  --surface-0:#0b1120;
+  --surface-1:#111a2c;
+  --surface-2:#0f1827;
+  --surface-3:#0b1329;
+  --surface-hover:#161e31;
+
+  /* Bordes / Glass / Sombras */
+  --border-soft:  color-mix(in oklab, #eaf2ff 20%, #0b1120 80%);
+  --border-strong:color-mix(in oklab, #eaf2ff 28%, #0b1120 72%);
+  --glass-tint:#0e1524cc;
+  --elev-1: 0 2px 8px rgba(0,0,0,.35);
+  --elev-2: 0 8px 24px rgba(0,0,0,.45);
+  --shadow-1: 0 1px 0 rgba(255,255,255,.03), 0 12px 28px rgba(0,0,0,.42);
+  --shadow-2: 0 2px 0 rgba(255,255,255,.02), 0 22px 48px rgba(0,0,0,.52);
+  --inner-emboss: inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.26);
+
+  /* Estados (dark) */
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error:   #ef4444;
+  --success-soft: color-mix(in oklab, var(--success) 22%, #0b1120);
+  --warning-soft: color-mix(in oklab, var(--warning) 22%, #0b1120);
+  --error-soft:   color-mix(in oklab, var(--error)   22%, #0b1120);
+  --success-ring: color-mix(in oklab, var(--success) 40%, transparent);
+  --warning-ring: color-mix(in oklab, var(--warning) 40%, transparent);
+  --error-ring:   color-mix(in oklab, var(--error)   40%, transparent);
+
+  /* Glow */
+  /* Anillos y resplandores más notorios en modo oscuro */
+  --focus-ring: color-mix(in oklab, var(--accent-1) 42%, transparent);
+  --glow: 0 0 28px color-mix(in oklab, var(--accent-0) 78%, transparent 22%);
+  --glow-strong: 0 0 42px color-mix(in oklab, var(--accent-0) 86%, transparent 14%);
+  --glow-soft: 0 0 18px color-mix(in oklab, var(--accent-1) 42%, transparent 58%);
+}
+
+/* ===== Toggle de acento ===== */
+.accent-green { --accent: var(--accent-green); --accent-ink: var(--accent-green-ink); }
+.accent-blue  { --accent: var(--accent-blue);  --accent-ink: var(--accent-blue-ink); }
+
+/* Paleta extendida por clase en body (compatibilidad) */
+body.accent-blue, body.blue-theme{
+  --accent-0:#1aa2ff; --accent-1:#62c8ff; --accent-2:#0b74e0; --accent-3:#3198ff;
+  --accent-rgb: 26,162,255;
+}
+body.accent-green{
+  --accent-0:#22cc88; --accent-1:#6de2b0; --accent-2:#18a36e; --accent-3:#2fd291;
+  --accent-rgb: 34,204,136;
+}
+/* Azul más profundo solo en dark (compatibilidad con token 2) */
+body.dark-theme.accent-blue{ --accent-0:#0e50e6; --accent-1:#3e6aff; --accent-2:#0a3db4; }
+
+/* ===== MODO CLARO CÓMODO (light-comfort) ===== */
+body.light-comfort:not(.app-theme-dark):not(.dark-theme){
+  /* Fondos: gris frío, menos blanco */
+  --app-bg:    #e7edf3;
+  --surface-0: #edf1f6;
+  --surface-1: #eef2f6;
+  --surface-2: #e4e9f0;
+
+  /* Paneles ligeramente más oscuros que las superficies */
+  --panel-top: #eef1f5;
+  --panel-bot: #e3e8ee;
+
+  /* Texto: buen contraste sin “brillar” */
+  --ink-0: #121826;   /* primario */
+  --ink-1: #2a3649;   /* labels */
+  --ink-2: #43536a;   /* secundarios */
+  --ink-3: #64748b;   /* muted */
+  --placeholder: #8fa0b6;
+
+  /* Bordes menos “vidriados” y más definidos */
+  --border-soft:   #b8c4d3;
+  --border-strong: #aab8c9;
+  --glass-tint:    #e5eaf1;
+
+  /* Sombras más discretas */
+  --shadow-1:      0 6px 16px rgba(16,24,40,.06);
+  --shadow-2:      0 12px 28px rgba(16,24,40,.08);
+  --shadow-in:     inset 0 1px 0 rgba(255,255,255,.10);
+  --inner-emboss:  inset 0 1px 0 rgba(255,255,255,.08), inset 0 -1px 0 rgba(0,0,0,.03);
+
+  /* Foco y glow más suaves */
+  --focus-ring: color-mix(in oklab, var(--accent-2) 14%, transparent);
+  --glow:       0 0 18px color-mix(in oklab, var(--accent-0) 24%, transparent 76%);
+}
+/* Extiende el fondo al shell si aplica */
+body.light-comfort:not(.app-theme-dark):not(.dark-theme) .app-shell,
+body.light-comfort:not(.app-theme-dark):not(.dark-theme) .layout,
+body.light-comfort:not(.app-theme-dark):not(.dark-theme) #app {
+  background: var(--app-bg);
+}
+
+/* ============================================================
+   Buenas prácticas para tokens (recordatorio)
+   1) No hardcodear colores: usa `var(--token)`.
+   2) Tematiza con clases en <body>/root (dark/accent/light-comfort).
+   3) Nuevos acentos/estados: defínelos aquí antes de usarlos.
+   4) Accesibilidad: verifica contraste de texto sobre superficies.
+   5) Rendimiento: centraliza sombras/bordes/tipografías aquí.
+============================================================ */

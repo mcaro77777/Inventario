@@ -1,0 +1,394 @@
+/* === 4k-tabla.scss — tema azul para PrimeNG p-table === */
+  /*
+    Descripción
+    -----------
+    Tema visual azul para `p-table` de PrimeNG. Define variables y reglas para
+    encabezados, filas, hover, seleccionado y anillos de enfoque. Incluye una
+    variante de modo oscuro controlada por la clase `body.dark-theme`.
+
+    Alcance y clases recomendadas
+    -----------------------------
+    - Se espera que las tablas usen `styleClass="mantenedor-datatable table-compact"`
+      para heredar el estilo y densidad adecuada.
+    - Este archivo ajusta las capas de encabezado (`thead th`), filas (`tbody td`),
+      estados (hover/selected) y scroll sticky cuando aplica.
+
+    Variables
+    ---------
+    - --tbl-azul, --tbl-azul-700, --tbl-azul-900     Tonos base de azul.
+    - --tbl-ink                                       Color de texto principal (claro).
+    - --tbl-header-bg / --tbl-header-bd               Fondo/borde de cabecera.
+    - --tbl-hover-bg / --tbl-selected-bg              Estados de fila.
+    - --tbl-ring                                      Anillo de enfoque accesible.
+    - En `body.dark-theme` se redefinen los equivalentes para fondo oscuro.
+
+    Uso rápido
+    ----------
+    <p-table [value]="items"
+             styleClass="mantenedor-datatable table-compact"
+             [scrollable]="true" [scrollHeight]="'calc(100vh - 220px)'">
+      ...
+    </p-table>
+  */
+:root{
+    --tbl-azul:        #2563eb;  /* primario */
+    --tbl-azul-700:    #1d4ed8;
+    --tbl-azul-900:    #1e40af;
+    --tbl-ink:         #0f172a;  /* texto oscuro */
+    --tbl-header-bg:   color-mix(in oklab, var(--tbl-azul) 10%, #ffffff);
+    --tbl-header-bd:   color-mix(in oklab, var(--tbl-azul) 28%, #e5e7eb);
+    --tbl-hover-bg:    color-mix(in oklab, var(--tbl-azul) 6%, #ffffff);
+    --tbl-selected-bg: color-mix(in oklab, var(--tbl-azul) 12%, #ffffff);
+    --tbl-ring:        color-mix(in oklab, var(--tbl-azul) 36%, transparent);
+  }
+
+/* =====================
+   Modo oscuro (clase body.dark-theme)
+   ===================== */
+body.dark-theme{
+  /* Variables de tabla en dark theme controlado por clase */
+  --tbl-header-bg:   color-mix(in oklab, var(--tbl-azul) 28%, #0b1220);
+  --tbl-header-bd:   color-mix(in oklab, var(--tbl-azul) 42%, #0b1220);
+  --tbl-hover-bg:    color-mix(in oklab, var(--tbl-azul) 20%, #0b1220);
+  --tbl-selected-bg: color-mix(in oklab, var(--tbl-azul) 32%, #0b1220);
+  --tbl-ring:        color-mix(in oklab, var(--tbl-azul) 62%, transparent);
+  --tbl-row-bg:      #0f172a; /* fondo base de filas */
+  --tbl-row-bg-alt:  #111b2a; /* zebra alt */
+}
+
+body.dark-theme .mantenedor-datatable.p-datatable .p-datatable-thead > tr > th,
+body.dark-theme .table-compact.p-datatable .p-datatable-thead > tr > th{
+  background: var(--tbl-header-bg) !important;
+  color: #dbe8ff !important;
+  border-bottom-color: var(--tbl-header-bd) !important;
+}
+body.dark-theme .mantenedor-datatable.p-datatable
+  .p-datatable-thead > tr > th
+  :where(.p-column-title, .p-column-header-content, .p-sortable-column-icon, .p-column-filter-menu-button, .p-column-filter),
+body.dark-theme .table-compact.p-datatable
+  .p-datatable-thead > tr > th
+  :where(.p-column-title, .p-column-header-content, .p-sortable-column-icon, .p-column-filter-menu-button, .p-column-filter){
+  color: #dbe8ff !important;
+  fill: #dbe8ff !important;
+}
+
+body.dark-theme .mantenedor-datatable .p-datatable-tbody > tr:hover,
+body.dark-theme .table-compact .p-datatable-tbody > tr:hover{
+  background: var(--tbl-hover-bg) !important;
+}
+
+body.dark-theme .mantenedor-datatable .p-datatable-tbody > tr.p-highlight,
+body.dark-theme .mantenedor-datatable .p-datatable-tbody > tr.row-selected,
+body.dark-theme .table-compact .p-datatable-tbody > tr.p-highlight,
+body.dark-theme .table-compact .p-datatable-tbody > tr.row-selected{
+  background: var(--tbl-selected-bg) !important;
+  box-shadow: inset 0 0 0 2px var(--tbl-ring);
+}
+
+body.dark-theme .mantenedor-datatable .p-datatable-tbody > tr > td,
+body.dark-theme .table-compact .p-datatable-tbody > tr > td{
+  color: #eaf2ff;
+  border-color: color-mix(in oklab, var(--tbl-azul) 30%, #0b1220);
+}
+
+/* Fondo base de filas (evitar blanco en dark) + zebra */
+body.dark-theme .mantenedor-datatable .p-datatable-tbody > tr,
+body.dark-theme .table-compact .p-datatable-tbody > tr{
+  background: var(--tbl-row-bg) !important;
+}
+body.dark-theme .mantenedor-datatable .p-datatable-tbody > tr:nth-child(even),
+body.dark-theme .table-compact .p-datatable-tbody > tr:nth-child(even){
+  background: var(--tbl-row-bg-alt) !important;
+}
+
+body.dark-theme .mantenedor-datatable .filters-row :where(.p-inputtext, .form-control),
+body.dark-theme .table-compact .filters-row :where(.p-inputtext, .form-control){
+  background: #0f172a;
+  color: #eaf2ff;
+  border-color: color-mix(in oklab, var(--tbl-azul) 48%, #1f2937) !important;
+}
+body.dark-theme .mantenedor-datatable .filters-row :where(.p-inputtext::placeholder, .form-control::placeholder),
+body.dark-theme .table-compact .filters-row :where(.p-inputtext::placeholder, .form-control::placeholder){
+  color: #93a4bf;
+}
+
+body.dark-theme .mantenedor-datatable .filters-row :where(.p-multiselect, .p-dropdown),
+body.dark-theme .table-compact .filters-row :where(.p-multiselect, .p-dropdown){
+  background: #0f172a !important;
+  border-color: color-mix(in oklab, var(--tbl-azul) 48%, #1f2937) !important;
+  color: #eaf2ff !important;
+}
+body.dark-theme .mantenedor-datatable .filters-row :where(.p-multiselect .p-multiselect-label, .p-dropdown .p-dropdown-label),
+body.dark-theme .table-compact .filters-row :where(.p-multiselect .p-multiselect-label, .p-dropdown .p-dropdown-label){
+  color: #eaf2ff !important;
+}
+body.dark-theme .mantenedor-datatable .filters-row :where(.p-multiselect .p-multiselect-trigger, .p-dropdown .p-dropdown-trigger),
+body.dark-theme .table-compact .filters-row :where(.p-multiselect .p-multiselect-trigger, .p-dropdown .p-dropdown-trigger){
+  color: #dbe8ff !important;
+}
+  
+  /* Header: fondo celeste, texto azul, línea inferior azul suave */
+  .mantenedor-datatable.p-datatable .p-datatable-thead > tr > th,
+  .table-compact.p-datatable .p-datatable-thead > tr > th{
+    background: var(--tbl-header-bg) !important;
+    color: var(--tbl-azul) !important;
+    border-bottom: 1px solid var(--tbl-header-bd) !important;
+    position: relative;
+  }
+  /* Subrayado luminoso (light) */
+  .mantenedor-datatable.p-datatable .p-datatable-thead > tr > th::after,
+  .table-compact.p-datatable .p-datatable-thead > tr > th::after{
+    content: ""; position:absolute; left:0; right:0; bottom:-1px; height:2px;
+    background: linear-gradient(90deg,
+      transparent 0%, color-mix(in oklab, var(--tbl-azul) 28%, transparent) 20%,
+      color-mix(in oklab, var(--tbl-azul) 42%, transparent) 50%,
+      color-mix(in oklab, var(--tbl-azul) 28%, transparent) 80%, transparent 100%);
+  }
+  .mantenedor-datatable.p-datatable,
+  .table-compact.p-datatable
+    .p-datatable-thead > tr > th
+    :where(.p-column-title, .p-column-header-content, .p-sortable-column-icon, .p-column-filter-menu-button, .p-column-filter){
+    color: var(--tbl-azul) !important;
+    fill: var(--tbl-azul) !important;
+  }
+  
+  /* Sticky header: sombra sutil azul */
+  .mantenedor-datatable .p-datatable-scrollable .p-datatable-thead > tr > th,
+  .table-compact .p-datatable-scrollable .p-datatable-thead > tr > th{
+    position: sticky; top: 0; z-index: 2;
+    box-shadow: 0 6px 10px -8px color-mix(in oklab, var(--tbl-azul) 30%, transparent);
+  }
+  
+  /* Fix header transparente en virtual scroll */
+  .mantenedor-datatable .p-datatable-thead,
+  .table-compact .p-datatable-thead {
+    background: #eef4fc !important;
+  }
+  .mantenedor-datatable .p-datatable-thead > tr,
+  .table-compact .p-datatable-thead > tr {
+    background: #eef4fc !important;
+  }
+  .mantenedor-datatable .p-datatable-thead > tr > th,
+  .table-compact .p-datatable-thead > tr > th {
+    background: #eef4fc !important;
+  }
+  .mantenedor-datatable .p-scroller-viewport .p-datatable-thead,
+  .mantenedor-datatable .p-datatable-wrapper .p-datatable-thead,
+  .table-compact .p-scroller-viewport .p-datatable-thead,
+  .table-compact .p-datatable-wrapper .p-datatable-thead {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: #eef4fc !important;
+  }
+  .mantenedor-datatable .p-virtualscroller,
+  .table-compact .p-virtualscroller {
+    background: #ffffff;
+  }
+  
+  /* Hover fila */
+  .mantenedor-datatable .p-datatable-tbody > tr:hover,
+  .table-compact .p-datatable-tbody > tr:hover{
+    background: var(--tbl-hover-bg) !important;
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--tbl-azul) 18%, transparent);
+  }
+  
+  /* Fila seleccionada / highlight */
+  .mantenedor-datatable .p-datatable-tbody > tr.p-highlight,
+  .mantenedor-datatable .p-datatable-tbody > tr.row-selected,
+  .table-compact .p-datatable-tbody > tr.p-highlight,
+  .table-compact .p-datatable-tbody > tr.row-selected{
+    background: var(--tbl-selected-bg) !important;
+    box-shadow: inset 0 0 0 2px var(--tbl-ring);
+  }
+  
+  /* Checkboxes / radios dentro de la tabla al tono azul */
+  .mantenedor-datatable :where(.p-checkbox .p-checkbox-box, .p-radiobutton .p-radiobutton-box),
+  .table-compact :where(.p-checkbox .p-checkbox-box, .p-radiobutton .p-radiobutton-box){
+    border-color: color-mix(in oklab, var(--tbl-azul) 60%, #cbd5e1) !important;
+  }
+  .mantenedor-datatable :where(.p-checkbox.p-highlight .p-checkbox-box,
+                               .p-radiobutton.p-highlight .p-radiobutton-box),
+  .table-compact :where(.p-checkbox.p-highlight .p-checkbox-box,
+                      .p-radiobutton.p-highlight .p-radiobutton-box){
+    border-color: var(--tbl-azul) !important;
+    background: var(--tbl-azul) !important;
+  }
+  .mantenedor-datatable :where(.p-checkbox .p-checkbox-icon, .p-radiobutton .p-radiobutton-icon),
+  .table-compact :where(.p-checkbox .p-checkbox-icon, .p-radiobutton .p-radiobutton-icon){
+    color: #fff !important;
+  }
+  
+  /* Inputs de filtros (fila filtro) */
+  .mantenedor-datatable .filters-row :where(.p-inputtext, .form-control),
+  .table-compact .filters-row :where(.p-inputtext, .form-control){
+    border-color: color-mix(in oklab, var(--tbl-azul) 30%, #cbd5e1) !important;
+  }
+  .mantenedor-datatable .filters-row :where(.p-inputtext:focus, .form-control:focus),
+  .table-compact .filters-row :where(.p-inputtext:focus, .form-control:focus){
+    border-color: var(--tbl-azul) !important;
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--tbl-azul) 30%, transparent) !important;
+  }
+  
+  /* Íconos ordenar activos */
+  .mantenedor-datatable .p-sortable-column.p-highlight .p-sortable-column-icon,
+  .table-compact .p-sortable-column.p-highlight .p-sortable-column-icon{
+    color: var(--tbl-azul) !important;
+    fill: var(--tbl-azul) !important;
+  }
+  
+  /* Etiquetas internas (chips/Badges) coherentes en azul */
+  .mantenedor-datatable .tag-azul,
+  .mantenedor-datatable .badge-azul,
+  .table-compact .tag-azul,
+  .table-compact .badge-azul{
+    background: color-mix(in oklab, var(--tbl-azul) 14%, #ffffff);
+    color: var(--tbl-azul);
+    border: 1px solid color-mix(in oklab, var(--tbl-azul) 28%, #e5e7eb);
+    border-radius: 6px;
+    padding: 2px 8px;
+  }
+
+  /* === Badges de Stock === */
+  /* Stock Mínimo - Amarillo */
+  .mantenedor-datatable .stock-minimo-badge,
+  .table-compact .stock-minimo-badge,
+  .stock-minimo-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 36px !important;
+    padding: 2px 8px !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    background: rgba(234, 179, 8, 0.15) !important;
+    color: #b45309 !important;
+    border: 1px solid rgba(234, 179, 8, 0.35) !important;
+  }
+
+  /* Stock Actual - Azul */
+  .mantenedor-datatable .stock-actual-badge,
+  .table-compact .stock-actual-badge,
+  .stock-actual-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 36px !important;
+    padding: 2px 8px !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    background: rgba(33, 150, 243, 0.15) !important;
+    color: #1565c0 !important;
+    border: 1px solid rgba(33, 150, 243, 0.35) !important;
+  }
+  
+  /* Barra de scroll (opcional) */
+  .mantenedor-datatable .p-datatable-scrollable-body::-webkit-scrollbar-thumb,
+  .table-compact .p-datatable-scrollable-body::-webkit-scrollbar-thumb{
+    background: color-mix(in oklab, var(--tbl-azul) 30%, #93c5fd);
+    border-radius: 8px;
+  }
+
+/* =====================
+   Modo oscuro (auto)
+   ===================== */
+@media (prefers-color-scheme: dark) {
+  :root{
+    /* Fondo y bordes con mayor contraste en dark */
+    --tbl-header-bg:   color-mix(in oklab, var(--tbl-azul) 28%, #0b1220);
+    --tbl-header-bd:   color-mix(in oklab, var(--tbl-azul) 42%, #0b1220);
+    --tbl-hover-bg:    color-mix(in oklab, var(--tbl-azul) 20%, #0b1220);
+    --tbl-selected-bg: color-mix(in oklab, var(--tbl-azul) 32%, #0b1220);
+    --tbl-ring:        color-mix(in oklab, var(--tbl-azul) 62%, transparent);
+  }
+
+  /* Cabecera: texto/íconos más claros si el tema global usa fondos oscuros */
+  .mantenedor-datatable.p-datatable .p-datatable-thead > tr > th,
+  .table-compact.p-datatable .p-datatable-thead > tr > th{
+    color: #dbe8ff !important;
+    border-bottom-color: var(--tbl-header-bd) !important;
+  }
+  .mantenedor-datatable.p-datatable
+    .p-datatable-thead > tr > th
+    :where(.p-column-title, .p-column-header-content, .p-sortable-column-icon, .p-column-filter-menu-button, .p-column-filter),
+  .table-compact.p-datatable
+    .p-datatable-thead > tr > th
+    :where(.p-column-title, .p-column-header-content, .p-sortable-column-icon, .p-column-filter-menu-button, .p-column-filter){
+    color: #dbe8ff !important;
+    fill: #dbe8ff !important;
+  }
+
+  /* Celdas: aseguremos contraste en texto */
+  .mantenedor-datatable .p-datatable-tbody > tr > td,
+  .table-compact .p-datatable-tbody > tr > td{
+    color: #eaf2ff;
+    border-color: color-mix(in oklab, var(--tbl-azul) 30%, #0b1220);
+  }
+
+  /* Inputs de filtro con borde azul en foco y fondo acorde */
+  .mantenedor-datatable .filters-row :where(.p-inputtext, .form-control),
+  .table-compact .filters-row :where(.p-inputtext, .form-control){
+    background: #0f172a;
+    color: #eaf2ff;
+    border-color: color-mix(in oklab, var(--tbl-azul) 48%, #1f2937) !important;
+  }
+  .mantenedor-datatable .filters-row :where(.p-inputtext::placeholder, .form-control::placeholder),
+  .table-compact .filters-row :where(.p-inputtext::placeholder, .form-control::placeholder){
+    color: #93a4bf;
+  }
+
+  /* Controles de filtro tipo MultiSelect / Dropdown al tono */
+  .mantenedor-datatable .filters-row :where(.p-multiselect, .p-dropdown),
+  .table-compact .filters-row :where(.p-multiselect, .p-dropdown){
+    background: #0f172a !important;
+    border-color: color-mix(in oklab, var(--tbl-azul) 48%, #1f2937) !important;
+    color: #eaf2ff !important;
+  }
+  .mantenedor-datatable .filters-row :where(.p-multiselect .p-multiselect-label, .p-dropdown .p-dropdown-label),
+  .table-compact .filters-row :where(.p-multiselect .p-multiselect-label, .p-dropdown .p-dropdown-label){
+    color: #eaf2ff !important;
+  }
+  .mantenedor-datatable .filters-row :where(.p-multiselect .p-multiselect-trigger, .p-dropdown .p-dropdown-trigger),
+  .table-compact .filters-row :where(.p-multiselect .p-multiselect-trigger, .p-dropdown .p-dropdown-trigger){
+    color: #dbe8ff !important;
+  }
+}
+
+/*
+  ============================================================
+  Buenas prácticas para tablas (guía rápida)
+  ============================================================
+  1) Densidad y clases
+     - Usar styleClass="mantenedor-datatable table-compact" para tono y compactación.
+     - Evitar paddings personalizados en celdas salvo casos especiales.
+
+  2) Scroll y sticky
+     - Preferir [scrollable]="true" y [scrollHeight] con calc() para vistas altas.
+     - El header ya aplica sombra sutil cuando es sticky.
+
+  3) Encabezados
+     - Textos cortos, usar tooltips si el título excede el ancho.
+     - Mantener consistencia de orden/íconos de sort y filtros por columna.
+
+  4) Filtros
+     - Ubicar en fila dedicada (.filters-row). Inputs coherentes con tokens.
+     - En dark, controlar contraste de labels/placeholders.
+
+  5) Selección y acciones
+     - Resaltar fila seleccionada con box-shadow interno (ya provisto).
+     - Ubicar acciones en primera/última columna; usar p-button .btn-azul/.btn-rojo.
+
+  6) Accesibilidad
+     - Incluir `dataKey` único y `aria-label` en la tabla.
+     - Encabezados con `scope="col"` si se usan th manuales.
+
+  7) Rendimiento
+     - Para listas muy largas, evaluar lazy loading/paginación de PrimeNG.
+     - Evitar plantillas con contenido pesado en cada celda.
+
+  8) Responsivo
+     - Usar columnas críticas primero; ocultar o truncar no esenciales en breakpoints.
+     - Considerar `white-space: nowrap; text-overflow: ellipsis;` en celdas largas.
+*/

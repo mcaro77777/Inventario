@@ -1,0 +1,300 @@
+<main>
+    <!-- Barra de encabezado estilo panel -->
+    <header class="panel-header">
+        <div class="panel-header-left">
+            <i class="pi pi-bars panel-icon"></i>
+            <h3 class="panel-title">INGRESO STOCK</h3>
+        </div>
+        <div class="panel-header-right">
+            <button pButton type="button" class="btn-export" icon="pi pi-file-excel" label="Exportar a Excel" (click)="exportarExcel()"></button>
+            <button pButton type="button" class="btn-filter" icon="pi pi-filter-slash" label="Limpiar Filtros" (click)="clearFilters()"></button>
+        </div>
+    </header>
+
+    <!-- Indicadores de resumen -->
+    <div class="indicators-row">
+        <div class="indicator-card indicator-card--total"
+             [class.indicator-card--active]="filtroIndicador === 'TODOS'"
+             (click)="filtrarPorIndicador('TODOS')">
+            <div class="indicator-value">{{ totalProductos }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Total productos</span>
+                <span class="indicator-desc">Productos en inventario</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--green"
+             [class.indicator-card--active]="filtroIndicador === 'OK'"
+             (click)="filtrarPorIndicador('OK')">
+            <div class="indicator-value">{{ totalOk }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Stock OK</span>
+                <span class="indicator-desc">Sobre el mínimo</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--yellow"
+             [class.indicator-card--active]="filtroIndicador === 'BAJO'"
+             (click)="filtrarPorIndicador('BAJO')">
+            <div class="indicator-value">{{ totalBajo }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Stock Bajo</span>
+                <span class="indicator-desc">Bajo el mínimo</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--red"
+             [class.indicator-card--active]="filtroIndicador === 'CRITICO'"
+             (click)="filtrarPorIndicador('CRITICO')">
+            <div class="indicator-value">{{ totalCritico }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Sin Stock</span>
+                <span class="indicator-desc">Stock en cero</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="loading" class="loading-spinner">
+        <p-progressSpinner strokeWidth="4" fill="transparent" animationDuration="1s"
+            styleClass="loading-icon"></p-progressSpinner>
+        <span>Procesando...</span>
+    </div>
+
+    <!-- Tabla con virtual scroll -->
+    <p-table #dt [value]="stockListado" dataKey="id" scrollable="true" [virtualScroll]="true"
+        [virtualScrollOptions]="{ itemSize: rowItemSize, scrollHeight: tablaAltura }" [rows]="30" [virtualScrollDelay]="0"
+        [size]="'small'" [rowHover]="true" styleClass="mantenedor-datatable p-datatable-sm"
+        sortMode="multiple">
+
+        <!-- Cabecera -->
+        <ng-template pTemplate="header">
+            <tr>
+                <th *ngFor="let col of visibleColumns; trackBy: trackCol" pSortableColumn="{{ col.field }}">
+                    {{ col.header }}
+                    <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+                </th>
+                <th>Acciones</th>
+            </tr>
+            <tr>
+                <th *ngFor="let col of visibleColumns; trackBy: trackCol">
+                    <ng-container *ngIf="col.filterType === 'multiSelect'">
+                        <p-multiSelect [options]="filterOptions[col.field]" [(ngModel)]="selectedFilters[col.field]"
+                            appendTo="body" (onChange)="applyFilter(col.field)" placeholder="{{ col.header }}"
+                            display="chip">
+                        </p-multiSelect>
+                    </ng-container>
+                    <ng-container *ngIf="col.filterType === 'text'">
+                        <input pInputText type="text" [(ngModel)]="selectedFilters[col.field]"
+                            (input)="applyFilter(col.field)" placeholder="{{ col.header }}">
+                    </ng-container>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+
+        <!-- Cuerpo -->
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td *ngFor="let col of visibleColumns; trackBy: trackCol"
+                    [ngClass]="{'stock-minimo-cell': col.field === 'stockMinimo'}">
+                    <ng-container *ngIf="col.field === 'color'; else checkStockMinimo">
+                        <span class="estado-pill"
+                              [ngClass]="row['color'] === 1 ? 'OK' : row['color'] === 0 ? 'ALERTA' : 'DEFAULT'">
+                            {{ row['color'] === 1 ? 'OK' : row['color'] === 0 ? 'BAJO' : '—' }}
+                        </span>
+                    </ng-container>
+                    <ng-template #checkStockMinimo>
+                        <ng-container *ngIf="col.field === 'stockMinimo'; else checkStockActual">
+                            <span class="stock-minimo-badge">{{ row[col.field] }}</span>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template #checkStockActual>
+                        <ng-container *ngIf="col.field === 'stockActual'; else normalCell">
+                            <span class="stock-actual-badge">{{ row[col.field] }}</span>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template #normalCell>
+                        {{ row[col.field] }}
+                    </ng-template>
+                </td>
+                <td class="acciones-cell">
+                    <button pButton type="button" icon="pi pi-search" class="p-button-text" pTooltip="Historial"
+                        tooltipPosition="top" (click)="abrirDialogoHistorial(row.idProducto ?? row.id)"></button>
+                    <button pButton type="button" icon="pi pi-plus" class="p-button-text" pTooltip="Ingresos"
+                        tooltipPosition="top"
+                        (click)="abrirDialogoAgregar(row.idProducto ?? row.id, row.proveedor_id)"></button>
+                    <!--<button pButton type="button" icon="pi pi-minus" class="p-button-text" pTooltip="Retiros" tooltipPosition="top" (click)="abrirDialogoEgresos(row)"></button>-->
+                </td>
+            </tr>
+        </ng-template>
+
+        <!-- Sin resultados -->
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td [attr.colspan]="visibleColumns.length" class="text-center">No hay registros encontrados.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-toast></p-toast>
+
+    <!-- Dialog: Ejemplo estilo Crear Requerimiento -->
+    <p-dialog [(visible)]="dialogRequerimientoVisible" [modal]="true" [draggable]="false" [closable]="true"
+              [style]="{ width: '90%', maxWidth: '1200px' }" [breakpoints]="{ '960px': '95vw' }"
+              [dismissableMask]="true" styleClass="dlg-requerimiento">
+      <ng-template pTemplate="header">
+        <div class="misat-dialog-header-inline">
+          <span>CREAR REQUERIMIENTO</span>
+        </div>
+      </ng-template>
+
+      <!-- Cabecera del caso con pills -->
+      <div class="case-header-box">
+        <div class="form-fields">
+          <div class="form-field" style="flex: 0 0 14%;">
+            <label class="form-label">Origen Atención:</label>
+            <div class="case-header-pill">
+              <span style="font-weight:600;">MAIL</span>
+            </div>
+          </div>
+          <div class="form-field" style="flex: 0 0 24%;">
+            <label class="form-label">Tipo Atención:</label>
+            <div class="case-header-pill">
+              <span style="font-weight:600;">RECLAMO CONTRA EMPRESA SANITARIA</span>
+            </div>
+          </div>
+          <div class="form-field" style="flex: 0 0 10%;">
+            <label class="form-label">Folio:</label>
+            <div class="case-header-pill">
+              <span style="font-weight:600;">202330281</span>
+            </div>
+          </div>
+          <div class="form-field" style="flex: 0 0 12%;">
+            <label class="form-label">Fecha Ingreso:</label>
+            <div class="case-header-pill">
+              <span style="font-weight:600;">19/01/2023</span>
+            </div>
+          </div>
+          <div class="form-field" style="flex: 0 0 14%;">
+            <label class="form-label">Fecha Recepción:</label>
+            <div class="case-header-pill">
+              <span style="font-weight:600;">19/01/2023</span>
+            </div>
+          </div>
+          <div class="form-field" style="flex: 0 0 18%;">
+            <label class="form-label">Fecha Término Esperada:</label>
+            <div class="case-header-pill">
+              <span style="font-weight:600;">19/12/2023</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenido: Grid de formulario -->
+      <div class="ingreso-form-grid">
+        <!-- Fila 1: Dos paneles lado a lado -->
+        <div class="ingreso-row">
+          <!-- Panel: Datos del Requerimiento -->
+          <div class="ingreso-panel">
+            <div class="p-panel-header">Datos del Requerimiento</div>
+            <div class="p-panel-content">
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Fecha, Plazo, Tipo -->
+                <div class="misat-flex-row-wrap">
+                  <div class="form-field" style="flex: 1; min-width: 140px;">
+                    <label class="form-label">Fecha Requerimiento</label>
+                    <input type="date" class="form-control" />
+                  </div>
+                  <div class="form-field" style="flex: 0 0 80px;">
+                    <label class="form-label">Plazo *</label>
+                    <input type="text" class="form-control" placeholder="" />
+                  </div>
+                  <div class="form-field" style="flex: 1; min-width: 120px;">
+                    <label class="form-label">Tipo *</label>
+                    <select class="form-control">
+                      <option>MAIL</option>
+                      <option>OFICIO</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Región, Sanitaria -->
+                <div class="misat-flex-row-wrap">
+                  <div class="form-field" style="flex: 1; min-width: 180px;">
+                    <label class="form-label">Región *</label>
+                    <select class="form-control">
+                      <option>Seleccione región</option>
+                    </select>
+                  </div>
+                  <div class="form-field" style="flex: 1; min-width: 180px;">
+                    <label class="form-label">Sanitaria *</label>
+                    <select class="form-control">
+                      <option>Selecciona sanitaria</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Descripción -->
+                <div class="form-field">
+                  <label class="form-label">Descripción *</label>
+                  <textarea class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel: Datos del Correo -->
+          <div class="ingreso-panel">
+            <div class="p-panel-header">Datos del Correo</div>
+            <div class="p-panel-content">
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div class="form-field">
+                  <label class="form-label">Para *</label>
+                  <input type="text" class="form-control" />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">CC</label>
+                  <input type="text" class="form-control" />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Cuerpo *</label>
+                  <textarea class="form-control" rows="5"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fila 2: Panel Archivos Adjuntos -->
+        <div class="ingreso-row">
+          <div class="ingreso-panel" style="width: 100%;">
+            <div class="p-panel-header">Archivos Adjuntos</div>
+            <div class="p-panel-content">
+              <div class="table-responsive" style="max-height: 120px; overflow: auto;">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Nombre de archivo</th>
+                      <th style="width: 80px;">Eliminar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="text-muted">No se encontraron registros.</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template pTemplate="footer">
+        <div style="display: flex; justify-content: space-between; width: 100%; gap: 12px;">
+          <button pButton type="button" class="btn-accent misat-dialog-footer-primary" label="Adjuntar Archivo"></button>
+          <button pButton type="button" class="btn-accent misat-dialog-footer-primary" label="Enviar"></button>
+        </div>
+      </ng-template>
+    </p-dialog>
+</main>

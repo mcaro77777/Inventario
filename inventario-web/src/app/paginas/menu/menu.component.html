@@ -1,0 +1,36 @@
+<div class="app-layout" [class.menu-open]="menuAbierto()">
+  <button class="menu-backdrop" type="button" aria-label="Cerrar menú" (click)="cerrarMenu()"></button>
+  <aside class="sidebar">
+    <a class="brand" routerLink="/menu/dashboard-bi" (click)="cerrarMenu()">
+      <span class="brand-mark"><i></i><i></i><i></i></span>
+      <span class="brand-copy"><strong>Inventario</strong><small>DAP · MOP</small></span>
+      <button class="close-menu icon-button" type="button" (click)="$event.preventDefault(); cerrarMenu()" aria-label="Cerrar menú"><i class="pi pi-times"></i></button>
+    </a>
+    <nav aria-label="Navegación principal">
+      @if (itemsOperacion().length) {
+        <p class="nav-title">Operación</p>
+        @for (item of itemsOperacion(); track item.ruta) {
+          <a [routerLink]="item.ruta" routerLinkActive="active" (click)="cerrarMenu()"><i class="pi" [class]="'pi ' + item.icono"></i><span>{{ item.etiqueta }}</span></a>
+        }
+      }
+      @if (itemsAdministracion().length) {
+        <p class="nav-title secondary">Administración</p>
+        @for (item of itemsAdministracion(); track item.ruta) {
+          <a [routerLink]="item.ruta" routerLinkActive="active" (click)="cerrarMenu()"><i class="pi" [class]="'pi ' + item.icono"></i><span>{{ item.etiqueta }}</span></a>
+        }
+      }
+    </nav>
+    <div class="sidebar-footer">
+      <button class="theme-row" type="button" (click)="alternarTema()"><i class="pi" [class.pi-sun]="oscuro()" [class.pi-moon]="!oscuro()"></i><span>{{ oscuro() ? 'Modo claro' : 'Modo oscuro' }}</span></button>
+      <div class="profile-card"><span class="avatar">{{ iniciales() }}</span><span class="profile-copy"><strong>{{ auth.username() || 'Usuario' }}</strong><small>Inventario DAP</small></span><button class="icon-button" type="button" (click)="salir()" title="Cerrar sesión" aria-label="Cerrar sesión"><i class="pi pi-sign-out"></i></button></div>
+    </div>
+  </aside>
+  <section class="workspace">
+    <header class="topbar">
+      <button class="mobile-menu icon-button" type="button" (click)="menuAbierto.set(true)" aria-label="Abrir menú"><i class="pi pi-bars"></i></button>
+      <div class="context"><span class="eyebrow">Plataforma de gestión</span><strong>Inventario institucional</strong></div>
+      <div class="topbar-actions"><button class="theme-toggle" type="button" (click)="alternarTema()" [attr.aria-label]="oscuro() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"><i class="pi pi-sun"></i><i class="pi pi-moon"></i></button><span class="top-avatar">{{ iniciales() }}</span></div>
+    </header>
+    <main class="page"><router-outlet /></main>
+  </section>
+</div>

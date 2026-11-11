@@ -1,0 +1,148 @@
+:host{
+  display:block;
+  padding:.75rem;
+  background:var(--bg-page);
+  color:var(--text-body);
+  font-family:var(--font);
+  container-type:inline-size;
+}
+
+.kpi-section{ background:transparent; padding:.25rem 0 .5rem; border-bottom:1px solid #eef2f7; margin-bottom:.5rem }
+
+.toolbar{
+  display:flex; align-items:center; gap:.75rem; margin:.25rem 0 1rem;
+  label{ font-size:.9rem; color:#6b7280 }
+  select{
+    appearance:none; -webkit-appearance:none; -moz-appearance:none;
+    background:#fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M5 7l5 5 5-5" stroke="%236b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat right .6rem center/14px;
+    border:1px solid #e5e7eb; border-radius:.5rem; padding:.45rem 2rem .45rem .65rem; color:#111827;
+    box-shadow:0 1px 2px rgba(0,0,0,.04);
+  }
+}
+
+.charts-row{
+  margin-top:1rem;
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:1rem;
+}
+/* Permite que los hijos no fuercen el ancho mínimo y se mantengan 2 por fila */
+.charts-row > * { min-width:0; }
+
+.action-bar{
+  position:sticky;
+  bottom:1rem;
+  right:0;
+  display:flex;
+  justify-content:flex-end;
+  gap:1rem;
+  margin-top:1rem;
+}
+
+:host ::ng-deep .row-zero{ background:#fecaca!important; }
+:host ::ng-deep .row-low { background:#fef9c3!important; }
+
+@media (max-width:600px){
+  :host{ padding:.35rem; }
+  .toolbar{ flex-wrap:wrap; gap:.5rem; }
+  .charts-row{ grid-template-columns:1fr; }
+}
+
+/* Top progress bar */
+.progressbar{
+  height:3px; width:100%; border-radius:2px; margin-bottom:.5rem;
+  background: linear-gradient(90deg,#6366f1,#22c55e,#f59e0b,#ef4444);
+  background-size:400% 100%;
+  animation: progress-run 1s linear infinite;
+}
+@keyframes progress-run{
+  0%{ background-position:100% 0 }
+  100%{ background-position:-100% 0 }
+}
+
+/* ====== Dark mode para dashboard ====== */
+:host-context(body.dark-theme) {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+:host-context(body.dark-theme) .kpi-section {
+  border-bottom-color: #334155;
+}
+
+:host-context(body.dark-theme) .toolbar {
+  label { color: #94a3b8; }
+  select {
+    background-color: #334155;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M5 7l5 5 5-5" stroke="%2394a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+    border-color: #475569;
+    color: #e2e8f0;
+  }
+}
+
+/* Charts cards en dark mode */
+:host-context(body.dark-theme) ::ng-deep .chart-card,
+:host-context(body.dark-theme) ::ng-deep app-base-chart {
+  background: linear-gradient(180deg, #2d3a4d 0%, #1e293b 100%) !important;
+  border: 1px solid #334155 !important;
+  border-radius: 12px;
+  
+  .chart-title, h4, h3, h5 {
+    color: #e2e8f0 !important;
+  }
+}
+
+/* Textos de gráficos Chart.js en dark mode */
+:host-context(body.dark-theme) ::ng-deep canvas {
+  color: #e2e8f0 !important;
+}
+:host-context(body.dark-theme) ::ng-deep .p-chart text,
+:host-context(body.dark-theme) ::ng-deep .chartjs-render-monitor {
+  color: #e2e8f0 !important;
+}
+
+/* Forzar colores claros en leyendas de Chart.js */
+:host-context(body.dark-theme) ::ng-deep .p-chart {
+  .chartjs-legend, 
+  ul li span,
+  [class*="legend"] {
+    color: #e2e8f0 !important;
+  }
+}
+
+/* Chart.js legend labels - aplicar via CSS variables */
+:host-context(body.dark-theme) {
+  --chart-legend-color: #e2e8f0;
+  --chart-tick-color: #e2e8f0;
+  --chart-grid-color: rgba(255,255,255,0.1);
+}
+
+/* KPI cards en dark mode */
+:host-context(body.dark-theme) ::ng-deep app-base-card-grid .kpi-card,
+:host-context(body.dark-theme) ::ng-deep .stat-card {
+  background: linear-gradient(180deg, #2d3a4d 0%, #1e293b 100%) !important;
+  border: 1px solid #334155 !important;
+  
+  .kpi-value, .stat-value {
+    color: #60a5fa !important;
+  }
+  .kpi-label, .stat-label {
+    color: #94a3b8 !important;
+  }
+}
+
+/* Panel header en dark mode */
+:host-context(body.dark-theme) ::ng-deep .panel-header {
+  background: linear-gradient(180deg, #3a4556 0%, #2f3a48 100%) !important;
+  border-color: #475569 !important;
+  color: #e2e8f0 !important;
+}
+
+/* Filas de alerta en dark mode */
+:host-context(body.dark-theme) ::ng-deep .row-zero { 
+  background: rgba(239, 68, 68, 0.2) !important; 
+}
+:host-context(body.dark-theme) ::ng-deep .row-low { 
+  background: rgba(234, 179, 8, 0.2) !important; 
+}
+

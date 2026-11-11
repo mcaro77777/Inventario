@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="360" viewBox="0 0 880 360">
+  <defs>
+    <!-- Soft shadows -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#143a53" flood-opacity="0.35"/>
+    </filter>
+
+    <!-- Saucer metal gradients -->
+    <linearGradient id="metalTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#f4f8ff"/>
+      <stop offset="60%" stop-color="#e6eef9"/>
+      <stop offset="100%" stop-color="#cfd9ea"/>
+    </linearGradient>
+    <linearGradient id="metalBottom" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#e9effa"/>
+      <stop offset="40%" stop-color="#d6deee"/>
+      <stop offset="100%" stop-color="#b5c1d4"/>
+    </linearGradient>
+
+    <!-- Rim highlight -->
+    <linearGradient id="rimGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#b9c7da"/>
+      <stop offset="40%" stop-color="#a9b8cc"/>
+      <stop offset="100%" stop-color="#919fb4"/>
+    </linearGradient>
+
+    <!-- Windows (blue LEDs) -->
+    <linearGradient id="ledBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8bd4ff"/>
+      <stop offset="100%" stop-color="#46b2ff"/>
+    </linearGradient>
+
+    <!-- Dome glow -->
+    <radialGradient id="domeGrad" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="55%" stop-color="#e9f2ff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#d6e3f5" stop-opacity="1"/>
+    </radialGradient>
+
+    <!-- Beam -->
+    <linearGradient id="beamGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#7dd3ff" stop-opacity="0.66"/>
+      <stop offset="40%"  stop-color="#60b7ff" stop-opacity="0.48"/>
+      <stop offset="75%"  stop-color="#5aa8ff" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#5aa8ff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Thruster flame -->
+    <linearGradient id="flameGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff3b30"/>
+      <stop offset="50%" stop-color="#ff8f1f"/>
+      <stop offset="100%" stop-color="#ffd873" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <!-- Subtle glow for LEDs -->
+    <filter id="ledGlow" x="-200%" y="-200%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Particles for beam -->
+    <radialGradient id="dot" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#bfe4ff" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#bfe4ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background subtle vignette -->
+  <rect width="100%" height="100%" fill="none"/>
+  <g filter="url(#shadow)">
+    <!-- Beam (under the saucer) -->
+    <g transform="translate(440,210)">
+      <path d="M -140 0 L 140 0 L 200 140 C 120 150 -120 150 -200 140 Z"
+            fill="url(#beamGrad)"/>
+      <!-- little particles -->
+      <g opacity="0.65">
+        <circle cx="-60" cy="30" r="6" fill="url(#dot)"/>
+        <circle cx="30"  cy="60" r="8" fill="url(#dot)"/>
+        <circle cx="85"  cy="95" r="5" fill="url(#dot)"/>
+        <circle cx="-110" cy="90" r="7" fill="url(#dot)"/>
+        <circle cx="-10" cy="110" r="9" fill="url(#dot)"/>
+      </g>
+    </g>
+
+    <!-- Saucer shadow (underneath) -->
+    <ellipse cx="440" cy="230" rx="210" ry="28" fill="#0f1f2e" opacity="0.28"/>
+
+    <!-- Saucer body -->
+    <g>
+      <!-- Bottom plate -->
+      <path d="M200,200 Q440,260 680,200 Q680,230 440,250 Q200,230 200,200 Z"
+            fill="url(#metalBottom)" stroke="#99a7bb" stroke-opacity=".25"/>
+      <!-- Upper plate -->
+      <path d="M230,180 Q440,150 650,180 Q615,205 440,210 Q265,205 230,180 Z"
+            fill="url(#metalTop)"/>
+
+      <!-- Center cap -->
+      <ellipse cx="440" cy="205" rx="60" ry="14" fill="#65748b" opacity="0.65"/>
+      <circle cx="440" cy="196" r="16" fill="#8aa0bb" opacity="0.55"/>
+
+      <!-- Rim -->
+      <path d="M210,180 Q440,130 670,180 Q670,185 660,188 Q440,160 220,188 Q210,185 210,180 Z"
+            fill="url(#rimGrad)"/>
+
+      <!-- Dome -->
+      <g transform="translate(0,-8)">
+        <ellipse cx="440" cy="148" rx="66" ry="40" fill="url(#domeGrad)"/>
+        <ellipse cx="440" cy="146" rx="48" ry="12" fill="#ffffff" opacity=".55"/>
+      </g>
+
+      <!-- Windows / LEDs -->
+      <g filter="url(#ledGlow)">
+        <g transform="translate(0,0)">
+          <rect x="300" y="190" width="24" height="12" rx="6" fill="url(#ledBlue)"/>
+          <rect x="340" y="193" width="24" height="12" rx="6" fill="url(#ledBlue)"/>
+          <rect x="380" y="195" width="24" height="12" rx="6" fill="url(#ledBlue)"/>
+          <rect x="420" y="195" width="24" height="12" rx="6" fill="url(#ledBlue)"/>
+          <rect x="460" y="193" width="24" height="12" rx="6" fill="url(#ledBlue)"/>
+          <rect x="500" y="190" width="24" height="12" rx="6" fill="url(#ledBlue)"/>
+        </g>
+      </g>
+
+      <!-- Small arms (stylized) -->
+      <g opacity="0.9">
+        <path d="M285,162 q-12,6 -18,18" stroke="#9fb0c6" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <circle cx="266" cy="185" r="6" fill="#9fb0c6"/>
+        <path d="M595,162 q12,6 18,18" stroke="#9fb0c6" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <circle cx="614" cy="185" r="6" fill="#9fb0c6"/>
+      </g>
+
+      <!-- Thrusters -->
+      <g>
+        <g transform="translate(320,215)">
+          <rect x="-16" y="-14" width="32" height="16" rx="6" fill="#7a889f"/>
+          <path d="M-10,2 L10,2 L18,60 Q0,74 -18,60 Z" fill="url(#flameGrad)" opacity="0.92"/>
+        </g>
+        <g transform="translate(560,215)">
+          <rect x="-16" y="-14" width="32" height="16" rx="6" fill="#7a889f"/>
+          <path d="M-10,2 L10,2 L18,60 Q0,74 -18,60 Z" fill="url(#flameGrad)" opacity="0.92"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

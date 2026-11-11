@@ -1,0 +1,157 @@
+<main>
+    <!-- Barra de encabezado estilo panel -->
+    <header class="panel-header">
+        <div class="panel-header-left">
+            <i class="pi pi-list-check panel-icon"></i>
+            <h3 class="panel-title">MIS SOLICITUDES</h3>
+        </div>
+        <div class="panel-header-right">
+            <button pButton type="button" class="btn-export" icon="pi pi-file-excel" label="Exportar a Excel" (click)="exportarExcel()"></button>
+            <button pButton type="button" class="btn-filter" icon="pi pi-filter-slash" label="Limpiar Filtros" (click)="clearFilters()"></button>
+        </div>
+    </header>
+
+    <!-- Indicadores de resumen -->
+    <div class="indicators-row">
+        <div class="indicator-card indicator-card--total"
+             [class.indicator-card--active]="filtroIndicador === 'TODOS'"
+             (click)="filtrarPorIndicador('TODOS')">
+            <div class="indicator-value">{{ totalSolicitudes }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Total</span>
+                <span class="indicator-desc">Todas las solicitudes</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--yellow"
+             [class.indicator-card--active]="filtroIndicador === 'PENDIENTE'"
+             (click)="filtrarPorIndicador('PENDIENTE')">
+            <div class="indicator-value">{{ totalPendientes }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Pendientes</span>
+                <span class="indicator-desc">Por aprobar</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--green"
+             [class.indicator-card--active]="filtroIndicador === 'APROBADO'"
+             (click)="filtrarPorIndicador('APROBADO')">
+            <div class="indicator-value">{{ totalAprobadas }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Aprobadas</span>
+                <span class="indicator-desc">Listas para retiro</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--red"
+             [class.indicator-card--active]="filtroIndicador === 'RECHAZADO'"
+             (click)="filtrarPorIndicador('RECHAZADO')">
+            <div class="indicator-value">{{ totalRechazadas }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Rechazadas</span>
+                <span class="indicator-desc">No aprobadas</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="loading()" class="loading-spinner">
+        <p-progressSpinner strokeWidth="4" fill="transparent" animationDuration="1s"
+            styleClass="loading-icon"></p-progressSpinner>
+        <span>Procesando...</span>
+    </div>
+
+    <!-- Tabla con virtual scroll -->
+    <p-table #dt [value]="solicitudes()" dataKey="idIngreso" scrollable="true" [virtualScroll]="true"
+        [virtualScrollOptions]="{ itemSize: rowItemSize, scrollHeight: tablaAltura }" [rows]="30" [virtualScrollDelay]="0"
+        [size]="'small'" [rowHover]="true" styleClass="mantenedor-datatable p-datatable-sm"
+        sortMode="multiple">
+  
+      <!-- Cabecera -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let col of visibleColumns()" pSortableColumn="{{ col.field }}">
+            {{ col.header }}
+            <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+          </th>
+          <th style="width: 5rem; text-align: center;">Acciones</th>
+        </tr>
+        <tr>
+          <th *ngFor="let col of visibleColumns()">
+            <ng-container *ngIf="col.filterType === 'multiSelect'">
+              <p-multiSelect [options]="filterOptions()[col.field]"
+                             [(ngModel)]="selectedFilters[col.field]"
+                             appendTo="body"
+                             (onChange)="applyFilter(col.field)"
+                             placeholder="{{ col.header }}"
+                             display="chip">
+              </p-multiSelect>
+            </ng-container>
+  
+            <ng-container *ngIf="col.filterType === 'text'">
+              <input pInputText
+                     type="text"
+                     [(ngModel)]="selectedFilters[col.field]"
+                     (input)="applyFilter(col.field)"
+                     placeholder="{{ col.header }}">
+            </ng-container>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+  
+      <!-- Cuerpo -->
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td *ngFor="let col of visibleColumns()">
+            <ng-container *ngIf="col.field === 'tipo'; else normalCell">
+              <div style="display:flex; align-items:center; gap: .5rem;">
+                <span class="estado-pill"
+                      [ngClass]="row[col.field] === 2 ? 'OK' : row[col.field] === 3 ? 'ALERTA' : 'DEFAULT'">
+                  {{ descripcionTipo(row[col.field]) }}
+                </span>
+                <button
+                  *ngIf="row[col.field] === 2"
+                  pButton
+                  type="button"
+                  class="p-button-text p-button-sm"
+                  icon="pi pi-file-pdf"
+                  pTooltip="Ver certificado PDF"
+                  tooltipPosition="top"
+                  (click)="abrirCertificado(row)"
+                ></button>
+              </div>
+            </ng-container>
+            <ng-template #normalCell>
+              {{ row[col.field] }}
+            </ng-template>
+          </td>
+          <td style="text-align: center;">
+            <button
+              *ngIf="row.tipo === 1"
+              pButton
+              type="button"
+              class="p-button-danger p-button-text p-button-sm"
+              icon="pi pi-trash"
+              pTooltip="Eliminar solicitud"
+              tooltipPosition="top"
+              (click)="confirmarEliminacion(row)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+  
+      <!-- Sin registros -->
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="visibleColumns().length + 1" class="text-center">
+            No hay solicitudes registradas.
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  
+    <p-toast></p-toast>
+    <p-confirmDialog></p-confirmDialog>
+  </main>
+  

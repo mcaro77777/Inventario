@@ -1,0 +1,197 @@
+<main>
+    <!-- Barra de encabezado estilo panel -->
+    <header class="panel-header">
+        <div class="panel-header-left">
+            <i class="pi pi-check-square panel-icon"></i>
+            <h3 class="panel-title">ESTADO SOLICITUDES</h3>
+        </div>
+        <div class="panel-header-right">
+            <button pButton type="button" class="btn-export" icon="pi pi-file-excel" label="Exportar a Excel" (click)="exportarExcel()"></button>
+            <button pButton type="button" class="btn-filter" icon="pi pi-filter-slash" label="Limpiar Filtros" (click)="clearFilters()"></button>
+        </div>
+    </header>
+
+    <!-- Indicadores de resumen -->
+    <div class="indicators-row">
+        <div class="indicator-card indicator-card--total"
+             [class.indicator-card--active]="filtroIndicador === 'TODOS'"
+             (click)="filtrarPorIndicador('TODOS')">
+            <div class="indicator-value">{{ totalSolicitudes }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Total</span>
+                <span class="indicator-desc">Todas las solicitudes</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--yellow"
+             [class.indicator-card--active]="filtroIndicador === 'PENDIENTE'"
+             (click)="filtrarPorIndicador('PENDIENTE')">
+            <div class="indicator-value">{{ totalPendientes }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Pendientes</span>
+                <span class="indicator-desc">Por aprobar</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--green"
+             [class.indicator-card--active]="filtroIndicador === 'APROBADO'"
+             (click)="filtrarPorIndicador('APROBADO')">
+            <div class="indicator-value">{{ totalAprobadas }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Aprobadas</span>
+                <span class="indicator-desc">Listas para retiro</span>
+            </div>
+        </div>
+
+        <div class="indicator-card indicator-card--red"
+             [class.indicator-card--active]="filtroIndicador === 'RECHAZADO'"
+             (click)="filtrarPorIndicador('RECHAZADO')">
+            <div class="indicator-value">{{ totalRechazadas }}</div>
+            <div class="indicator-text">
+                <span class="indicator-title">Rechazadas</span>
+                <span class="indicator-desc">No aprobadas</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="loading()" class="loading-spinner">
+        <p-progressSpinner strokeWidth="4" fill="transparent" animationDuration="1s"
+            styleClass="loading-icon"></p-progressSpinner>
+        <span>Procesando...</span>
+    </div>
+
+    <!-- Tabla con virtual scroll -->
+    <p-table #dt [value]="solicitudes()" dataKey="idIngreso" scrollable="true" [virtualScroll]="true"
+        [virtualScrollOptions]="{ itemSize: rowItemSize, scrollHeight: tablaAltura }" [rows]="30" [virtualScrollDelay]="0"
+        [size]="'small'" [rowHover]="true" styleClass="mantenedor-datatable p-datatable-sm"
+        sortMode="multiple">
+  
+      <!-- Cabecera: títulos -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let col of visibleColumns()" pSortableColumn="{{ col.field }}">
+            {{ col.header }}
+            <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+          </th>
+        </tr>
+        <!-- Cabecera: filtros -->
+        <tr>
+          <th *ngFor="let col of visibleColumns()">
+            <!-- Filtro multiselect (campo tipo) -->
+            <ng-container *ngIf="col.filterType === 'multiSelect'">
+              <p-multiSelect
+                [options]="filterOptions()[col.field]"
+                [(ngModel)]="selectedFilters[col.field]"
+                appendTo="body"
+                (onChange)="applyFilter(col.field)"
+                [placeholder]="col.header"
+                display="chip">
+              </p-multiSelect>
+            </ng-container>
+
+            <!-- Filtro texto / numérico -->
+            <ng-container *ngIf="col.filterType !== 'multiSelect'">
+              <input pInputText
+                     [type]="col.filterType === 'numeric' ? 'number' : 'text'"
+                     [(ngModel)]="selectedFilters[col.field]"
+                     (input)="applyFilter(col.field)"
+                     [placeholder]="col.header">
+            </ng-container>
+          </th>
+        </tr>
+      </ng-template>
+  
+      <!-- Cuerpo -->      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td *ngFor="let col of visibleColumns()">
+            <ng-container *ngIf="col.field === 'tipo'; else normalCell">
+              <div style="display:flex; align-items:center; gap: .5rem;">
+                <span class="estado-pill"
+                      [ngClass]="row[col.field] === 2 ? 'OK' : row[col.field] === 3 ? 'ALERTA' : 'DEFAULT'">
+                  {{ descripcionTipo(row[col.field]) }}
+                </span>
+                <button
+                  *ngIf="row[col.field] === 2"
+                  pButton
+                  type="button"
+                  class="p-button-text p-button-sm"
+                  icon="pi pi-file-pdf"
+                  pTooltip="Ver certificado PDF"
+                  tooltipPosition="top"
+                  (click)="abrirCertificado(row)"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-text p-button-sm"
+                  icon="pi pi-pencil"
+                  pTooltip="Cambiar estado"
+                  tooltipPosition="top"
+                  (click)="abrirDialogoEstado(row)"
+                ></button>
+              </div>
+            </ng-container>
+            <ng-template #normalCell>
+              {{ row[col.field] }}
+            </ng-template>
+          </td>
+        </tr>
+      </ng-template>
+  
+      <!-- Sin registros -->      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="visibleColumns().length" class="text-center">
+            No hay solicitudes pendientes.
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  
+    <!-- Toasts -->
+    <p-toast></p-toast>
+
+    <p-dialog
+      header="Cambiar estado"
+      [(visible)]="showEstadoDialog"
+      [modal]="true"
+      [closable]="true"
+      [closeOnEscape]="true"
+      [draggable]="false"
+      [resizable]="false"
+      [maximizable]="false"
+      (onHide)="cerrarDialogoEstado()"
+      [style]="{ width: '520px' }"
+      [breakpoints]="{ '960px': '85vw', '640px': '95vw' }"
+      styleClass="app-dialog"
+    >
+      <div style="display:flex; flex-direction:column; gap: .75rem;">
+        <div *ngIf="solicitudParaCambio" style="display:flex; flex-direction:column; gap:.25rem;">
+          <div><strong>Cliente:</strong> {{ solicitudParaCambio.clienteNombre }}</div>
+          <div><strong>Producto:</strong> {{ solicitudParaCambio.productoNombre }}</div>
+        </div>
+
+        <div style="display:flex; gap: 1rem; align-items:center;">
+          <label style="display:flex; align-items:center; gap:.4rem;">
+            <input type="radio" name="estadoSolicitud" [value]="2" [(ngModel)]="estadoSeleccionado" />
+            Aceptada
+          </label>
+          <label style="display:flex; align-items:center; gap:.4rem;">
+            <input type="radio" name="estadoSolicitud" [value]="3" [(ngModel)]="estadoSeleccionado" />
+            Rechazada
+          </label>
+        </div>
+
+        <div *ngIf="estadoSeleccionado === 3" style="display:flex; flex-direction:column; gap:.35rem;">
+          <label>Observación *</label>
+          <textarea rows="3" style="width:100%;" [(ngModel)]="observacionCambio"></textarea>
+          <small class="p-error" *ngIf="mostrarErrorObservacion">La observación es obligatoria para rechazar.</small>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:.5rem; margin-top: .5rem;">
+          <button pButton type="button" class="p-button-secondary p-button-sm" label="Cancelar" icon="pi pi-times" (click)="cerrarDialogoEstado()" [disabled]="guardandoEstado()"></button>
+          <button pButton type="button" class="p-button-sm" label="Guardar" icon="pi pi-save" (click)="guardarCambioEstado()" [disabled]="guardandoEstado() || !estadoSeleccionado"></button>
+        </div>
+      </div>
+    </p-dialog>
+  </main>

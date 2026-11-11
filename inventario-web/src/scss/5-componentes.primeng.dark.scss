@@ -1,0 +1,188 @@
+/* ============================================================================
+   5-componentes.primeng.dark.scss — overrides SOLO modo oscuro (PrimeNG + forms)
+   ========================================================================== */
+
+@use './componentes.primeng.dark/datatable';
+@use './componentes.primeng.dark/select';
+@use './componentes.primeng.dark/listbox';
+
+/* --------------------------------------------------------------------------
+   Soporte automático para modo oscuro del sistema (sin clase .dark-theme)
+   Esto asegura contraste en selects/combos cuando Windows/macOS está en dark
+   pero la app no aplica la clase body.dark-theme.
+   -------------------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  /* Inputs de texto/fecha/hora visibles sin .dark-theme */
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  input[type="time"],
+  textarea,
+  .p-inputtext,
+  .p-inputnumber .p-inputtext,
+  .p-inputtextarea {
+    background: color-mix(in oklab, #0f1827 88%, #ffffff 12%) !important;
+    color: #e8eefc !important;
+    border: 1px solid color-mix(in oklab, #e8eefc 22%, #0b1120 78%) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 -1px 0 rgba(0,0,0,.22) !important;
+  }
+  input::placeholder,
+  textarea::placeholder,
+  .p-inputtext::placeholder,
+  .p-inputtextarea::placeholder { color: rgba(232,238,252,0.65) !important; }
+  /* Focus ring sutil con acento */
+  input:focus,
+  textarea:focus,
+  .p-inputtext:focus,
+  .p-inputnumber .p-inputtext:focus,
+  .p-inputtextarea:focus {
+    outline: none !important;
+    border-color: color-mix(in oklab, #3e6aff 60%, #0b1120) !important;
+    box-shadow: 0 0 0 3px color-mix(in oklab, #3e6aff 24%, transparent) !important;
+  }
+
+  /* Controles cerrados */
+  .p-select,
+  .p-dropdown {
+    background: color-mix(in oklab, #0f1827 88%, #ffffff 12%) !important;
+    color: #e8eefc !important;
+    border-color: color-mix(in oklab, #e8eefc 22%, #0b1120 78%) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 -1px 0 rgba(0,0,0,.22) !important;
+  }
+  .p-select .p-select-label,
+  .p-dropdown .p-dropdown-label { color: #e8eefc !important; }
+  .p-select .p-select-label.p-placeholder,
+  .p-dropdown .p-dropdown-label.p-placeholder,
+  .p-inputtext::placeholder { color: rgba(232,238,252,0.65) !important; }
+
+  /* Panel/overlay */
+  .p-select-panel,
+  .p-dropdown-panel {
+    background: color-mix(in oklab, #0f1827 88%, #ffffff 12%) !important;
+    color: #e8eefc !important;
+    border: 1px solid color-mix(in oklab, #e8eefc 22%, #0b1120 78%) !important;
+    box-shadow: 0 10px 28px rgba(0,0,0,.6) !important;
+  }
+  .p-select-panel .p-select-item,
+  .p-dropdown-panel .p-dropdown-item { color: #e8eefc !important; }
+  .p-select-panel .p-select-item:not(.p-highlight):hover,
+  .p-dropdown-panel .p-dropdown-item:not(.p-highlight):hover {
+    background: color-mix(in oklab, #3e6aff 16%, #0f1827) !important;
+  }
+  .p-select-panel .p-select-item.p-highlight,
+  .p-dropdown-panel .p-dropdown-item.p-highlight {
+    background: color-mix(in oklab, #3e6aff 22%, #0f1827) !important;
+    color: #ffffff !important;
+  }
+  .p-dropdown-panel .p-dropdown-header .p-dropdown-filter,
+  .p-select-panel .p-select-header .p-select-filter {
+    background: color-mix(in oklab, #0f1827 88%, #ffffff 12%) !important;
+    color: #e8eefc !important;
+    border-color: color-mix(in oklab, #e8eefc 22%, #0b1120 78%) !important;
+  }
+  .p-dropdown-panel .p-dropdown-header .p-dropdown-filter::placeholder,
+  .p-select-panel .p-select-header .p-select-filter::placeholder { color: rgba(232,238,252,0.65) !important; }
+
+  /* PrimeNG 20+ data-pc selectors */
+  [data-pc-name="select"][data-pc-section="root"],
+  [data-pc-name="dropdown"][data-pc-section="root"]{
+    background: color-mix(in oklab, #0f1827 88%, #ffffff 12%) !important;
+    color: #e8eefc !important;
+    border-color: color-mix(in oklab, #e8eefc 22%, #0b1120 78%) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 -1px 0 rgba(0,0,0,.22) !important;
+  }
+  [data-pc-name="select"][data-pc-section="label"],
+  [data-pc-name="dropdown"][data-pc-section="label"],
+  [data-pc-name="select"][data-pc-section="label"] *,
+  [data-pc-name="dropdown"][data-pc-section="label"] *{ color: #e8eefc !important; }
+  [data-pc-name="select"][data-pc-section="label"].p-placeholder,
+  [data-pc-name="dropdown"][data-pc-section="label"].p-placeholder{ color: rgba(232,238,252,0.65) !important; }
+
+  [data-pc-name="dropdown"][data-pc-section="panel"],
+  [data-pc-name="select"][data-pc-section="panel"]{
+    background: color-mix(in oklab, #0f1827 88%, #ffffff 12%) !important;
+    color: #e8eefc !important;
+    border: 1px solid color-mix(in oklab, #e8eefc 22%, #0b1120 78%) !important;
+  }
+  [data-pc-name="select"][data-pc-section="option"],
+  [data-pc-name="dropdown"][data-pc-section="item"],
+  [data-pc-name="select"][data-pc-section="option"] *,
+  [data-pc-name="dropdown"][data-pc-section="item"] *{ color: #e8eefc !important; }
+  [data-pc-name="select"][data-pc-section="option"]:not(.p-highlight):hover,
+  [data-pc-name="dropdown"][data-pc-section="item"]:not(.p-highlight):hover{
+    background: color-mix(in oklab, #3e6aff 16%, #0f1827) !important;
+  }
+  [data-pc-name="select"][data-pc-section="option"].p-highlight,
+  [data-pc-name="dropdown"][data-pc-section="item"].p-highlight{
+    background: color-mix(in oklab, #3e6aff 22%, #0f1827) !important;
+    color: #ffffff !important;
+  }
+
+  /* Listbox (filtros dashboard) */
+  .p-listbox {
+    background: color-mix(in oklab, #0f1827 88%, #ffffff 12%) !important;
+    border: 1px solid color-mix(in oklab, #e8eefc 22%, #0b1120 78%) !important;
+  }
+  .p-listbox .p-listbox-list {
+    background: color-mix(in oklab, #0f1827 88%, #ffffff 12%) !important;
+  }
+  .p-listbox .p-listbox-item,
+  .p-listbox .p-listbox-option {
+    color: #e8eefc !important;
+    background: transparent !important;
+  }
+  .p-listbox .p-listbox-item span,
+  .p-listbox .p-listbox-option span,
+  .p-listbox [data-pc-section="option"],
+  .p-listbox [data-pc-section="option"] * {
+    color: #e8eefc !important;
+  }
+  .p-listbox .p-listbox-item:not(.p-highlight):hover,
+  .p-listbox .p-listbox-option:not(.p-highlight):hover {
+    background: color-mix(in oklab, #3e6aff 16%, #0f1827) !important;
+  }
+  .p-listbox .p-listbox-item.p-highlight,
+  .p-listbox .p-listbox-option.p-highlight,
+  .p-listbox [data-pc-section="option"].p-highlight {
+    background: color-mix(in oklab, #3e6aff 22%, #0f1827) !important;
+    color: #ffffff !important;
+  }
+  .p-listbox .p-listbox-item.p-highlight span,
+  .p-listbox .p-listbox-option.p-highlight span,
+  .p-listbox [data-pc-section="option"].p-highlight * {
+    color: #ffffff !important;
+  }
+  .p-listbox .p-listbox-header,
+  .p-listbox .p-listbox-filter-container {
+    background: color-mix(in oklab, #0f1827 88%, #ffffff 12%) !important;
+    border-bottom: 1px solid color-mix(in oklab, #e8eefc 22%, #0b1120 78%) !important;
+  }
+  .p-listbox .p-listbox-filter {
+    background: color-mix(in oklab, #0f1827 88%, #ffffff 12%) !important;
+    color: #e8eefc !important;
+    border: 1px solid color-mix(in oklab, #e8eefc 22%, #0b1120 78%) !important;
+  }
+  .p-listbox .p-listbox-filter::placeholder {
+    color: rgba(232,238,252,0.65) !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Dashboard ABC items - modo oscuro
+   -------------------------------------------------------------------------- */
+body.dark-theme,
+[data-theme="dark"] {
+  .abc-a { background: rgba(59,130,246,0.2) !important; border-color: #60a5fa !important; }
+  .abc-b { background: rgba(245,158,11,0.2) !important; border-color: #fbbf24 !important; }
+  .abc-c { background: rgba(156,163,175,0.2) !important; border-color: #6b7280 !important; }
+  .abc-a .abc-label { color: #93c5fd !important; }
+  .abc-b .abc-label { color: #fcd34d !important; }
+  .abc-c .abc-label { color: #d1d5db !important; }
+  .abc-value { color: #f3f4f6 !important; }
+  .abc-count { color: #d1d5db !important; }
+  
+  /* Badge de total estancado */
+  .estancado-total { background: rgba(245,158,11,0.2) !important; color: #fcd34d !important; border: 1px solid #f59e0b; }
+}

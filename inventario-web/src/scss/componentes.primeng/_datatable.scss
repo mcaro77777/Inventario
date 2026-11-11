@@ -1,0 +1,100 @@
+/* === 4k-tabla.scss — tema azul para PrimeNG p-table === */
+:root{
+    --tbl-azul:        #2563eb;  /* primario */
+    --tbl-azul-700:    #1d4ed8;
+    --tbl-azul-900:    #1e40af;
+    --tbl-ink:         #0f172a;  /* texto oscuro */
+    --tbl-header-bg:   color-mix(in oklab, var(--tbl-azul) 10%, #ffffff);
+    --tbl-header-bd:   color-mix(in oklab, var(--tbl-azul) 28%, #e5e7eb);
+    --tbl-hover-bg:    color-mix(in oklab, var(--tbl-azul) 6%, #ffffff);
+    --tbl-selected-bg: color-mix(in oklab, var(--tbl-azul) 12%, #ffffff);
+    --tbl-ring:        color-mix(in oklab, var(--tbl-azul) 36%, transparent);
+  }
+
+
+/* Datatable dentro de panel + cabeceras modo claro */
+.p-datatable.mantenedor-datatable{
+  border-radius: var(--radius-xl);
+  border:1px solid var(--border-soft);
+  background: linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+  box-shadow: var(--shadow-1), var(--shadow-in);
+
+  --th-py:4px; --th-px:6px;
+  --td-py:4px; --td-px:8px;
+  --th-gap:4px;
+  --filter-h:24px; --filter-py:12px; --filter-px:6px; --filter-radius:8px;
+}
+.p-datatable.mantenedor-datatable .p-datatable-thead > tr > th{
+  padding: var(--th-py) var(--th-px) !important;
+}
+.p-datatable.mantenedor-datatable .p-datatable-tbody > tr > td{
+  padding:var(--td-py) var(--td-px) !important; line-height:1.25;
+}
+.p-datatable.mantenedor-datatable .filters-row > th{
+  padding-top: calc(var(--th-py) + 2px) !important;
+  padding-bottom: var(--filter-py) !important;
+  padding-inline:var(--th-px) !important;
+}
+.p-datatable.mantenedor-datatable .filters-row .p-inputtext,
+.p-datatable.mantenedor-datatable .filters-row .form-control{
+  height:var(--filter-h) !important;
+  padding:var(--filter-py) var(--filter-px) !important;
+  border-radius:var(--filter-radius) !important;
+  font-size:12px;
+}
+
+/* Cabeceras p-table en modo claro: texto oscuro */
+body:not(.dark-theme) .p-datatable .p-datatable-thead > tr > th{
+  color: var(--ink-0) !important;
+}
+body:not(.dark-theme) .p-datatable .p-datatable-thead > tr > th .p-column-title,
+body:not(.dark-theme) .p-datatable .p-datatable-thead > tr > th .p-column-header-content,
+body:not(.dark-theme) .p-datatable .p-datatable-thead > tr > th .p-sortable-column-icon,
+body:not(.dark-theme) .p-datatable .p-datatable-thead > tr > th .p-column-filter-menu-button,
+body:not(.dark-theme) .p-datatable .p-datatable-thead > tr > th .p-column-filter{
+  color: var(--ink-0) !important;
+  fill: var(--ink-0) !important; 
+}
+  
+
+/* ===== Hacer tabla transparente para mostrar degradado de fondo ===== */
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-datatable-wrapper,
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-datatable-table,
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-scroller,
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-scroller-viewport,
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-virtualscroller,
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-virtualscroller-content,
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-datatable-scrollable-body,
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-datatable-scrollable-view,
+body:not(.dark-theme) .p-datatable.mantenedor-datatable [class*="p-datatable"],
+body:not(.dark-theme) .p-datatable.mantenedor-datatable [class*="p-scroller"]{
+  background: transparent !important;
+}
+
+/* ===== Estilos de filas (modo claro) ===== */
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-datatable-tbody > tr{
+  background: transparent !important;
+  color: var(--ink-0);
+}
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-datatable-tbody > tr > td{
+  background: transparent !important;
+}
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-datatable-tbody{
+  background: transparent !important;
+}
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-datatable-tbody > tr:nth-child(even){
+  background: rgba(255,255,255,0.25) !important;
+}
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-datatable-tbody > tr:hover{
+  background: rgba(59,130,246,0.12) !important;
+}
+/* Seleccionada: resalte claro con borde y barra izquierda */
+/*body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.p-highlight{
+  background: color-mix(in oklab, rgb(var(--accent-rgb)) 22%, var(--surface-2));
+  color: #0f172a;
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, rgb(var(--accent-rgb)) 45%, transparent);
+}
+body:not(.dark-theme) .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.p-highlight > td:first-child{
+  box-shadow: inset 4px 0 0 0 color-mix(in oklab, rgb(var(--accent-rgb)) 75%, transparent);
+}*/
+

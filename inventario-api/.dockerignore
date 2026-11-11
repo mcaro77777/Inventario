@@ -1,0 +1,5 @@
+.git
+.env
+.dev-uploads
+coverage.out
+README.md

@@ -1,0 +1,36 @@
+/* Estilos de tabla compartidos para pantallas con PrimeNG DataTable */
+
+/* Padding compacto en modo small */
+.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td,
+.p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
+  padding: 0.35rem 0.5rem;
+}
+
+/* Encabezado con fondo sólido y borde inferior */
+.mantenedor-datatable .p-datatable-thead > tr > th {
+  background: var(--panel-top, var(--surface-1, #ffffff)) !important;
+  border-bottom: 1px solid var(--surface-border, #e5e7eb) !important;
+}
+
+/* Bordes redondeados en extremos del encabezado */
+.mantenedor-datatable .p-datatable-thead > tr:first-child > th:first-child { border-top-left-radius: 8px; }
+.mantenedor-datatable .p-datatable-thead > tr:first-child > th:last-child  { border-top-right-radius: 8px; }
+
+/* Altura de fila compacta */
+.p-datatable.p-datatable-sm .p-datatable-tbody > tr { line-height: 1.15; }
+
+/* Inputs compactos en filtros */
+.p-multiselect.p-inputwrapper-sm .p-multiselect-label,
+.p-inputtext.p-inputtext-sm { padding: 0.25rem 0.5rem; }
+
+/* Badges de estado reutilizables */
+.estado-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-weight: 700; font-size: 12px; letter-spacing: .2px;
+  padding: 2px 10px; border-radius: 9999px;
+  border: 1px solid transparent; text-transform: uppercase;
+  user-select: none;
+}
+.estado-pill.OK { background: rgba(46,125,50,.15); color: #66bb6a; border-color: rgba(102,187,106,.45); }
+.estado-pill.ALERTA { background: rgba(211,47,47,.15); color: #ef5350; border-color: rgba(239,83,80,.45); }
+.estado-pill.DEFAULT { background: rgba(25,118,210,.15); color: #64b5f6; border-color: rgba(100,181,246,.45); }

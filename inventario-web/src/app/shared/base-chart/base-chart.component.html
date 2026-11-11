@@ -1,0 +1,49 @@
+<div class="chart-card">
+  <header *ngIf="title || helpText">
+    <h3>{{ title }}</h3>
+    <div class="help-container" *ngIf="helpText">
+      <button class="help-btn" (click)="toggleHelp(); $event.stopPropagation()" 
+              [class.active]="showHelp"
+              title="Ayuda">
+        <i class="pi pi-question-circle"></i>
+      </button>
+      <div class="help-tooltip" *ngIf="showHelp">
+        <div class="help-content">{{ helpText }}</div>
+      </div>
+    </div>
+  </header>
+  <div class="chart">
+    <!-- Sin datos -->
+    <ng-container *ngIf="!data">
+      <div class="chart-skeleton" aria-hidden="true"></div>
+    </ng-container>
+
+    <!-- Pocos datos: mostrar mensaje -->
+    <ng-container *ngIf="data && minItems > 0 && !hasEnoughData && !isSinglePoint">
+      <div class="no-data-message">
+        <i class="pi pi-info-circle"></i>
+        <p>No hay suficientes datos en el rango seleccionado</p>
+        <span class="data-hint">{{ dataCount }} de {{ minItems }} mínimo</span>
+        <button class="expand-btn" (click)="onExpandRange()">
+          <i class="pi pi-calendar-plus"></i> Ampliar a 90 días
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- Un solo punto en línea: mostrar como tarjeta -->
+    <ng-container *ngIf="data && isSinglePoint">
+      <div class="single-point-card">
+        <div class="single-value">{{ singlePointValue | number:'1.0-0' }}</div>
+        <div class="single-label">{{ singlePointLabel }}</div>
+        <span class="single-hint">Sin tendencia (solo 1 día con datos)</span>
+      </div>
+    </ng-container>
+
+    <!-- Datos suficientes: mostrar gráfico -->
+    <ng-container *ngIf="data && hasEnoughData && !isSinglePoint">
+      <canvas baseChart [type]="type" [data]="data" [options]="options"
+              (chartClick)="onChartClick($event)">
+      </canvas>
+    </ng-container>
+  </div>
+</div>

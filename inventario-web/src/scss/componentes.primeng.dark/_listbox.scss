@@ -1,0 +1,94 @@
+/* PrimeNG Listbox: estilo oscuro en modo dark */
+
+/* Contenedor principal */
+body.dark-theme .p-listbox {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--f-bg) 80%, #ffffff 20%),
+    color-mix(in oklab, var(--f-bg-2) 80%, #ffffff 20%)
+  ) !important;
+  border: 1px solid var(--f-border) !important;
+  color: var(--f-text) !important;
+}
+
+/* Lista de items */
+body.dark-theme .p-listbox .p-listbox-list,
+body.dark-theme .p-listbox .p-listbox-list-wrapper {
+  background: linear-gradient(180deg, var(--f-bg), var(--f-bg-2)) !important;
+  color: var(--f-text) !important;
+}
+
+/* Items individuales */
+body.dark-theme .p-listbox .p-listbox-item,
+body.dark-theme .p-listbox .p-listbox-option,
+body.dark-theme .p-listbox [data-pc-section="option"] {
+  background: transparent !important;
+  color: var(--f-text) !important;
+}
+
+/* Texto dentro de items */
+body.dark-theme .p-listbox .p-listbox-item span,
+body.dark-theme .p-listbox .p-listbox-item *,
+body.dark-theme .p-listbox .p-listbox-option span,
+body.dark-theme .p-listbox .p-listbox-option *,
+body.dark-theme .p-listbox [data-pc-section="option"] *,
+body.dark-theme .p-listbox [data-pc-section="optionlabel"],
+body.dark-theme .p-listbox [data-pc-section="optioncontent"] {
+  color: var(--f-text) !important;
+}
+
+/* Hover */
+body.dark-theme .p-listbox .p-listbox-item:not(.p-highlight):hover,
+body.dark-theme .p-listbox .p-listbox-option:not(.p-highlight):hover,
+body.dark-theme .p-listbox [data-pc-section="option"]:not(.p-highlight):hover {
+  background: color-mix(in oklab, rgb(var(--accent-rgb)) 12%, var(--f-bg-2)) !important;
+}
+
+/* Seleccionado (highlight) - color visible y destacado */
+body.dark-theme .p-listbox .p-listbox-item.p-highlight,
+body.dark-theme .p-listbox .p-listbox-option.p-highlight,
+body.dark-theme .p-listbox [data-pc-section="option"].p-highlight,
+body.dark-theme .p-listbox li.p-highlight,
+body.dark-theme .p-listbox li[aria-selected="true"],
+body.dark-theme .p-listbox .p-listbox-list li.p-highlight,
+body.dark-theme .p-listbox .p-listbox-list-wrapper li.p-highlight {
+  background: #10b981 !important;
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+  border-radius: 6px;
+}
+body.dark-theme .p-listbox .p-listbox-item.p-highlight *,
+body.dark-theme .p-listbox .p-listbox-option.p-highlight *,
+body.dark-theme .p-listbox [data-pc-section="option"].p-highlight *,
+body.dark-theme .p-listbox li.p-highlight *,
+body.dark-theme .p-listbox li[aria-selected="true"] *,
+body.dark-theme .p-listbox li.p-highlight span,
+body.dark-theme .p-listbox li[aria-selected="true"] span {
+  color: #ffffff !important;
+}
+
+/* Header y filtro */
+body.dark-theme .p-listbox .p-listbox-header,
+body.dark-theme .p-listbox .p-listbox-filter-container,
+body.dark-theme .p-listbox [data-pc-section="header"],
+body.dark-theme .p-listbox [data-pc-section="filtercontainer"] {
+  background: linear-gradient(180deg, var(--f-bg), var(--f-bg-2)) !important;
+  border-bottom: 1px solid var(--f-border) !important;
+}
+
+/* Input de filtro */
+body.dark-theme .p-listbox .p-listbox-filter,
+body.dark-theme .p-listbox [data-pc-section="filterinput"] {
+  color: var(--f-text) !important;
+  background: linear-gradient(180deg, var(--f-bg), var(--f-bg-2)) !important;
+  border: 1px solid var(--f-border) !important;
+}
+body.dark-theme .p-listbox .p-listbox-filter::placeholder {
+  color: var(--f-muted) !important;
+}
+
+/* Icono de filtro */
+body.dark-theme .p-listbox .p-listbox-filter-icon,
+body.dark-theme .p-listbox [data-pc-section="filtericon"] {
+  color: var(--f-muted) !important;
+}

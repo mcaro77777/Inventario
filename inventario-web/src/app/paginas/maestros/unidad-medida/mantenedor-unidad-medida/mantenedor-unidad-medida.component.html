@@ -1,0 +1,166 @@
+<main>
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
+  <!-- Barra de acciones -->
+  <div class="actions-bar">
+    <div class="actions-left">
+      <button pButton type="button" class="btn-strong-amber" icon="pi pi-plus" label="Nuevo" (click)="modoCrear()"></button>
+      <button pButton type="button" class="btn-strong-green" icon="pi pi-file-excel" label="Exportar a Excel" (click)="exportarExcel()"></button>
+      <button pButton type="button" class="btn-strong-navy" icon="pi pi-filter-slash" label="Limpiar Filtros" (click)="clearFilters()"></button>
+    </div>
+    <span class="total-registros" *ngIf="dt">
+      Total de registros: {{ dt.filteredValue?.length ?? unidades().length }}
+    </span>
+  </div>
+
+  <!-- Formulario en diálogo -->
+  <p-dialog
+    header="Unidad de Medida"
+    [(visible)]="showDialog"
+    [modal]="true"
+    [closable]="true"
+    [closeOnEscape]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [maximizable]="false"
+    (onHide)="cancelar()
+    "
+    [style]="{ width: '60vw' }"
+    [breakpoints]="{ '960px': '85vw', '640px': '95vw' }"
+    styleClass="app-dialog"
+  >
+    @if (saving()) {
+      <!-- Barra de progreso para guardar/actualizar/eliminar -->
+      <p-progressBar
+        mode="indeterminate"
+        style="height: 4px; margin: 0 0 .5rem 0;"
+      ></p-progressBar>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      @if (formHabilitado()) {
+        <div class="form-grid">
+          <div class="form-field">
+            <label
+              >Descripción<span class="required-asterisk">*</span></label
+            >
+            <input pInputText class="p-inputtext-sm" formControlName="descripcion" />
+          </div>
+        </div>
+      }
+
+      <input type="hidden" formControlName="id" />
+
+      <div class="botones-form flex flex-wrap gap-2" style="margin-top:0.5rem;">
+        @if (formHabilitado() && form.value.id === 0) {
+          <button
+            pButton
+            type="submit"
+            class="p-button-sm btn-strong-navy"
+            [disabled]="saving()"
+            label="Guardar"
+            icon="pi pi-save"
+          ></button>
+        }
+
+        @if (formHabilitado() && form.value.id !== 0) {
+          <button
+            pButton
+            type="submit"
+            class="p-button-sm btn-strong-navy"
+            [disabled]="saving()"
+            label="Actualizar"
+            icon="pi pi-refresh"
+          ></button>
+        }
+
+        @if (formHabilitado() && form.value.id !== 0) {
+          <button
+            pButton
+            type="button"
+            class="p-button-sm btn-strong-red"
+            [disabled]="saving()"
+            label="Eliminar"
+            icon="pi pi-trash"
+            (click)="confirmarEliminar()"
+          ></button>
+        }
+
+        @if (formHabilitado()) {
+          <button
+            pButton
+            type="button"
+            class="p-button-secondary p-button-sm"
+            [disabled]="saving()"
+            label="Cancelar"
+            icon="pi pi-times"
+            (click)="cancelar()"
+          ></button>
+        }
+      </div>
+    </form>
+  </p-dialog>
+
+  <!-- Indicador de carga -->
+  @if (loading()) {
+    <p-progressBar
+      mode="indeterminate"
+      style="height: 6px; margin: .25rem 0 .5rem 0;"
+    ></p-progressBar>
+  }
+
+  <!-- Tabla -->
+  <p-table #dt
+           [value]="unidades()"
+           dataKey="id"
+           [scrollable]="true"
+           [scrollHeight]="'calc(100vh - 220px)'"
+           [virtualScroll]="true"
+           [virtualScrollItemSize]="40"
+           [rows]="50"
+           [size]="'small'" 
+           [rowHover]="true"
+           sortMode="multiple"
+           styleClass="mantenedor-datatable p-datatable-sm"
+           selectionMode="single"
+           [selection]="unidadSeleccionada()"
+           [loading]="loading()"
+           (selectionChange)="unidadSeleccionada.set($event)"
+           (onRowSelect)="seleccionar($event.data)">
+
+    <!-- Encabezado -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="descripcion">
+          Descripción
+          <p-sortIcon field="descripcion"></p-sortIcon>
+        </th>
+      </tr>
+      <!-- Filtros -->
+      <tr>
+        <th>
+          <input pInputText class="w-full p-inputtext-sm"
+                 placeholder="Filtrar descripción"
+                 (click)="$event.stopPropagation()"
+                 (input)="dt.filter($any($event.target).value, 'descripcion', 'contains')" />
+        </th>
+      </tr>
+    </ng-template>
+
+    <!-- Filas -->
+    <ng-template pTemplate="body" let-row>
+      <tr [pSelectableRow]="row" [ngClass]="{'fila-seleccionada': (unidadSeleccionada()?.id) === row.id}">
+        <td>{{ row.descripcion }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="1" class="text-center">
+          No hay registros encontrados.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</main>

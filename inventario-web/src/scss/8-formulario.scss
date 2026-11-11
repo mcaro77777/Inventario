@@ -1,0 +1,9 @@
+/* =============================================================================
+   8-formulario.scss — Agregador de estilos de formulario (modular)
+   ========================================================================= */
+
+/* Reusa layout base y helpers desde los parciales modulados.
+   Sass @use carga una sola vez por compilación, por lo que no duplica CSS
+   aunque otros entrypoints también los importen. */
+@use 'componentes.primeng/form-layout';
+@use 'componentes.primeng/form-layout-helpers';

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>DAP Inventario</title>
+    <base href="/" />
+
+    <!-- Rendimiento / Viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Dashboard de inventario — Angular 19 + PrimeNG" />
+    <!-- Importante: sin modo sistema. Un único theme-color neutro (JS lo puede actualizar si quieres más adelante). -->
+    <meta name="theme-color" content="#E9F1FA" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Fuente Inter (solo pesos usados para bajar KB; display=swap) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- PrimeIcons (CDN confiable) -->
+    <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css" />
+  </head>
+
+  <body>
+    <!-- ============================================================
+      BOOT rápido:
+      - Solo día/noche (sin modo sistema). Lee localStorage('theme') o usa 'light'.
+      - Heurística de rendimiento (perf-lite) según hardware.
+    ============================================================ -->
+    <script>
+      (function () {
+        try {
+          // 1) Tema (sin modo sistema)
+          var saved = localStorage.getItem('theme');
+          var theme = saved === 'dark' ? 'dark' : 'light';
+          document.body.classList.add(theme === 'dark' ? 'dark-theme' : 'light-theme');
+
+          // 2) Acento persistido (blue|green). Default blue.
+          var acc = localStorage.getItem('accent');
+          document.body.classList.add(acc === 'green' ? 'accent-green' : 'accent-blue');
+
+          // 3) perf-lite si hardware modesto (menos blur/sombras)
+          var lowPerf =
+            (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+            (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+          if (lowPerf) document.body.classList.add('perf-lite');
+        } catch (e) {
+          document.body.classList.add('light-theme', 'accent-blue');
+        }
+      })();
+    </script>
+
+    <!-- =========================================================================
+      SPRITE SVG GLOBAL (íconos reutilizables con <use href="#i-..."> )
+      Ids: i-gear, i-building, i-leaf, i-truck, i-users, i-factory, i-box, i-ship,
+           i-anchor, i-globe, i-pin, i-snow, i-clipboard, i-mail, i-user
+    ========================================================================= -->
+    <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+      <!-- Engranaje -->
+      <symbol id="i-gear" viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M10.1 2.7c.6-1 2.1-1 2.7 0l.6 1.1c.2.3.6.5 1 .4l1.2-.3c1.1-.3 2.1.7 1.8 1.8l-.3 1.2c-.1.4.1.8.4 1l1.1.6c1 .6 1 2.1 0 2.7l-1.1.6c-.3.2-.5.6-.4 1l.3 1.2c.3 1.1-.7 2.1-1.8 1.8l-1.2-.3c-.4-.1-.8.1-1 .4l-.6 1.1c-.6 1-2.1 1-2.7 0l-.6-1.1c-.2-.3-.6-.5-1-.4l-1.2.3c-1.1.3-2.1-.7-1.8-1.8l.3-1.2c.1-.4-.1-.8-.4-1l-1.1-.6c-1-.6-1-2.1 0-2.7l1.1-.6c.3-.2.5-.6.4-1l-.3-1.2C4.8 5 5.7 4 6.8 4.3l1.2.3c.4.1.8-.1 1-.4zM12 9a3 3 0 100 6 3 3 0 000-6z"
+        />
+      </symbol>
+
+      <!-- Edificio -->
+      <symbol id="i-building" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M4 20h16v2H4z" />
+        <path fill="currentColor" d="M6 20V6a1 1 0 011-1h5a1 1 0 011 1v14zM14 20V9a1 1 0 011-1h3a1 1 0 011 1v11z" />
+        <g fill="#fff" opacity=".85">
+          <rect x="8" y="8" width="2" height="2" rx=".25" />
+          <rect x="11" y="8" width="2" height="2" rx=".25" />
+          <rect x="8" y="12" width="2" height="2" rx=".25" />
+          <rect x="11" y="12" width="2" height="2" rx=".25" />
+          <rect x="16" y="11" width="2" height="2" rx=".25" />
+          <rect x="16" y="14" width="2" height="2" rx=".25" />
+        </g>
+      </symbol>
+
+      <!-- Hoja / Producto -->
+      <symbol id="i-leaf" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M20 4s-6 .5-9 3.5S7 15 7 15s3.5-1 6.5-4S20 4 20 4z" />
+        <path fill="currentColor" d="M6 20c3-6 6-9 12-12" opacity=".65" />
+      </symbol>
+
+      <!-- Camión -->
+      <symbol id="i-truck" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M2 7h11v8H2z" />
+        <path fill="currentColor" d="M13 9h4l3 3v3h-7z" />
+        <circle cx="6" cy="17" r="2" fill="currentColor" />
+        <circle cx="16" cy="17" r="2" fill="currentColor" />
+      </symbol>
+
+      <!-- Usuarios -->
+      <symbol id="i-users" viewBox="0 0 24 24">
+        <circle cx="9" cy="8" r="3" fill="currentColor" />
+        <circle cx="16" cy="9" r="2.5" fill="currentColor" opacity=".85" />
+        <path fill="currentColor" d="M4 19c0-2.8 2.8-5 6-5s6 2.2 6 5z" opacity=".9" />
+        <path fill="currentColor" d="M14 19c0-1.9 1.8-3.4 4-3.4.8 0 1.5.2 2 .5V19z" opacity=".7" />
+      </symbol>
+
+      <!-- Fábrica / Exportador -->
+      <symbol id="i-factory" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M3 20V9l5 3V9l5 3V7l8 4v9z" />
+        <rect x="5" y="16" width="2" height="3" fill="#fff" opacity=".9" />
+        <rect x="9" y="16" width="2" height="3" fill="#fff" opacity=".9" />
+        <rect x="13" y="16" width="2" height="3" fill="#fff" opacity=".9" />
+      </symbol>
+
+      <!-- Caja / Recibidor -->
+      <symbol id="i-box" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M3 7l9-4 9 4-9 4z" />
+        <path fill="currentColor" d="M3 7v10l9 4V11z" opacity=".9" />
+        <path fill="currentColor" d="M21 7v10l-9 4V11z" opacity=".75" />
+      </symbol>
+
+      <!-- Barco / Embarcador -->
+      <symbol id="i-ship" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M3 13h18l-2 5H5z" />
+        <rect x="10" y="7" width="6" height="4" rx="1" fill="currentColor" />
+        <rect x="9" y="5" width="2" height="2" fill="currentColor" />
+      </symbol>
+
+      <!-- Ancla -->
+      <symbol id="i-anchor" viewBox="0 0 24 24">
+        <circle cx="12" cy="5" r="2" fill="currentColor" />
+        <path fill="currentColor" d="M11 7h2v8h3l-4 5-4-5h3z" />
+        <path fill="currentColor" d="M4 13a8 8 0 0016 0" opacity=".8" />
+      </symbol>
+
+      <!-- Globo -->
+      <symbol id="i-globe" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+        <path
+          d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"
+          stroke="currentColor"
+          stroke-width="1.8"
+          fill="none"
+        />
+      </symbol>
+
+      <!-- Pin -->
+      <symbol id="i-pin" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 22s6-6 6-10a6 6 0 10-12 0c0 4 6 10 6 10z" />
+        <circle cx="12" cy="12" r="2.5" fill="#fff" opacity=".9" />
+      </symbol>
+
+      <!-- Copo de nieve -->
+      <symbol id="i-snow" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="2" d="M12 3v18M4 7l16 10M20 7L4 17M6 12h12" />
+      </symbol>
+
+      <!-- Clipboard -->
+      <symbol id="i-clipboard" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+      </symbol>
+
+      <!-- Mail -->
+      <symbol id="i-mail" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+      </symbol>
+
+      <!-- User -->
+      <symbol id="i-user" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+      </symbol>
+    </svg>
+
+    <noscript>Necesitas habilitar JavaScript para ejecutar esta aplicación.</noscript>
+    <app-root></app-root>
+  </body>
+</html>

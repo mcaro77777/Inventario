@@ -1,0 +1,20 @@
+<main class="login-page">
+  <section class="story" aria-label="Presentación del sistema">
+    <div class="story-brand"><span class="brand-mark"><i></i><i></i><i></i></span><span><strong>Inventario</strong><small>DAP · MOP</small></span></div>
+    <div class="story-copy"><span class="eyebrow">Gestión institucional</span><h1>Control claro del inventario, desde el ingreso hasta la entrega.</h1><p>Stock, solicitudes, trazabilidad y reportes en una sola plataforma.</p></div>
+    <div class="metrics"><div><strong>Stock</strong><span>Visibilidad en tiempo real</span></div><div><strong>Trazabilidad</strong><span>Historial por producto</span></div><div><strong>Control</strong><span>Permisos por perfil</span></div></div>
+  </section>
+  <section class="access-panel">
+    <div class="access-card">
+      <span class="eyebrow">Acceso seguro</span><h2>Bienvenido</h2><p>Ingresa con tus credenciales institucionales.</p>
+      <form #loginForm="ngForm" (ngSubmit)="login()" aria-label="Formulario de inicio de sesión">
+        <label><span>Usuario</span><div class="input-wrap"><i class="pi pi-user"></i><input type="text" name="username" [(ngModel)]="username" placeholder="Tu usuario" autocomplete="username" required autofocus></div></label>
+        <label><span>Contraseña</span><div class="input-wrap"><i class="pi pi-lock"></i><input type="password" name="password" [(ngModel)]="password" placeholder="Tu contraseña" autocomplete="current-password" required></div></label>
+        @if (loading) { <p-progressBar mode="indeterminate" [style]="{height:'3px'}" /> }
+        <button type="submit" [disabled]="loginForm.invalid || loading"><span>{{ loading ? 'Validando…' : 'Iniciar sesión' }}</span><i class="pi pi-arrow-right"></i></button>
+      </form>
+      @if (errorMsg) { <p class="error" role="alert"><i class="pi pi-exclamation-circle"></i>{{ errorMsg }}</p> }
+      <small class="support">Dirección de Aeropuertos · Ministerio de Obras Públicas</small>
+    </div>
+  </section>
+</main>

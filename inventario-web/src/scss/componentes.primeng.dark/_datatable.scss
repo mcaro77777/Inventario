@@ -1,0 +1,197 @@
+/* Datatable overrides in dark theme */
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-thead > tr > th,
+body.dark-theme .p-datatable .p-datatable-thead > tr > th{
+  /* Match dark header panels - tono azul-gris más claro */
+  background: linear-gradient(180deg, #4b5a6e, #445266) !important;
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid rgba(71,85,105,0.6) !important;
+}
+
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-thead > tr > th .p-column-title,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-thead > tr > th .p-column-header-content,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-thead > tr > th .p-sortable-column-icon,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-thead > tr > th .p-column-filter-menu-button,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-thead > tr > th .p-column-filter{
+  color: var(--f-text) !important;
+  fill: var(--f-text) !important;
+}
+
+/* Contenedor y wrapper con fondo oscuro */
+body.dark-theme .p-datatable.mantenedor-datatable,
+body.dark-theme .p-datatable{
+  background: linear-gradient(180deg, #3a4556, #2f3a48) !important;
+  border-color: var(--f-border-soft) !important;
+  color: var(--f-text) !important;
+}
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-wrapper,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-table,
+body.dark-theme .p-datatable .p-datatable-wrapper,
+body.dark-theme .p-datatable .p-datatable-table{ background: transparent !important; }
+
+/* Celdas del body en oscuro */
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr,
+body.dark-theme .p-datatable .p-datatable-tbody > tr{
+  background: #38434f !important;
+  color: var(--f-text) !important;
+}
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr > td,
+body.dark-theme .p-datatable .p-datatable-tbody > tr > td{
+  background: transparent !important;
+  color: var(--f-text) !important;
+  border-top: 1px solid color-mix(in oklab, var(--f-border-soft) 66%, transparent) !important;
+}
+
+/* Zebra */
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr:nth-child(even),
+body.dark-theme .p-datatable .p-datatable-tbody > tr:nth-child(even){
+  background: #3d4855 !important;
+}
+
+/* Hover y seleccionado */
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr:hover,
+body.dark-theme .p-datatable .p-datatable-tbody > tr:hover{
+  background: #4a5668 !important;
+}
+/* Seleccionado: MISMO color que modo claro (celeste suave fijo) */
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.p-highlight,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr[aria-selected="true"],
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.p-selectable-row.p-highlight,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.row-selected,
+body.dark-theme .p-datatable .p-datatable-tbody > tr.p-highlight,
+body.dark-theme .p-datatable .p-datatable-tbody > tr[aria-selected="true"],
+body.dark-theme .p-datatable .p-datatable-tbody > tr.p-selectable-row.p-highlight,
+body.dark-theme .p-datatable .p-datatable-tbody > tr.row-selected{
+  background: #cfe8ff !important; /* fijo: igual al modo claro */
+  color: #0f172a !important;
+}
+/* Barra lateral para reforzar selección */
+/* Sin barra lateral en dark para que coincida con modo claro */
+/* Mantener legibilidad en celdas */
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.p-highlight > td,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr[aria-selected="true"] > td,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.p-selectable-row.p-highlight > td,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.row-selected > td,
+body.dark-theme .p-datatable .p-datatable-tbody > tr.p-highlight > td,
+body.dark-theme .p-datatable .p-datatable-tbody > tr[aria-selected="true"] > td,
+body.dark-theme .p-datatable .p-datatable-tbody > tr.p-selectable-row.p-highlight > td,
+body.dark-theme .p-datatable .p-datatable-tbody > tr.row-selected > td{
+  color: #0f172a !important;
+  background: #cfe8ff !important; /* fijo */
+  border-top: 1px solid #9fcaff !important;
+  border-bottom: 1px solid #9fcaff !important;
+}
+/* No reducir contraste en hover sobre seleccionado */
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.p-highlight:hover,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr[aria-selected="true"]:hover,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.p-selectable-row.p-highlight:hover,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.row-selected:hover,
+body.dark-theme .p-datatable .p-datatable-tbody > tr.p-highlight:hover,
+body.dark-theme .p-datatable .p-datatable-tbody > tr[aria-selected="true"]:hover,
+body.dark-theme .p-datatable .p-datatable-tbody > tr.p-selectable-row.p-highlight:hover,
+body.dark-theme .p-datatable .p-datatable-tbody > tr.row-selected:hover{
+  background: #b9dcff !important; /* hover ligeramente más fuerte */
+}
+
+/* Columna de selección (checkbox/radio) visible en seleccionado */
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.p-highlight .p-checkbox .p-checkbox-box,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr[aria-selected="true"] .p-checkbox .p-checkbox-box,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr.p-highlight .p-radiobutton .p-radiobutton-box,
+body.dark-theme .p-datatable.mantenedor-datatable .p-datatable-tbody > tr[aria-selected="true"] .p-radiobutton .p-radiobutton-box,
+body.dark-theme .p-datatable .p-datatable-tbody > tr.p-highlight .p-checkbox .p-checkbox-box,
+body.dark-theme .p-datatable .p-datatable-tbody > tr[aria-selected="true"] .p-checkbox .p-checkbox-box,
+body.dark-theme .p-datatable .p-datatable-tbody > tr.p-highlight .p-radiobutton .p-radiobutton-box,
+body.dark-theme .p-datatable .p-datatable-tbody > tr[aria-selected="true"] .p-radiobutton .p-radiobutton-box{
+  border-color: #9fcaff !important;
+  box-shadow: 0 0 0 1px rgba(159,202,255,.6);
+}
+
+/* ====== Badges de stock para dark mode ====== */
+body.dark-theme .stock-minimo-badge {
+  background: rgba(234, 179, 8, 0.28) !important;
+  color: #fde047 !important;
+  border-color: rgba(253, 224, 71, 0.55) !important;
+}
+body.dark-theme .stock-actual-badge {
+  background: rgba(59, 130, 246, 0.28) !important;
+  color: #93c5fd !important;
+  border-color: rgba(147, 197, 253, 0.55) !important;
+}
+
+/* Estado pills para dark mode */
+body.dark-theme .estado-pill.OK {
+  background: rgba(76, 175, 80, 0.28) !important;
+  color: #a5d6a7 !important;
+  border-color: rgba(165, 214, 167, 0.6) !important;
+}
+body.dark-theme .estado-pill.ALERTA {
+  background: rgba(244, 67, 54, 0.28) !important;
+  color: #ef9a9a !important;
+  border-color: rgba(239, 154, 154, 0.6) !important;
+}
+body.dark-theme .estado-pill.DEFAULT {
+  background: rgba(33, 150, 243, 0.28) !important;
+  color: #90caf9 !important;
+  border-color: rgba(144, 202, 249, 0.6) !important;
+}
+
+/* ====== Indicator cards para dark mode ====== */
+body.dark-theme .indicator-card {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+body.dark-theme .indicator-card--total {
+  background: linear-gradient(90deg, #1e293b 0%, rgba(59,130,246,0.18) 100%) !important;
+}
+body.dark-theme .indicator-card--green {
+  background: linear-gradient(90deg, #1e293b 0%, rgba(34,197,94,0.18) 100%) !important;
+}
+body.dark-theme .indicator-card--yellow {
+  background: linear-gradient(90deg, #1e293b 0%, rgba(234,179,8,0.22) 100%) !important;
+}
+body.dark-theme .indicator-card--red {
+  background: linear-gradient(90deg, #1e293b 0%, rgba(239,68,68,0.18) 100%) !important;
+}
+body.dark-theme .indicator-card--total .indicator-value { color: #60a5fa !important; }
+body.dark-theme .indicator-card--green .indicator-value { color: #4ade80 !important; }
+body.dark-theme .indicator-card--yellow .indicator-value { color: #facc15 !important; }
+body.dark-theme .indicator-card--red .indicator-value { color: #f87171 !important; }
+body.dark-theme .indicator-title {
+  color: #e2e8f0 !important;
+}
+body.dark-theme .indicator-desc {
+  color: #94a3b8 !important;
+}
+
+/* ====== Empty message y scroller para dark mode ====== */
+body.dark-theme .p-datatable .p-datatable-emptymessage td,
+body.dark-theme .p-datatable .p-datatable-emptymessage tr {
+  background: #1e293b !important;
+  color: #94a3b8 !important;
+}
+body.dark-theme .p-datatable .p-scroller,
+body.dark-theme .p-datatable .p-scroller-viewport,
+body.dark-theme .p-datatable .p-scroller-content,
+body.dark-theme .p-datatable .p-virtualscroller,
+body.dark-theme .p-datatable .p-datatable-scrollable-body {
+  background: #1e293b !important;
+}
+body.dark-theme .p-datatable table {
+  background: #1e293b !important;
+}
+body.dark-theme .p-datatable-scrollable .p-datatable-wrapper {
+  background: #1e293b !important;
+}
+
+/* Inputs de filtro en dark mode */
+body.dark-theme .p-datatable input.p-inputtext,
+body.dark-theme .p-datatable .p-multiselect {
+  background: #334155 !important;
+  border-color: #475569 !important;
+  color: #e2e8f0 !important;
+}
+body.dark-theme .p-datatable .p-multiselect .p-multiselect-label {
+  color: #e2e8f0 !important;
+}
+body.dark-theme .p-datatable .p-inputtext::placeholder {
+  color: #64748b !important;
+}

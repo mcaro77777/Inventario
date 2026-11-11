@@ -1,0 +1,853 @@
+/* Reset + base */
+*,*::before,*::after{ box-sizing:border-box; }
+html,body{ height:100%; }
+/* Desactivar smooth global para evitar rebote/jank con virtual scroll.
+   Si necesitas smooth para anclas específicas, agrega la clase
+   `.smooth-scroll` al <html> en esa vista. */
+html{ scroll-behavior:auto; }
+html.smooth-scroll{ scroll-behavior:smooth; }
+/* Controlar el rebote y el scroll chaining a nivel documento */
+html,body{ overscroll-behavior-y: none; }
+body{
+  margin:0; color:var(--ink-0); background:var(--surface-0);
+  font: var(--fs-0)/1.45 system-ui,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+  text-rendering: optimizeLegibility;
+}
+img,svg{ display:block; max-width:100%; }
+button{ font:inherit; cursor:pointer; }
+a{ color:inherit; text-decoration:none; }
+.sr-only{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+.no-scroll{ overflow:hidden; }
+
+/* Fondo global (oscuro con halos) */
+body.dark-theme{
+  --app-bg-0:#3d4a5c; --app-bg-1:#364152; --app-bg-2:#2f3a48;
+  background:
+    radial-gradient(1600px 900px at 6% -20%, rgba(255,255,255,.06) 0%, rgba(255,255,255,0) 60%),
+    radial-gradient(1400px 800px at 105% -10%, rgba(255,255,255,.04) 0%, rgba(255,255,255,0) 60%),
+    linear-gradient(180deg, var(--app-bg-0) 0%, var(--app-bg-1) 55%, var(--app-bg-2) 100%);
+  background-attachment: fixed;
+}
+body.dark-theme .main-container,
+body.dark-theme .full-content-area{ background: transparent !important; }
+
+/* App shell */
+.main-container{
+  min-height:100dvh;
+  background:
+    radial-gradient(1200px 820px at 10% -10%, color-mix(in oklab, var(--accent-1) 8%, transparent) 0%, transparent 60%),
+    radial-gradient(1000px 880px at 120% 10%, color-mix(in oklab, #8b5cf6 7%, transparent) 0%, transparent 55%),
+    linear-gradient(180deg, var(--surface-0), color-mix(in oklab, var(--surface-0) 90%, var(--surface-2) 10%));
+}
+.announcement-bar{ height:8px; background: linear-gradient(90deg, var(--accent-1), var(--accent-0) 40%, var(--accent-2)); box-shadow: var(--glow); }
+.full-content-area{ padding:14px clamp(12px,2.2vw,24px); padding-top: calc(var(--navbar-h) + 14px); }
+/* Evitar scroll chaining y rebote dentro del área principal de contenido */
+.full-content-area{ overscroll-behavior: contain; }
+
+/* Paneles */
+.panel{
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--surface-1) 96%, transparent),
+    color-mix(in oklab, var(--surface-2) 88%, transparent));
+  border:1px solid var(--border-soft);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--inner-emboss), var(--shadow-1);
+  overflow: clip;
+}
+.panel-header{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:12px 14px;
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--surface-1) 94%, transparent),
+    color-mix(in oklab, var(--surface-2) 70%, transparent));
+  border-bottom:1px solid var(--border-soft);
+}
+.panel-title{ margin:0; font-weight:900; letter-spacing:.2px; }
+.panel-body{ padding:14px; }
+
+/* Paneles modo oscuro - mismo tono que la tabla */
+body.dark-theme .panel{
+  background: linear-gradient(180deg, #445266, #3d4a5c);
+  border-color: rgba(71,85,105,0.6);
+}
+body.dark-theme .panel-header{
+  background: linear-gradient(180deg, #4b5a6e, #445266);
+  border-bottom-color: rgba(71,85,105,0.5);
+}
+body.dark-theme .panel-body{
+  background: #3d4a5c;
+}
+
+/* Botones */
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:12px;
+  border:1px solid var(--border-soft);
+  background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+  box-shadow: var(--inner-emboss), var(--shadow-1);
+  transition: transform .08s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease;
+  color: var(--ink-0);
+}
+.btn:hover{ transform: translateY(-1px); box-shadow: var(--shadow-2); }
+.btn:active{ transform: translateY(0); }
+.btn-outline{ background: linear-gradient(180deg, color-mix(in oklab, var(--surface-1) 85%, transparent), transparent); }
+.btn-primary,.btn-accent{
+  color:#fff;
+  border-color: color-mix(in oklab, var(--accent-2) 70%, var(--accent-0));
+  background: linear-gradient(180deg, color-mix(in oklab, var(--accent-0) 90%, var(--accent-1) 10%), var(--accent-2));
+  box-shadow: 0 1px 0 rgba(255,255,255,.25) inset, 0 10px 28px color-mix(in oklab, var(--accent-0) 32%, transparent);
+}
+.btn-secondary{
+  color: var(--ink-0);
+  border-color: var(--border-strong);
+  background: linear-gradient(180deg, var(--surface-1), color-mix(in oklab, var(--surface-2) 85%, var(--surface-0) 15%));
+}
+.btn-danger{ color:#fff; border-color:#dc2626; background:linear-gradient(180deg,#ef4444,#dc2626); box-shadow:0 1px 0 rgba(255,255,255,.25) inset, 0 10px 28px rgba(220,38,38,.32); }
+
+/* Accesibilidad + utils */
+:focus-visible{ outline:2px solid color-mix(in oklab, var(--accent-1) 65%, #fff); outline-offset:2px; border-radius:10px; }
+.mr-2{ margin-right:.5rem; }
+.desktop-only{ display:none; }
+@media (min-width: 900px){ .desktop-only{ display:flex; } }
+input::placeholder, textarea::placeholder{ color: var(--placeholder); opacity: 1; }
+
+/* FIX p-table en modo claro que heredaba fondos oscuros */
+
+
+
+/* ===== Espaciados topbar (resetea gaps extra) ===== */
+.announcement-bar{ height:0; margin:0; padding:0; border:0; }
+.full-content-area{ padding-top: unset; margin-top: unset; overflow-anchor: none; }
+.full-content-area > :first-child{ margin-top:0 !important; }
+
+/* ===== Modo compacto (mismo aspecto que tenías) ===== */
+.compact .panel-header{ padding:10px 12px; }
+.compact .panel-body{ padding:10px; }
+.compact .btn{ padding:6px 10px; border-radius:10px; }
+.compact .search-container{ padding:6px 8px; }
+.compact .maintenance-option{ padding:10px; border-radius:12px; }
+.compact .category-title{ padding:10px 12px; }
+
+/* Rendimiento reducido */
+//.perf-lite *{ transition-duration:.001s !important; animation-duration:.001s !important; }
+
+
+
+
+
+
+/* ===== Mis Atenciones — helpers de layout y tarjetas resumen ===== */
+.misat-panel-actions{
+  display:flex;
+  gap:8px;
+}
+
+/* Barra del encabezado de Mis Atenciones (MIS ATENCIONES + botones) modo claro */
+body.light-theme .mantenedor-table2.panel .panel-header{
+  background:
+    linear-gradient(90deg,
+      color-mix(in oklab, #9ca3af 65%, #d1d5db) 0%,
+      color-mix(in oklab, #cbd5f5 70%, #e5e7eb) 40%,
+      color-mix(in oklab, #e5e7eb 80%, #ffffff) 100%);
+  border-bottom: 1px solid rgba(148,163,184,0.65);
+}
+
+.misat-indicators-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+/* Fondo de los paneles de Mis Atenciones (modo claro) */
+body.light-theme .mantenedor-table2 .panel-body{
+  background:
+    linear-gradient(270deg,
+      rgba(147,197,253,0.55) 0%,
+      rgba(191,219,254,0.45) 25%,
+      rgba(230,242,255,0.20) 80%,
+      rgba(255,255,255,0) 55%) !important;
+}
+
+.indicator-card{
+  flex:1 1 180px;
+  min-width:180px;
+  border-radius:16px;
+  padding:10px 16px;
+  border:1px solid rgba(148,163,184,0.5);
+  box-shadow:0 10px 22px rgba(15,23,42,0.12);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  transition: box-shadow .16s ease, transform .12s ease, border-color .16s ease;
+}
+
+.indicator-card--total{
+  background: radial-gradient(circle at 0% 50%, rgba(59,130,246,.12) 0%, transparent 50%),
+              linear-gradient(135deg, #eff6ff 0%, #f9fafb 60%, #ffffff 100%);
+  border-left: 4px solid #3b82f6;
+}
+
+.indicator-card--green{
+  background: radial-gradient(circle at 0% 50%, rgba(34,197,94,.15) 0%, transparent 50%),
+              linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 50%, #ffffff 100%);
+  border-left: 4px solid #22c55e;
+  border-color:#bbf7d0;
+  box-shadow:0 10px 22px rgba(22, 163, 74, 0.2);
+}
+
+.indicator-card--yellow{
+  background: radial-gradient(circle at 0% 50%, rgba(234,179,8,.15) 0%, transparent 50%),
+              linear-gradient(135deg, #fef9c3 0%, #fffbeb 55%, #ffffff 100%);
+  border-left: 4px solid #eab308;
+  border-color:#facc15;
+  box-shadow:0 10px 22px rgba(245, 158, 11, 0.22);
+}
+
+.indicator-card--red{
+  background: radial-gradient(circle at 0% 50%, rgba(239,68,68,.15) 0%, transparent 50%),
+              linear-gradient(135deg, #fef2f2 0%, #fef2f2 45%, #ffffff 100%);
+  border-left: 4px solid #ef4444;
+  border-color:#fecaca;
+  box-shadow:0 10px 22px rgba(220, 38, 38, 0.2);
+}
+
+.indicator-main-value{
+  font-size:22px;
+  font-weight:700;
+}
+
+.indicator-text{
+  display:flex;
+  flex-direction:column;
+  font-size:12px;
+}
+
+.indicator-card--total .indicator-main-value{ color:#0f172a; }
+.indicator-card--total .indicator-text{ color:#64748b; }
+
+.indicator-card--green .indicator-main-value,
+.indicator-card--green .indicator-text{ color:#166534; }
+
+.indicator-card--yellow .indicator-main-value,
+.indicator-card--yellow .indicator-text{ color:#854d0e; }
+
+.indicator-card--red .indicator-main-value,
+.indicator-card--red .indicator-text{ color:#b91c1c; }
+
+.indicator-text-title{
+  font-weight:600;
+}
+
+/* Efecto hover: levitar hacia arriba */
+.indicator-card:hover{
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow:
+    0 18px 36px rgba(15, 23, 42, 0.22),
+    0 0 0 2px rgba(59, 130, 246, 0.18);
+}
+
+/* Efecto active: presionado */
+.indicator-card:active{
+  transform: translateY(1px) scale(0.98);
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,.12),
+    0 4px 8px rgba(15, 23, 42, 0.15);
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+
+/* Indicador seleccionado/activo */
+.indicator-card--active{
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 3px rgba(59, 130, 246, 0.5),
+    0 12px 28px rgba(15, 23, 42, 0.25);
+}
+.indicator-card--active.indicator-card--green{
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.5), 0 12px 28px rgba(15, 23, 42, 0.25);
+}
+.indicator-card--active.indicator-card--yellow{
+  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.5), 0 12px 28px rgba(15, 23, 42, 0.25);
+}
+.indicator-card--active.indicator-card--red{
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.5), 0 12px 28px rgba(15, 23, 42, 0.25);
+}
+
+/* Variante modo oscuro para los paneles de indicadores de Mis Atenciones */
+body.dark-theme .indicator-card{
+  background: radial-gradient(circle at 0% 0%, rgba(148,163,184,.12) 0%, transparent 36%),
+              radial-gradient(circle at 100% 0%, rgba(59,130,246,.14) 0%, transparent 38%),
+              linear-gradient(135deg, #3a4556 0%, #2f3a48 40%, #283140 100%);
+  border-color: rgba(71,85,105,0.5);
+  box-shadow:
+    0 0 0 1px rgba(51,65,85,0.5),
+    0 12px 30px rgba(0,0,0,0.4);
+}
+
+body.dark-theme .indicator-card--total .indicator-main-value,
+body.dark-theme .indicator-card--green .indicator-main-value,
+body.dark-theme .indicator-card--yellow .indicator-main-value,
+body.dark-theme .indicator-card--red .indicator-main-value{
+  color:#e5e7eb;
+}
+
+body.dark-theme .indicator-card--total .indicator-text,
+body.dark-theme .indicator-card--green .indicator-text,
+body.dark-theme .indicator-card--yellow .indicator-text,
+body.dark-theme .indicator-card--red .indicator-text{
+  color:#9ca3af;
+}
+
+/* Colores de acento más marcados en modo oscuro */
+body.dark-theme .indicator-card--green{
+  border-left: 4px solid #22c55e;
+  background: radial-gradient(circle at 0% 50%, rgba(34,197,94,.25) 0%, transparent 50%),
+              linear-gradient(135deg, #2a3d35 0%, #2f3a48 40%, #283140 100%);
+}
+body.dark-theme .indicator-card--green .indicator-main-value{ color: #4ade80; }
+
+body.dark-theme .indicator-card--yellow{
+  border-left: 4px solid #eab308;
+  background: radial-gradient(circle at 0% 50%, rgba(234,179,8,.25) 0%, transparent 50%),
+              linear-gradient(135deg, #3d3a28 0%, #2f3a48 40%, #283140 100%);
+}
+body.dark-theme .indicator-card--yellow .indicator-main-value{ color: #facc15; }
+
+body.dark-theme .indicator-card--red{
+  border-left: 4px solid #ef4444;
+  background: radial-gradient(circle at 0% 50%, rgba(239,68,68,.25) 0%, transparent 50%),
+              linear-gradient(135deg, #3d2a2a 0%, #2f3a48 40%, #283140 100%);
+}
+body.dark-theme .indicator-card--red .indicator-main-value{ color: #f87171; }
+
+/* Hover en modo oscuro: levitar hacia arriba */
+body.dark-theme .indicator-card:hover{
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.4),
+    0 0 0 2px rgba(96, 165, 250, 0.25);
+}
+
+body.dark-theme .indicator-card:active{
+  transform: translateY(1px) scale(0.98);
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,.25),
+    0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Popups/Diálogos modo oscuro - mismo tono */
+body.dark-theme .p-dialog{
+  background: linear-gradient(180deg, #445266, #3d4a5c);
+  border: 1px solid rgba(71,85,105,0.6);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+}
+body.dark-theme .p-dialog .p-dialog-header{
+  background: linear-gradient(180deg, #4b5a6e, #445266);
+  border-bottom: 1px solid rgba(71,85,105,0.5);
+  color: #e5e7eb;
+}
+body.dark-theme .p-dialog .p-dialog-content{
+  background: #3d4a5c;
+  color: #e5e7eb;
+}
+body.dark-theme .p-dialog .p-dialog-footer{
+  background: #364152;
+  border-top: 1px solid rgba(71,85,105,0.5);
+}
+body.dark-theme .p-dialog .p-dialog-header .p-dialog-header-icon{
+  color: #9ca3af;
+}
+body.dark-theme .p-dialog .p-dialog-header .p-dialog-header-icon:hover{
+  background: rgba(71,85,105,0.5);
+  color: #e5e7eb;
+}
+/* Inputs dentro de diálogos en modo oscuro */
+body.dark-theme .p-dialog .p-inputtext,
+body.dark-theme .p-dialog .p-dropdown,
+body.dark-theme .p-dialog .p-calendar,
+body.dark-theme .p-dialog .p-inputtextarea{
+  background: #2f3a48;
+  border-color: rgba(71,85,105,0.7);
+  color: #e5e7eb;
+}
+body.dark-theme .p-dialog .p-inputtext:enabled:focus,
+body.dark-theme .p-dialog .p-dropdown:not(.p-disabled).p-focus{
+  border-color: rgba(96,165,250,0.6);
+  box-shadow: 0 0 0 2px rgba(96,165,250,0.2);
+}
+
+/* Tabla Mis Atenciones */
+.misat-table-header-row{
+  background:linear-gradient(90deg, #e5edff 0%, #f4f4ff 40%, #f9fafb 100%);
+}
+
+.misat-table-header-row > th{
+  border-bottom:1px solid #e2e8f0;
+}
+
+.misat-table-header-row > th:nth-child(1){ width:6%; }
+.misat-table-header-row > th:nth-child(2){ width:6%; }
+.misat-table-header-row > th:nth-child(3){ width:10%; }
+.misat-table-header-row > th:nth-child(4){ width:14%; }
+.misat-table-header-row > th:nth-child(5){ width:10%; }
+.misat-table-header-row > th:nth-child(6){ width:12%; }
+.misat-table-header-row > th:nth-child(7){ width:12%; }
+.misat-table-header-row > th:nth-child(8){ width:16%; }
+.misat-table-header-row > th:nth-child(9){ width:8%; }
+.misat-table-header-row > th:nth-child(10){ width:10%; }
+.misat-table-header-row > th:nth-child(11){ width:10%; }
+.misat-table-header-row > th:nth-child(12){ width:12%; text-align:center; }
+
+.filters-row{
+  background:rgba(248, 250, 252, 0.85);
+}
+
+/* Degradado horizontal de la tabla completa (solo Mis Atenciones, modo claro) */
+body.light-theme .p-datatable.mantenedor-datatable{
+  background:
+    linear-gradient(270deg,
+      rgba(147,197,253,0.55) 0%,
+      rgba(191,219,254,0.45) 25%,
+      rgba(230,242,255,0.20) 50%,
+      rgba(255,255,255,0) 55%) !important;
+}
+
+.misat-row{
+  background-color: transparent; /* deja ver el degradado del fondo de tabla */
+  transition:background-color 0.18s ease, transform 0.12s ease;
+}
+
+.misat-row-actions{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  color:#b0b0b0;
+}
+
+.misat-row-actions .btn-icon{
+  border:none;
+  background:transparent;
+  padding:0;
+  color:inherit;
+}
+
+.misat-actions-buttons-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:4px;
+}
+
+.misat-btn-attach{
+  background:linear-gradient(135deg, #e0f2fe, #bfdbfe);
+  border:none;
+  color:#1e293b;
+}
+
+.misat-btn-e,
+.misat-btn-i,
+.misat-btn-v{
+  background:linear-gradient(135deg, #e0e7ff, #6366f1);
+  border:none;
+}
+
+.misat-btn-v{
+  background:linear-gradient(135deg, #e5e7eb, #9ca3af);
+}
+
+/* Dialogos Mis Atenciones */
+.misat-dialog-header-inline{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.misat-dialog-form-fields{
+  row-gap:16px;
+}
+
+.misat-section-full{
+  width:100%;
+}
+
+.misat-flex-row-wrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+}
+
+.misat-flex-row-gap24{
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px;
+  align-items:center;
+}
+
+.misat-dialog-two-cols{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  align-items:flex-start;
+  margin-bottom:8px;
+}
+
+.misat-attachments-row{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:8px;
+}
+
+.misat-attachments-table-wrapper{
+  max-height:120px;
+  overflow:auto;
+  border:1px solid #e0e7ff;
+}
+
+.misat-dialog-footer-primary{
+  width:220px;
+}
+
+/* Mis Atenciones — degradados de botones en modo claro (equivalentes a los inline originales) */
+body.light-theme .mantenedor-datatable .p-button-rounded.misat-btn-attach{
+  background:linear-gradient(135deg, #e8f4ff 0%, #cfe4ff 100%);
+  border:none;
+  color:#1e293b;
+}
+
+body.light-theme .mantenedor-datatable .p-button-rounded.misat-btn-e,
+body.light-theme .mantenedor-datatable .p-button-rounded.misat-btn-i{
+  background:linear-gradient(135deg, #e6e9ff 0%, #a5b4ff 100%);
+  border:none;
+}
+
+body.light-theme .mantenedor-datatable .p-button-rounded.btn-caso-a{
+  background:linear-gradient(135deg, #e6e9ff 0%, #a5b4ff 100%);
+  border:none;
+}
+
+body.light-theme .mantenedor-datatable .p-button-rounded.btn-caso-d{
+  background:linear-gradient(135deg, #ffe4e6 0%, #fecaca 100%);
+  border:none;
+}
+
+body.light-theme .mantenedor-datatable .p-button-rounded.btn-caso-c{
+  background:linear-gradient(135deg, #e7f9f0 0%, #6ee7b7 100%);
+  border:none;
+}
+
+body.light-theme .mantenedor-datatable .p-button-rounded.misat-btn-r{
+  background:linear-gradient(135deg, #fef9c3 0%, #fde68a 100%);
+  border:none;
+}
+
+body.light-theme .mantenedor-datatable .p-button-rounded.misat-btn-v{
+  background:linear-gradient(135deg, #eceff3 0%, #cbd5e1 100%);
+  border:none;
+}
+
+/* Botones H/L/P/E/A/D/R/C/I en Mis Atenciones: ahora cuadraditos (esquinas suaves) */
+.misat-actions-buttons-row .p-button-rounded.p-button-sm{
+  border-radius:6px !important;          /* pequeño radio: cuadrado suave */
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  /* fondo claro, ligeramente azulado como el ejemplo */
+  background: linear-gradient(180deg, #f7f9ff 0%, #e4ebff 55%, #dde5f7 100%);
+  color: #1f2937 !important;             /* gris oscuro, no negro puro */
+  border: 1px solid #93c5fd !important;  /* azul suave en lugar de negro fuerte */
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.85) inset, /* brillo superior suave */
+    0 -1px 0 rgba(148,163,184,.35) inset,
+    0 1px 2px rgba(148,163,184,.60);     /* sombra exterior discreta */
+  transition: box-shadow .16s ease, transform .08s ease, background .16s ease;
+}
+
+.misat-actions-buttons-row .p-button-rounded.p-button-sm:hover{
+  /* Hover: levitar hacia arriba */
+  background: linear-gradient(180deg, #eef3ff 0%, #dde6ff 55%, #d4def6 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 -1px 0 rgba(148,163,184,.40) inset,
+    0 6px 12px rgba(59,130,246,.25),
+    0 0 0 2px rgba(59,130,246,.15);
+  transform: translateY(-2px) scale(1.08);
+  border-color: rgba(59,130,246,.5) !important;
+}
+
+.misat-actions-buttons-row .p-button-rounded.p-button-sm:active{
+  /* Active: efecto presionado */
+  background: linear-gradient(180deg, #d8e2ff 0%, #c7d4fb 55%, #bdc9f3 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(0,0,0,.15),
+    inset 0 -1px 0 rgba(255,255,255,.40),
+    0 1px 2px rgba(107,114,128,.40);
+  transform: translateY(1px) scale(0.95);
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+
+/* Asegurar que las letras E, A, D, R, C, I usen el mismo estilo visual que H/L/P */
+.misat-actions-buttons-row .p-button-rounded.misat-btn-e,
+.misat-actions-buttons-row .p-button-rounded.btn-caso-a,
+.misat-actions-buttons-row .p-button-rounded.btn-caso-d,
+.misat-actions-buttons-row .p-button-rounded.misat-btn-r,
+.misat-actions-buttons-row .p-button-rounded.btn-caso-c,
+.misat-actions-buttons-row .p-button-rounded.misat-btn-i{
+  /* mismo fondo y borde que el botón base */
+  background: linear-gradient(180deg, #f7f9ff 0%, #e4ebff 55%, #dde5f7 100%) !important;
+  border-color: #93c5fd !important;
+  color: #1f2937 !important;
+}
+
+/* Variante modo oscuro para los botones H/L/P/E/A/D/R/C/I: cuadrado suave gris oscuro */
+body.dark-theme .misat-actions-buttons-row .p-button-rounded.p-button-sm{
+  border-radius:6px !important;              /* cuadrado suave */
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  background: #374151 !important;           /* gris azulado oscuro */
+  color: #e5e7eb !important;                /* texto claro */
+  border: 1px solid #1f2933 !important;
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,.85),
+    0 4px 10px rgba(0,0,0,.7);
+}
+
+body.dark-theme .misat-actions-buttons-row .p-button-rounded.p-button-sm:hover{
+  background: #4b5563 !important;
+  box-shadow:
+    0 6px 14px rgba(0,0,0,.85),
+    0 0 0 2px rgba(96,165,250,.3);
+  transform: translateY(-2px) scale(1.08);
+  border-color: rgba(96,165,250,.5) !important;
+}
+
+body.dark-theme .misat-actions-buttons-row .p-button-rounded.p-button-sm:active{
+  background: #374151 !important;
+  box-shadow:
+    inset 0 2px 4px rgba(0,0,0,.4),
+    0 1px 2px rgba(0,0,0,.5);
+  transform: translateY(1px) scale(0.95);
+}
+
+/* ===== Utilidades genéricas para formularios (reutilizables) ===== */
+.fw-600{ font-weight:600; }
+.mb-1{ margin-bottom:4px; }
+.mt-1{ margin-top:4px; }
+.mt-2{ margin-top:8px; }
+.mb-2{ margin-bottom:8px; }
+
+.flex-row{ display:flex; }
+.flex-wrap{ flex-wrap:wrap; }
+.items-center{ align-items:center; }
+.gap-4{ gap:4px; }
+.gap-6{ gap:6px; }
+.gap-8{ gap:8px; }
+.gap-16{ gap:16px; }
+.gap-24{ gap:24px; }
+
+.w-100p{ width:100%; }
+
+/* Helper de ancho basado en "columns" (usa la CSS var --ch) */
+.w-ch{ flex:0 0 auto; }
+
+/* Badge de días en tabla Mis Atenciones (parte estática, colores por ngStyle) */
+.misat-badge-dias{
+  font-weight:600;
+  padding:3px 10px;
+  border-radius:999px;
+  display:inline-block;
+  min-width:42px;
+  text-align:center;
+  box-shadow:0 0 0 1px rgba(148, 163, 184, 0.18);
+}
+
+/* ===== Dashboard — layout de gráficos reutilizable ===== */
+.dash-charts-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-bottom:12px;
+}
+
+.dashboard-chart-card{
+  border-radius:16px;
+  padding:10px 12px;
+  border:1px solid rgba(148, 163, 184, 0.5);
+  box-shadow:0 12px 24px rgba(15, 23, 42, 0.16);
+  cursor:pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.dashboard-chart-card:hover{
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.22), 0 0 0 2px rgba(59, 130, 246, 0.18);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.dashboard-chart-card:active{
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.18) inset;
+}
+
+.dashboard-chart-card--primary{
+  background:linear-gradient(135deg, #eff6ff 0%, #f9fafb 55%, #ffffff 100%);
+}
+
+.dashboard-chart-card--light{
+  border-color:#e2e8f0;
+  background:#f8fafc;
+}
+
+.dashboard-chart-title{
+  margin:0 0 6px;
+  font-size:12px;
+  font-weight:600;
+  color:#0f172a;
+  letter-spacing:0.02em;
+  text-transform:uppercase;
+}
+
+/* Variantes más claras para Dashboard en modo oscuro */
+body.dark-theme .dashboard-chart-card--primary{
+  background:linear-gradient(135deg,#0f172a 0%, #020617 55%, #020617 100%);
+  border-color:rgba(148,163,184,0.55);
+}
+
+body.dark-theme .dashboard-chart-card--light{
+  background:linear-gradient(135deg,#020617 0%, #020617 60%, #020617 100%);
+  border-color:rgba(148,163,184,0.55);
+}
+
+body.dark-theme .dashboard-chart-card:hover{
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(96, 165, 250, 0.25);
+  border-color: rgba(96, 165, 250, 0.5);
+}
+
+body.dark-theme .dashboard-chart-card:active{
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35) inset;
+}
+
+body.dark-theme .dashboard-chart-title{
+  color:#e5e7eb;
+}
+
+/* Panel grande inferior del Dashboard: suavizar fondo en modo oscuro */
+body.dark-theme .dashboard-chart-card--blend{
+  background:linear-gradient(180deg, rgba(15,23,42,0.45), rgba(15,23,42,0.25));
+  box-shadow:0 12px 30px rgba(0,0,0,0.45);
+}
+
+.p-chart.dash-chart-sm,
+.p-chart.dash-chart-md,
+.p-chart.dash-chart-lg{
+  width:100% !important;
+}
+
+/* Gráfico pequeño (pie) */
+.p-chart.dash-chart-sm,
+.p-chart.dash-chart-sm canvas{
+  height:140px !important;
+  max-height:140px !important;
+}
+
+/* Gráfico medio (bar) */
+.p-chart.dash-chart-md,
+.p-chart.dash-chart-md canvas{
+  height:140px !important;
+  max-height:140px !important;
+}
+
+/* Gráfico grande (línea inferior) */
+.p-chart.dash-chart-lg,
+.p-chart.dash-chart-lg canvas{
+  height:180px !important;
+  max-height:180px !important;
+}
+
+/* ===== Diálogos genéricos (info read-only y formularios) ===== */
+.dlg-header-inline{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.dlg-fields-block{
+  margin-bottom:12px;
+}
+
+.dlg-pill-readonly{
+  background:#f6f9fc;
+  border-radius:16px;
+  padding:6px 10px;
+}
+
+.dlg-footer-main{
+  width:160px;
+}
+
+/* ═══ Grid del formulario Ingreso Caso ═══ */
+.ingreso-form-grid{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ingreso-row{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ingreso-row > .ingreso-panel{
+  flex: 1 1 280px;
+  min-width: 250px;
+}
+.ingreso-row > .ingreso-panel-xs{
+  flex: 0 1 180px;
+  min-width: 160px;
+}
+.ingreso-row > .ingreso-panel-sm{
+  flex: 0 1 280px;
+  min-width: 220px;
+}
+.ingreso-row > .ingreso-panel-lg{
+  flex: 2 1 400px;
+}
+
+/* Paneles del formulario Ingreso Caso */
+.ingreso-panel{
+  margin-bottom: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+.ingreso-panel .p-panel-header{
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #334155;
+  border-radius: 12px 12px 0 0;
+}
+.ingreso-panel .p-panel-content{
+  padding: 14px;
+  background: #ffffff;
+  border-radius: 0 0 12px 12px;
+}
+
+/* Paneles Ingreso en modo oscuro */
+body.dark-theme .ingreso-panel{
+  border-color: rgba(71, 85, 105, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+body.dark-theme .ingreso-panel .p-panel-header{
+  background: linear-gradient(180deg, #4b5a6e 0%, #445266 100%);
+  border-bottom-color: rgba(71, 85, 105, 0.5);
+  color: #e5e7eb;
+}
+body.dark-theme .ingreso-panel .p-panel-content{
+  background: #3d4a5c;
+  color: #e5e7eb;
+}

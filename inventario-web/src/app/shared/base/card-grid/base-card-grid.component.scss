@@ -1,0 +1,79 @@
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+.stat{display:flex;align-items:center;background:#fff;border-radius:12px;padding:.75rem 1rem;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.icon{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;margin-right:.75rem;color:#fff}
+.icon[data-color="blue"]{background:#3b82f6}
+.icon[data-color="green"]{background:#22c55e}
+.icon[data-color="purple"]{background:#6366f1}
+.icon[data-color="amber"]{background:#f59e0b}
+.info .label{color:#6b7280;font-size:.8rem}
+.value-row{display:flex;align-items:center;gap:.5rem}
+.value-row h3{margin:0;font-size:1.25rem;color:#111827}
+.trend{font-size:.8rem;display:flex;align-items:center;gap:.25rem}
+.trend.up{color:#16a34a}
+.trend.down{color:#dc2626}
+
+/* Skeleton loading */
+.skeleton{display:inline-block;background:linear-gradient(90deg,#eee 25%,#f5f5f5 37%,#eee 63%);background-size:400% 100%;animation:shimmer 1.2s ease-in-out infinite;border-radius:6px}
+.skeleton-text{width:80px;height:18px}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+/* Dark mode overrides */
+:host-context([data-theme='dark']) .stat,
+:host-context(body.dark-theme) .stat { 
+  background: #1e293b;
+  border: 1px solid #334155;
+  box-shadow: 0 1px 3px rgba(0,0,0,.45);
+}
+:host-context([data-theme='dark']) .info .label,
+:host-context(body.dark-theme) .info .label { 
+  color: #e2e8f0;
+}
+:host-context([data-theme='dark']) .value-row h3,
+:host-context(body.dark-theme) .value-row h3 { 
+  color: #f8fafc;
+}
+
+/* Dark mode con gradientes de color por tipo */
+:host-context(body.dark-theme) .stat:has(.icon[data-color="blue"]) {
+  background: linear-gradient(90deg, #1e293b 0%, rgba(59,130,246,0.15) 100%);
+  border-left: 3px solid #3b82f6;
+}
+:host-context(body.dark-theme) .stat:has(.icon[data-color="green"]) {
+  background: linear-gradient(90deg, #1e293b 0%, rgba(34,197,94,0.15) 100%);
+  border-left: 3px solid #22c55e;
+}
+:host-context(body.dark-theme) .stat:has(.icon[data-color="amber"]) {
+  background: linear-gradient(90deg, #1e293b 0%, rgba(245,158,11,0.15) 100%);
+  border-left: 3px solid #f59e0b;
+}
+:host-context(body.dark-theme) .stat:has(.icon[data-color="purple"]) {
+  background: linear-gradient(90deg, #1e293b 0%, rgba(239,68,68,0.15) 100%);
+  border-left: 3px solid #ef4444;
+}
+
+/* Ocultar icono en dark mode para estilo más limpio */
+:host-context(body.dark-theme) .icon {
+  display: none;
+}
+:host-context(body.dark-theme) .stat {
+  padding: 0.6rem 1rem;
+}
+:host-context(body.dark-theme) .value-row h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-right: 0.75rem;
+}
+:host-context(body.dark-theme) .stat {
+  flex-direction: row;
+}
+:host-context(body.dark-theme) .info {
+  display: flex;
+  flex-direction: column;
+}
+:host-context(body.dark-theme) .info .label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+:host-context(body.dark-theme) .skeleton {
+  background: linear-gradient(90deg, #334155 25%, #3d4d5f 37%, #334155 63%);
+}

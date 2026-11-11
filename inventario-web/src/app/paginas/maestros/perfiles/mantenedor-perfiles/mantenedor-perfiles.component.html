@@ -1,0 +1,87 @@
+<p-toast></p-toast>
+
+<p-confirmDialog></p-confirmDialog>
+
+<!-- Barra de acciones -->
+<div class="actions-bar">
+  <div class="actions-left">
+    <button pButton type="button" class="btn-strong-amber" icon="pi pi-plus" label="Nuevo" (click)="modoCrear()"></button>
+    <button pButton type="button" class="btn-strong-green" icon="pi pi-file-excel" label="Exportar a Excel" (click)="exportarExcel()"></button>
+    <button pButton type="button" class="btn-strong-navy" icon="pi pi-filter-slash" label="Limpiar Filtros" (click)="clearFilters()"></button>
+  </div>
+  <span class="total-registros" *ngIf="dt">
+    Total de registros: {{ dt.filteredValue?.length ?? perfiles().length }}
+  </span>
+</div>
+
+<!-- Formulario de perfil en diálogo -->
+<p-dialog header="Perfil" [visible]="showDialog" [modal]="true" [closable]="false" [draggable]="false" [resizable]="false" [maximizable]="false" (onHide)="cancelar()" [style]="{width:'60vw'}" [breakpoints]="{ '960px':'85vw', '640px':'95vw' }" styleClass="app-dialog">
+  <form [formGroup]="perfilForm" (ngSubmit)="guardar()">
+    <div class="form-grid" *ngIf="formHabilitado()">
+
+      <div class="form-field">
+        <label>Nombre<span class="required-asterisk">*</span></label>
+        <input pInputText class="p-inputtext-sm" formControlName="nombre" />
+      </div>
+
+      <div class="form-field">
+        <label>Descripción</label>
+        <input pInputText class="p-inputtext-sm" formControlName="descripcion" />
+      </div>
+
+    </div>
+
+    <input type="hidden" formControlName="id" />
+
+    <!-- Botones de acción (sin 'Nuevo' aquí) -->
+    <div class="botones-form flex flex-wrap gap-2" style="margin-top:0.5rem;">
+      <button *ngIf="formHabilitado() && perfilForm.value.id === 0" pButton class="p-button-sm btn-strong-navy" type="submit" label="Guardar" icon="pi pi-save"></button>
+      <button *ngIf="formHabilitado() && perfilForm.value.id !== 0" pButton class="p-button-sm btn-strong-navy" type="submit" label="Actualizar" icon="pi pi-refresh"></button>
+      <button *ngIf="formHabilitado() && perfilForm.value.id !== 0" pButton type="button" label="Eliminar" icon="pi pi-trash" class="p-button-sm btn-strong-red" (click)="confirmarEliminar()"></button>
+      <button *ngIf="formHabilitado()" pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-secondary p-button-sm" (click)="cancelar()"></button>
+    </div>
+  </form>
+</p-dialog>
+
+<hr class="form-divider" />
+
+<!-- Indicador de carga -->
+<p-progressBar *ngIf="loading" mode="indeterminate" style="height: 6px; margin: .25rem 0 .5rem 0;"></p-progressBar>
+
+<!-- Tabla de perfiles -->
+<div class="col-12">
+  <p-table #dt
+           [value]="perfiles()"
+           dataKey="id"
+           scrollable="true"
+           [virtualScroll]="true"
+           [virtualScrollOptions]="{ itemSize: 48, scrollHeight: 'calc(100vh - 220px)' }"
+           [rows]="30"
+           [virtualScrollDelay]="0"
+           [size]="'small'" [rowHover]="true"
+           sortMode="multiple"
+           styleClass="mantenedor-datatable p-datatable-sm"
+           [loading]="loading"
+           selectionMode="single" [selection]="perfilSeleccionado()" (selectionChange)="perfilSeleccionado.set($event)"
+           (onRowSelect)="seleccionarPerfil($event.data)">
+
+    <!-- Encabezado -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+        <th pSortableColumn="descripcion">Descripción <p-sortIcon field="descripcion"></p-sortIcon></th>
+      </tr>
+      <tr>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar nombre" (click)="$event.stopPropagation()" (input)="dt.filter($any($event.target).value, 'nombre', 'contains')" /></th>
+        <th><input pInputText class="w-full p-inputtext-sm" placeholder="Filtrar descripción" (click)="$event.stopPropagation()" (input)="dt.filter($any($event.target).value, 'descripcion', 'contains')" /></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr [pSelectableRow]="row" [ngClass]="{'fila-seleccionada': (perfilSeleccionado()?.id) === row.id}">
+        <td>{{ row.nombre }}</td>
+        <td>{{ row.descripcion }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

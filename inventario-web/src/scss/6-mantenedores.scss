@@ -1,0 +1,334 @@
+/* ============================================================================
+   6-mantenedores.scss — dashboard de Mantenedores (grid/list + hero + search)
+   ========================================================================== */
+
+   .mantenedores-dashboard{ max-width:none; width:100%; margin:0; padding-bottom:36px; }
+
+   /* Header / HERO */
+   .dashboard-header{
+     margin-top:10px; margin-bottom:4px; padding:8px 12px; border-radius: var(--radius-xl);
+     position:relative; overflow:hidden;
+     border: 1px solid color-mix(in oklab, var(--glass-tint) 55%, var(--border-soft));
+     background:
+       radial-gradient(1200px 600px at 10% -40%, rgba(var(--accent-rgb), .12), transparent 60%),
+       linear-gradient(180deg, color-mix(in oklab, var(--surface-1) 100%, #000 0%) 0%,
+                              color-mix(in oklab, var(--surface-2) 100%, #000 0%) 100%);
+     box-shadow:
+       inset 0 1px 0 rgba(255,255,255,.35),
+       inset 0 -1px 0 rgba(0,0,0,.45),
+       0 30px 80px -40px rgba(0,0,0,.75),
+       0 24px 60px -32px color-mix(in oklab, var(--accent-0) 40%, transparent);
+   }
+   .dashboard-header::before{ content:""; position:absolute; left:10px; right:10px; top:0; height:1px; border-radius:999px; background: rgba(255,255,255,.45); opacity:.45; }
+   .dashboard-header::after{
+     content:""; position:absolute; left:50%; transform:translateX(-50%); bottom:-16px; width:min(96%,1200px); height:34px; border-radius:999px;
+     background: radial-gradient(60% 100% at 50% 0%, color-mix(in oklab, var(--accent-1) 26%, transparent) 0%, transparent 70%); filter: blur(12px); opacity:.75;
+   }
+   
+   .drone-hero{ position:relative; overflow:hidden; }
+   .drone-hero::after{
+     content:""; position:absolute; inset:-2px;
+     background:
+       radial-gradient(200px 90px at 12% 0%, rgba(var(--accent-rgb),.18), transparent 60%),
+       radial-gradient(180px 70px at 95% 5%, rgba(76,255,180,.12), transparent 60%);
+   }
+   
+   /* Títulos */
+   .dashboard-title{ display:flex; align-items:center; gap:10px; margin:0 0 1px 0; font-size: clamp(22px, 2.3vw, 32px); color: var(--ink-0); }
+   .dashboard-subtitle{
+     display:inline-flex; align-items:center; gap:8px; margin:0; padding:8px 14px; font-size: var(--fs-0);
+     color: var(--ink-0); border-radius: 999px;
+     border:1px solid color-mix(in oklab, var(--accent-1) 18%, var(--glass-tint));
+     background:
+       radial-gradient(100% 100% at 0% 0%, color-mix(in oklab, var(--accent-1) 12%, transparent) 0%, transparent 70%),
+       linear-gradient(180deg, color-mix(in oklab, var(--glass-tint) 80%, transparent), color-mix(in oklab, var(--glass-tint) 48%, transparent));
+     box-shadow: inset 0 1.25px 0 rgba(255,255,255,.55), 0 14px 36px -10px color-mix(in oklab, var(--accent-0) 54%, transparent), 0 0 0 1px color-mix(in oklab, var(--accent-1) 32%, transparent) inset;
+   }
+   
+   /* Search + toggles */
+   .search-section{ display:grid; grid-template-columns:1fr auto auto auto; gap:12px; align-items:center; margin:12px 0 16px 0; }
+   @media (max-width: 1000px){ .search-section{ grid-template-columns: 1fr; } }
+   .search-container{
+     display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:14px;
+     border:1px solid var(--border-soft);
+     background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+     box-shadow: var(--shadow-1), var(--inner-emboss);
+   }
+   .search-input{ flex:1; background:transparent; border:0; outline:0; color: var(--ink-0); font-size: var(--fs-0); }
+   .view-toggle{ display:inline-flex; gap:6px; padding:4px; border-radius:999px; border:1px solid var(--border-soft); background: linear-gradient(180deg, var(--surface-1), var(--surface-2)); }
+   .toggle-btn{
+     display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:0; border-radius:999px;
+     color: var(--ink-1); font-weight:700; cursor:pointer; background:transparent;
+   }
+   .toggle-btn.active{
+     color: var(--ink-0);
+     background: color-mix(in oklab, rgb(var(--accent-rgb)) 18%, transparent);
+     box-shadow: inset 0 0 0 1px color-mix(in oklab, rgb(var(--accent-rgb)) 30%, transparent);
+   }
+   
+   /* Categorías grid/list */
+   .categories-container{ display:block; }
+   .categories-container.grid-view .category-section + .category-section{ margin-top:14px; }
+   .categories-container.list-view{
+     display:grid; gap:12px 14px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items:start;
+   }
+   @media (min-width: 1500px){ .categories-container.list-view{ grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); } }
+   .categories-container.list-view .category-section{
+     display:flex; flex-direction:column; padding:10px;
+     border:1px solid var(--border-soft); border-radius:16px;
+     background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+     box-shadow: var(--shadow-1);
+   }
+   
+   /* Tarjetas */
+   .options-grid{ display:grid; gap:10px; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+   .categories-container.list-view .options-grid{ grid-template-columns: 1fr; }
+   .categories-container.grid-view .options-grid{ grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:10px; }
+   
+   /* >>> COMPACCIÓN + título en la MISMA FILA del ícono <<< */
+   .maintenance-option{
+     position:relative; isolation:isolate;
+     /* Layout en fila: Ícono (28px) + texto */
+     display:grid; grid-template-columns: 28px 1fr; grid-template-rows: auto auto;
+     column-gap:10px; row-gap:2px; align-items:center;
+   
+     /* Más delgada */
+     padding:10px 12px; border-radius: 14px; border:1px solid var(--border-soft);
+     background: linear-gradient(180deg, rgba(255,255,255,.04), transparent),
+                 linear-gradient(180deg, var(--surface-1), var(--surface-2));
+     box-shadow: 0 12px 22px rgba(0,0,0,.12);
+     transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+     cursor:pointer;
+   }
+   .maintenance-option:hover{
+     transform: translateY(-2px);
+     border-color: color-mix(in oklab, rgb(var(--accent-rgb)) 35%, var(--border-soft));
+     box-shadow: 0 20px 35px rgba(0,0,0,.25), 0 8px 16px rgba(0,0,0,.15),
+                 0 0 0 3px color-mix(in oklab, rgb(var(--accent-rgb)) 25%, transparent),
+                 inset 0 1px 0 rgba(255,255,255,.1);
+   }
+   
+   /* Ícono fijo a la izquierda, texto a la derecha (título en la MISMA FILA) */
+   .maintenance-option .option-icon{
+     grid-row: 1 / span 2; grid-column: 1;
+     display:flex; align-items:center; justify-content:center;
+   }
+   .maintenance-option .option-icon .svg-icon{ width:28px; height:28px; display:block; }
+   
+   .maintenance-option h3{
+     grid-column: 2; grid-row: 1;
+     margin:0; font-weight:800;
+     font-size: 14px; line-height: 1.15; color: var(--ink-0);
+     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+   }
+   .maintenance-option p{
+     grid-column: 2; grid-row: 2;
+     margin:0; color: var(--ink-1); font-size: 12.5px; line-height: 1.3;
+     overflow: hidden; text-overflow: ellipsis;
+   }
+   
+   /* Dark variantes para dashboard */
+   body.dark-theme .mantenedores-dashboard{
+     background:
+       radial-gradient(1400px 800px at 12% -20%, rgba(255,255,255,.07) 0%, transparent 60%),
+       radial-gradient(1200px 700px at 100% -30%, rgba(255,255,255,.04) 0%, transparent 60%),
+       linear-gradient(180deg, #2e3238 0%, #21252a 100%);
+   }
+   body.dark-theme .mantenedores-dashboard .dashboard-header{
+     background: radial-gradient(1200px 600px at 10% -40%, rgba(255,255,255,.06), transparent 60%), linear-gradient(180deg, #26292e, #1f2226);
+     border-color:#353a43; box-shadow: 0 30px 80px -40px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.06);
+   }
+   body.dark-theme .mantenedores-dashboard .categories-container.list-view .category-section{
+     background: linear-gradient(180deg, #23262c, #1c1f24); border-color:#353a43; box-shadow: 0 10px 24px -18px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.04);
+   }
+   body.dark-theme .mantenedores-dashboard .maintenance-option{
+     background: linear-gradient(180deg, rgba(255,255,255,.03), transparent), linear-gradient(180deg, #20242a, #191c21);
+     border-color:#353a43; box-shadow: 0 12px 22px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.03) inset;
+   }
+   
+   /* ============================================================================
+      Neon IA para íconos (solo halo; NO cambia el color del ícono)
+      - Respeta el aspecto de los botones
+      - Halo azul/verde según body.accent-blue / body.accent-green
+      - Estilo futurista, robótico y elegante
+      ========================================================================== */
+   
+   :root{
+     --ia-glow-1: .22rem;  /* halo cercano */
+     --ia-glow-2: .55rem;  /* halo medio   */
+     --ia-glow-3: 1.05rem; /* halo largo   */
+   }
+   body.dark-theme{
+     --ia-glow-1: .18rem;
+     --ia-glow-2: .46rem;
+     --ia-glow-3: .90rem;
+   }
+   
+   /* Iconos de Lista/Grid y de cada tarjeta */
+   .mantenedores-dashboard .view-toggle .toggle-btn .nav-svg,
+   .mantenedores-dashboard .maintenance-option .svg-icon{
+     isolation: isolate;
+     transition: filter .16s ease, transform .16s ease;
+     /* halo base: mezcla de acento suave + largo tenue */
+     filter:
+       drop-shadow(0 0 var(--ia-glow-1) color-mix(in oklab, var(--accent-1), transparent 55%))
+       drop-shadow(0 0 var(--ia-glow-3) color-mix(in oklab, var(--accent-0), transparent 78%));
+   }
+   
+   /* Hover/active: más “IA”, sin tocar el botón */
+   .mantenedores-dashboard .view-toggle .toggle-btn:hover .nav-svg,
+   .mantenedores-dashboard .view-toggle .toggle-btn.active .nav-svg,
+   .mantenedores-dashboard .maintenance-option:hover .svg-icon,
+   .mantenedores-dashboard .maintenance-option:focus-visible .svg-icon{
+     transform: translateZ(0) scale(1.015);
+     filter:
+       drop-shadow(0 0 calc(var(--ia-glow-1) + .06rem) color-mix(in oklab, var(--accent-1), transparent 35%))
+       drop-shadow(0 0 calc(var(--ia-glow-2) + .10rem) color-mix(in oklab, var(--accent-0), transparent 52%))
+       drop-shadow(0 0 calc(var(--ia-glow-3) + .20rem) color-mix(in oklab, var(--accent-0), transparent 62%));
+   }
+   
+   /* Modo oscuro: brillo más controlado (elegante) */
+   body.dark-theme .mantenedores-dashboard .view-toggle .toggle-btn:hover .nav-svg,
+   body.dark-theme .mantenedores-dashboard .view-toggle .toggle-btn.active .nav-svg,
+   body.dark-theme .mantenedores-dashboard .maintenance-option:hover .svg-icon,
+   body.dark-theme .mantenedores-dashboard .maintenance-option:focus-visible .svg-icon{
+     filter:
+       drop-shadow(0 0 calc(var(--ia-glow-1) + .04rem) color-mix(in oklab, var(--accent-1), transparent 42%))
+       drop-shadow(0 0 calc(var(--ia-glow-2) + .06rem) color-mix(in oklab, var(--accent-0), transparent 58%))
+       drop-shadow(0 0 calc(var(--ia-glow-3) + .14rem) color-mix(in oklab, var(--accent-0), transparent 70%));
+   }
+   
+   /* ============================================================================
+      Comfort: menú de mantenedores con menor brillo (modo claro)
+      ========================================================================== */
+   body.light-comfort:not(.dark-theme) .mantenedores-dashboard{
+   
+     /* Header/Hero más plano */
+     .dashboard-header{
+       border-color: var(--border-soft);
+       background:
+         radial-gradient(900px 380px at 10% -40%, rgba(var(--accent-rgb), .08), transparent 65%),
+         linear-gradient(180deg, var(--panel-top) 0%, var(--panel-bot) 100%);
+       box-shadow: 0 16px 36px -24px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.30);
+     }
+     .drone-hero::after{ /* reduce brillos internos */
+       background:
+         radial-gradient(160px 70px at 12% 0%, rgba(var(--accent-rgb),.10), transparent 60%),
+         radial-gradient(140px 60px at 95% 5%, rgba(76,255,180,.08), transparent 60%);
+     }
+     .dashboard-subtitle{
+       box-shadow: inset 0 1px 0 rgba(255,255,255,.45),
+                   0 10px 24px -12px color-mix(in oklab, var(--accent-0) 32%, transparent),
+                   0 0 0 1px color-mix(in oklab, var(--accent-1) 22%, transparent) inset;
+       border-color: color-mix(in oklab, var(--accent-1) 14%, var(--glass-tint));
+       background:
+         radial-gradient(100% 100% at 0% 0%, color-mix(in oklab, var(--accent-1) 8%, transparent) 0%, transparent 70%),
+         linear-gradient(180deg, color-mix(in oklab, var(--glass-tint) 70%, transparent),
+                              color-mix(in oklab, var(--glass-tint) 40%, transparent));
+     }
+   
+     /* Buscador y toggles más mates */
+     .search-container{
+       border-color: var(--border-soft);
+       background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+       box-shadow: 0 4px 10px rgba(16,24,40,.06), var(--inner-emboss);
+     }
+     .view-toggle{
+       border-color: var(--border-soft);
+       background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+     }
+     .view-toggle .toggle-btn{ color: var(--ink-2); }
+     .view-toggle .toggle-btn.active{
+       color: var(--ink-0);
+       background: color-mix(in oklab, rgb(var(--accent-rgb)) 12%, transparent);
+       box-shadow: inset 0 0 0 1px color-mix(in oklab, rgb(var(--accent-rgb)) 22%, transparent);
+     }
+   
+     /* Botones “nav-item” (Azul/Verde/Confort) más calmados */
+     .nav-item{
+       border: 1px solid var(--border-soft);
+       background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+       box-shadow: 0 4px 10px rgba(16,24,40,.05), var(--inner-emboss);
+       color: var(--ink-1);
+     }
+     .nav-item.accent-toggle .accent-dot.blue,
+     .nav-item.accent-toggle .accent-dot.green{
+       filter: saturate(.9) brightness(.95);
+       box-shadow: none;
+     }
+     .nav-item.comfort-toggle.active{
+       color: var(--ink-0);
+       box-shadow: inset 0 0 0 1px color-mix(in oklab, rgb(var(--accent-rgb)) 22%, transparent);
+       background: color-mix(in oklab, rgb(var(--accent-rgb)) 10%, transparent);
+     }
+   
+     /* Tarjetas más “mate” y compactas en hover */
+     .maintenance-option{
+       border-color: var(--border-soft);
+       background: linear-gradient(180deg, rgba(255,255,255,.02), transparent),
+                   linear-gradient(180deg, var(--surface-1), var(--surface-2));
+       box-shadow: 0 8px 18px rgba(0,0,0,.10);
+     }
+     .maintenance-option:hover{
+       border-color: color-mix(in oklab, rgb(var(--accent-rgb)) 24%, var(--border-soft));
+       box-shadow: 0 14px 28px rgba(0,0,0,.18),
+                   0 0 0 2px color-mix(in oklab, rgb(var(--accent-rgb)) 18%, transparent),
+                   inset 0 1px 0 rgba(255,255,255,.08);
+       transform: translateY(-1px);
+     }
+   
+     /* Halo IA de íconos: más tenue en confort */
+     .view-toggle .toggle-btn .nav-svg,
+     .maintenance-option .svg-icon{
+       filter:
+         drop-shadow(0 0 .18rem color-mix(in oklab, var(--accent-1), transparent 60%))
+         drop-shadow(0 0 .45rem color-mix(in oklab, var(--accent-0), transparent 84%));
+     }
+     .view-toggle .toggle-btn:hover .nav-svg,
+     .view-toggle .toggle-btn.active .nav-svg,
+     .maintenance-option:hover .svg-icon,
+     .maintenance-option:focus-visible .svg-icon{
+       filter:
+         drop-shadow(0 0 .22rem color-mix(in oklab, var(--accent-1), transparent 50%))
+         drop-shadow(0 0 .55rem color-mix(in oklab, var(--accent-0), transparent 72%));
+       transform: translateZ(0) scale(1.01);
+     }
+   }
+   
+   /* === Iconos del menú-mantenedor con color según el acento (azul/verde) === */
+/* No cambia tamaños ni estructura, solo el color del icono */
+.mantenedores-dashboard .maintenance-option .svg-icon,
+.mantenedores-dashboard .maintenance-option i.pi {
+  color: rgb(var(--accent-rgb)); /* usa el acento de body.accent-blue/green ya definido en tokens */
+}
+
+/* === Badges de Stock === */
+/* Stock Mínimo - Amarillo */
+.stock-minimo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  background: rgba(234, 179, 8, 0.12) !important;
+  color: #ca8a04 !important;
+  border: 1px solid rgba(234, 179, 8, 0.25) !important;
+}
+
+/* Stock Actual - Azul */
+.stock-actual-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  background: rgba(33, 150, 243, 0.12) !important;
+  color: #1976d2 !important;
+  border: 1px solid rgba(33, 150, 243, 0.25) !important;
+}

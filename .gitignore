@@ -1,0 +1,12 @@
+crm-api/
+crm-web/
+documentacion/
+**/.env
+**/node_modules/
+**/dist/
+**/.angular/
+**/.dev-uploads/
+**/coverage/
+**/*.log
+inventario-api/ClientApp/*
+!inventario-api/ClientApp/README.md

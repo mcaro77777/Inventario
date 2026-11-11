@@ -1,0 +1,180 @@
+/* ============================================================================
+   7-dialogos.scss — estilos de diálogos. Incluye fix del PickList de Embalajes.
+   ========================================================================== */
+
+/* Base */
+.p-dialog .p-dialog-header{ font-weight:800; }
+.p-dialog .p-dialog-content{ background: var(--surface-1); color: var(--ink-0); }
+.p-dialog .p-dialog-footer{ background: linear-gradient(180deg, var(--surface-1), var(--surface-2)); }
+
+.p-dialog.app-dialog .botones-form{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem !important;
+  margin-top: 1rem !important;
+}
+
+/* Modo oscuro: tono azul-gris coherente con paneles */
+body.dark-theme .p-dialog{
+  background: linear-gradient(180deg, #445266, #3d4a5c) !important;
+  border: 1px solid rgba(71,85,105,0.6) !important;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5) !important;
+}
+body.dark-theme .p-dialog .p-dialog-header{
+  background: linear-gradient(180deg, #4b5a6e 0%, #445266 100%) !important;
+  color: #f9fafb !important;
+  border-bottom: 1px solid rgba(71,85,105,0.6) !important;
+}
+body.dark-theme .p-dialog .p-dialog-header .p-dialog-header-icon{
+  color: #9ca3af !important;
+}
+body.dark-theme .p-dialog .p-dialog-header .p-dialog-header-icon:hover{
+  background: rgba(71,85,105,0.5) !important;
+  color: #e5e7eb !important;
+}
+
+body.dark-theme .p-dialog .p-dialog-content{
+  background: #3d4a5c !important;
+  color: #e5e7eb !important;
+}
+
+body.dark-theme .p-dialog .p-dialog-footer{
+  background: linear-gradient(180deg, #364152 0%, #2f3a48 100%) !important;
+  border-top: 1px solid rgba(71,85,105,0.5) !important;
+}
+
+/* Inputs dentro de diálogos en modo oscuro */
+body.dark-theme .p-dialog .p-inputtext,
+body.dark-theme .p-dialog .p-dropdown,
+body.dark-theme .p-dialog .p-select,
+body.dark-theme .p-dialog .p-calendar,
+body.dark-theme .p-dialog .p-inputtextarea,
+body.dark-theme .p-dialog textarea,
+body.dark-theme .p-dialog input[type="text"],
+body.dark-theme .p-dialog input[type="number"],
+body.dark-theme .p-dialog input[type="email"],
+body.dark-theme .p-dialog input[type="date"],
+body.dark-theme .p-dialog input[type="time"]{
+  background: #2f3a48 !important;
+  border: 1px solid rgba(71,85,105,0.7) !important;
+  color: #e5e7eb !important;
+}
+body.dark-theme .p-dialog .p-inputtext:enabled:focus,
+body.dark-theme .p-dialog .p-dropdown.p-focus,
+body.dark-theme .p-dialog .p-select.p-focus,
+body.dark-theme .p-dialog input:focus,
+body.dark-theme .p-dialog textarea:focus{
+  border-color: rgba(96,165,250,0.6) !important;
+  box-shadow: 0 0 0 2px rgba(96,165,250,0.2) !important;
+}
+body.dark-theme .p-dialog .p-inputtext::placeholder,
+body.dark-theme .p-dialog input::placeholder,
+body.dark-theme .p-dialog textarea::placeholder{
+  color: #9ca3af !important;
+}
+/* Labels en modo oscuro */
+body.dark-theme .p-dialog label,
+body.dark-theme .p-dialog .form-label{
+  color: #e5e7eb !important;
+}
+/* Dropdown label y trigger */
+body.dark-theme .p-dialog .p-dropdown .p-dropdown-label,
+body.dark-theme .p-dialog .p-select .p-select-label{
+  color: #e5e7eb !important;
+}
+body.dark-theme .p-dialog .p-dropdown .p-dropdown-trigger,
+body.dark-theme .p-dialog .p-select .p-select-trigger{
+  color: #9ca3af !important;
+}
+
+/* Cabecera de caso reutilizable dentro de los diálogos */
+.case-header-box{
+  border:1px solid #e0e7ff;
+  background:#f8f9ff;
+  border-radius:6px;
+  padding:8px 8px 4px;
+  margin-bottom:12px;
+}
+
+.case-header-box .form-fields{
+  row-gap: 6px;
+  column-gap: 6px;
+  margin-bottom: 0;
+  flex-wrap:wrap;
+}
+
+.case-header-pill{
+  background:#f4f7ff;
+  border-radius:6px;
+  padding:4px 8px;
+  display:flex;
+  justify-content:flex-start;
+  gap:6px;
+}
+
+/* Variante en modo oscuro para la cabecera de caso */
+body.dark-theme .case-header-box{
+  border-color: rgba(71,85,105,0.6);
+  background: linear-gradient(180deg, #364152 0%, #2f3a48 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+body.dark-theme .case-header-box .form-label{
+  color: #e2e8f0 !important;
+}
+
+body.dark-theme .case-header-pill{
+  background: linear-gradient(135deg, #445266 0%, #3d4a5c 100%);
+  border: 1px solid rgba(71,85,105,0.5);
+  color: #f8fafc;
+}
+
+/* --- Embalajes (styleClass="dlg-embalajes") — MODO CLARO --- */
+body.light-theme .p-dialog.dlg-embalajes,
+body.light-theme .p-dialog.dlg-embalajes .p-dialog-header,
+body.light-theme .p-dialog.dlg-embalajes .p-dialog-content,
+body.light-theme .p-dialog.dlg-embalajes .p-dialog-footer{
+  background:#fff !important; color:#111827 !important;
+}
+body.light-theme .p-dialog.dlg-embalajes :where(.p-picklist,
+  .p-picklist .p-picklist-source,
+  .p-picklist .p-picklist-target,
+  .p-picklist .p-picklist-header,
+  .p-picklist .p-picklist-list,
+  .p-picklist .p-picklist-list-wrapper,
+  .p-picklist .p-picklist-buttons){
+  background:#fff !important; color:#111827 !important; border-color:#e5e7eb !important;
+}
+body.light-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-filter-container,
+body.light-theme .p-dialog.dlg-embalajes .p-inputtext{
+  background:#fff !important; color:#111827 !important; border-color:#e5e7eb !important;
+}
+body.light-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-item{ background:transparent !important; color:#111827 !important; }
+body.light-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-item.p-highlight{
+  background:#eef2ff !important; color:#111827 !important;
+}
+body.light-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-item:hover{ background:#f3f4f6 !important; }
+
+/* Botoneras laterales del picklist */
+body.light-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-buttons .p-button{
+  background: linear-gradient(180deg,#f9fafb,#eef2f7) !important;
+  border:1px solid #e5e7eb !important; color:#374151 !important; border-radius:10px;
+}
+
+/* --- MODO OSCURO (coherente con formulario dark) --- */
+body.dark-theme .p-dialog.dlg-embalajes .p-dialog-content{
+  background: #3d4a5c !important; color:#e9eef6 !important;
+}
+body.dark-theme .p-dialog.dlg-embalajes .p-picklist,
+body.dark-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-source,
+body.dark-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-target,
+body.dark-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-header,
+body.dark-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-list,
+body.dark-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-list-wrapper{
+  background: linear-gradient(180deg, #3d4a5c, #364152) !important;
+  color:#e9eef6 !important; border-color:rgba(71,85,105,0.6) !important;
+}
+body.dark-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-item{ background:transparent !important; color:#e9eef6 !important; }
+body.dark-theme .p-dialog.dlg-embalajes .p-picklist .p-picklist-item.p-highlight{
+  background: color-mix(in oklab, rgb(var(--accent-rgb)) 22%, #1b2430) !important; color:#e9eef6 !important;
+}

@@ -1,0 +1,52 @@
+<div class="progressbar" *ngIf="isLoading"></div>
+
+<div class="dashboard" style="--gap:1rem">
+
+  <!-- Toolbar de filtros -->
+  <div class="toolbar">
+    <label for="f-cat">Categoría</label>
+    <select id="f-cat" [(ngModel)]="categoriaSeleccionada" (change)="onCategoriaChange()">
+      <option *ngFor="let c of categorias" [ngValue]="c.value">{{ c.label }}</option>
+    </select>
+  </div>
+
+  <!-- KPIs -->
+  <section class="kpi-section">
+    <app-base-card-grid [items]="stats" (itemClick)="onStatClick($event)"></app-base-card-grid>
+  </section>
+
+  <!-- GRAFICOS: un solo contenedor para mantener 2 por fila -->
+  <div class="charts-row">
+    <app-base-chart *ngFor="let c of chartsRow1"
+                    [title]="c.title"
+                    [type]="c.type"
+                    [data]="c.data"
+                    [options]="c.options"
+                    [helpText]="c.helpText || ''">
+    </app-base-chart>
+    <app-base-chart [title]="consumptionChart.title"
+                    [type]="consumptionChart.type"
+                    [data]="consumptionChart.data"
+                    [options]="consumptionChart.options"
+                    [helpText]="consumptionChart.helpText || ''">
+    </app-base-chart>
+  </div>
+
+  <!-- Órdenes en curso -->
+  <!--<app-base-table title="Órdenes en Curso"
+                  [columns]="poColumns"
+                  [data]="pos"
+                  scrollHeight="180px">
+  </app-base-table>-->
+
+  <!-- CTA flotante -->
+  <!--<footer class="action-bar">
+    <button pButton pRipple icon="pi pi-plus" label="Ingresar Stock"
+            class="p-button-primary p-button-lg"
+            (click)="abrirDialogoIngreso()"></button>
+
+    <button pButton pRipple icon="pi pi-envelope" label="Solicitar Reposición"
+            class="p-button-secondary p-button-lg"
+            (click)="abrirWizardReposicion()"></button>
+  </footer>-->
+</div>
