@@ -8,5 +8,3 @@ documentacion/
 **/.dev-uploads/
 **/coverage/
 **/*.log
-inventario-api/ClientApp/*
-!inventario-api/ClientApp/README.md

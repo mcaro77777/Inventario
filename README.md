@@ -4,12 +4,13 @@ Migración completa del sistema de inventario:
 
 - `inventario-api`: API Go 1.24 conectada a PostgreSQL, esquema `inv`.
 - `inventario-web`: frontend Angular 20 responsive.
-- `Dockerfile`: compilación multi-stage de Angular y Go para EasyPanel.
+- `inventario-api/ClientApp`: frontend Angular compilado y versionado para desplegar con el mismo patrón autónomo de CRM.
+- `Dockerfile`: alternativa para construir Angular y Go desde la raíz del repositorio.
 
 ## Construcción local
 
 ```bash
-docker build -t inventario:local .
+docker build -t inventario-api:local ./inventario-api
 ```
 
 ## EasyPanel
@@ -18,7 +19,10 @@ Configure la aplicación con:
 
 - repositorio: `mcaro77777/Inventario`;
 - rama: `main`;
-- ruta de compilación: `/`;
+- fuente: `GitHub` (no `Imagen Docker`);
+- ruta de compilación: `/inventario-api`;
+- constructor: `Dockerfile`;
+- ruta del Dockerfile: `Dockerfile`;
 - puerto interno: `8080`;
 - volumen persistente: `/data/uploads`.
 
@@ -42,4 +46,4 @@ DB_MAX_IDLE_CONNS=10
 DB_CONN_MAX_LIFETIME_MINUTES=30
 ```
 
-El contenedor ejecuta con un usuario sin privilegios, sirve Angular y API desde el mismo origen y expone el healthcheck en `/api/health`.
+El directorio `inventario-api` tiene la misma estructura de despliegue que `crm-api`: código Go, Dockerfile y `ClientApp` compilado en una sola raíz. El contenedor ejecuta con un usuario sin privilegios, sirve Angular y API desde el mismo origen y expone el healthcheck en `/api/health`.
