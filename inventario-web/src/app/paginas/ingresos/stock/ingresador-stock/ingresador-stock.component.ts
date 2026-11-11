@@ -221,12 +221,12 @@ import { takeUntilDestroyed }            from '@angular/core/rxjs-interop';
     body.dark-theme :host ::ng-deep .p-select .p-select-label,
     body.dark-theme :host ::ng-deep .p-inputtext,
     body.dark-theme :host ::ng-deep .p-inputnumber-input {
-      background: #1e293b !important;
+      background: var(--input) !important;
       color: #ffffff !important;
       border-color: #475569 !important;
     }
     body.dark-theme :host ::ng-deep .p-select {
-      background: #1e293b !important;
+      background: var(--input) !important;
       border-color: #475569 !important;
     }
     body.dark-theme :host ::ng-deep .p-select .p-select-label:not(.p-placeholder) {

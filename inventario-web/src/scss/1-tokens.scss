@@ -141,29 +141,29 @@ body.dark-theme {
   --placeholder: color-mix(in oklab, #b6c7e6 60%, transparent);
 
   /* Superficies */
-  --surface-0:#0b1120;
-  --surface-1:#111a2c;
-  --surface-2:#0f1827;
-  --surface-3:#0b1329;
-  --surface-hover:#161e31;
+  --surface-0:#344151;
+  --surface-1:#3d4a5c;
+  --surface-2:#445266;
+  --surface-3:#4b5a6e;
+  --surface-hover:#4a586b;
 
   /* Bordes / Glass / Sombras */
-  --border-soft:  color-mix(in oklab, #eaf2ff 20%, #0b1120 80%);
-  --border-strong:color-mix(in oklab, #eaf2ff 28%, #0b1120 72%);
-  --glass-tint:#0e1524cc;
-  --elev-1: 0 2px 8px rgba(0,0,0,.35);
-  --elev-2: 0 8px 24px rgba(0,0,0,.45);
-  --shadow-1: 0 1px 0 rgba(255,255,255,.03), 0 12px 28px rgba(0,0,0,.42);
-  --shadow-2: 0 2px 0 rgba(255,255,255,.02), 0 22px 48px rgba(0,0,0,.52);
+  --border-soft:  #56657a;
+  --border-strong:#687992;
+  --glass-tint:#3d4a5ccc;
+  --elev-1: 0 2px 8px rgba(15,23,42,.22);
+  --elev-2: 0 8px 24px rgba(15,23,42,.3);
+  --shadow-1: 0 1px 0 rgba(255,255,255,.05), 0 12px 28px rgba(15,23,42,.28);
+  --shadow-2: 0 2px 0 rgba(255,255,255,.04), 0 22px 48px rgba(15,23,42,.34);
   --inner-emboss: inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.26);
 
   /* Estados (dark) */
   --success: #22c55e;
   --warning: #f59e0b;
   --error:   #ef4444;
-  --success-soft: color-mix(in oklab, var(--success) 22%, #0b1120);
-  --warning-soft: color-mix(in oklab, var(--warning) 22%, #0b1120);
-  --error-soft:   color-mix(in oklab, var(--error)   22%, #0b1120);
+  --success-soft: color-mix(in oklab, var(--success) 22%, #3d4a5c);
+  --warning-soft: color-mix(in oklab, var(--warning) 22%, #3d4a5c);
+  --error-soft:   color-mix(in oklab, var(--error)   22%, #3d4a5c);
   --success-ring: color-mix(in oklab, var(--success) 40%, transparent);
   --warning-ring: color-mix(in oklab, var(--warning) 40%, transparent);
   --error-ring:   color-mix(in oklab, var(--error)   40%, transparent);

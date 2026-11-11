@@ -288,24 +288,24 @@ import { Router } from '@angular/router';
     /* ====== Dark mode para indicadores ====== */
     :host ::ng-deep body.dark-theme .indicator-card,
     body.dark-theme :host ::ng-deep .indicator-card {
-      background: #1e293b;
-      border-color: #334155;
+      background: var(--surface-1);
+      border-color: var(--border-soft);
     }
     :host ::ng-deep body.dark-theme .indicator-card--total,
     body.dark-theme :host ::ng-deep .indicator-card--total {
-      background: linear-gradient(90deg, #1e293b 0%, rgba(59,130,246,0.15) 100%);
+      background: linear-gradient(90deg, var(--surface-1) 0%, rgba(59,130,246,0.15) 100%);
     }
     :host ::ng-deep body.dark-theme .indicator-card--green,
     body.dark-theme :host ::ng-deep .indicator-card--green {
-      background: linear-gradient(90deg, #1e293b 0%, rgba(34,197,94,0.15) 100%);
+      background: linear-gradient(90deg, var(--surface-1) 0%, rgba(34,197,94,0.15) 100%);
     }
     :host ::ng-deep body.dark-theme .indicator-card--yellow,
     body.dark-theme :host ::ng-deep .indicator-card--yellow {
-      background: linear-gradient(90deg, #1e293b 0%, rgba(234,179,8,0.18) 100%);
+      background: linear-gradient(90deg, var(--surface-1) 0%, rgba(234,179,8,0.18) 100%);
     }
     :host ::ng-deep body.dark-theme .indicator-card--red,
     body.dark-theme :host ::ng-deep .indicator-card--red {
-      background: linear-gradient(90deg, #1e293b 0%, rgba(239,68,68,0.15) 100%);
+      background: linear-gradient(90deg, var(--surface-1) 0%, rgba(239,68,68,0.15) 100%);
     }
     :host ::ng-deep body.dark-theme .indicator-title,
     body.dark-theme :host ::ng-deep .indicator-title {

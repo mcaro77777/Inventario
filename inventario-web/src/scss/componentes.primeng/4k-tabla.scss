@@ -47,13 +47,13 @@
    ===================== */
 body.dark-theme{
   /* Variables de tabla en dark theme controlado por clase */
-  --tbl-header-bg:   color-mix(in oklab, var(--tbl-azul) 28%, #0b1220);
-  --tbl-header-bd:   color-mix(in oklab, var(--tbl-azul) 42%, #0b1220);
-  --tbl-hover-bg:    color-mix(in oklab, var(--tbl-azul) 20%, #0b1220);
-  --tbl-selected-bg: color-mix(in oklab, var(--tbl-azul) 32%, #0b1220);
+  --tbl-header-bg:   color-mix(in oklab, var(--tbl-azul) 18%, #4b5a6e);
+  --tbl-header-bd:   color-mix(in oklab, var(--tbl-azul) 30%, #56657a);
+  --tbl-hover-bg:    color-mix(in oklab, var(--tbl-azul) 14%, #4a5668);
+  --tbl-selected-bg: color-mix(in oklab, var(--tbl-azul) 24%, #4a5668);
   --tbl-ring:        color-mix(in oklab, var(--tbl-azul) 62%, transparent);
-  --tbl-row-bg:      #0f172a; /* fondo base de filas */
-  --tbl-row-bg-alt:  #111b2a; /* zebra alt */
+  --tbl-row-bg:      #38434f; /* fondo base de filas */
+  --tbl-row-bg-alt:  #3d4855; /* zebra alt */
 }
 
 body.dark-theme .mantenedor-datatable.p-datatable .p-datatable-thead > tr > th,
@@ -88,7 +88,7 @@ body.dark-theme .table-compact .p-datatable-tbody > tr.row-selected{
 body.dark-theme .mantenedor-datatable .p-datatable-tbody > tr > td,
 body.dark-theme .table-compact .p-datatable-tbody > tr > td{
   color: #eaf2ff;
-  border-color: color-mix(in oklab, var(--tbl-azul) 30%, #0b1220);
+  border-color: color-mix(in oklab, var(--tbl-azul) 22%, #56657a);
 }
 
 /* Fondo base de filas (evitar blanco en dark) + zebra */
@@ -103,7 +103,7 @@ body.dark-theme .table-compact .p-datatable-tbody > tr:nth-child(even){
 
 body.dark-theme .mantenedor-datatable .filters-row :where(.p-inputtext, .form-control),
 body.dark-theme .table-compact .filters-row :where(.p-inputtext, .form-control){
-  background: #0f172a;
+  background: #344255;
   color: #eaf2ff;
   border-color: color-mix(in oklab, var(--tbl-azul) 48%, #1f2937) !important;
 }
@@ -114,7 +114,7 @@ body.dark-theme .table-compact .filters-row :where(.p-inputtext::placeholder, .f
 
 body.dark-theme .mantenedor-datatable .filters-row :where(.p-multiselect, .p-dropdown),
 body.dark-theme .table-compact .filters-row :where(.p-multiselect, .p-dropdown){
-  background: #0f172a !important;
+  background: #344255 !important;
   border-color: color-mix(in oklab, var(--tbl-azul) 48%, #1f2937) !important;
   color: #eaf2ff !important;
 }

@@ -145,20 +145,20 @@ interface PermisoRow extends PermisoDto {
 
     /* ====== Dark mode ====== */
     :host-context(body.dark-theme) {
-      --panel-top: #2d3a4d;
-      --panel-bot: #1e293b;
+      --panel-top: #445266;
+      --panel-bot: #3d4a5c;
     }
     :host-context(body.dark-theme) ::ng-deep .perfil-selector,
     :host-context(body.dark-theme) ::ng-deep .actions-bar {
-      background: linear-gradient(180deg, #2d3a4d 0%, #1e293b 100%);
-      border-color: #334155;
+      background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface-1) 100%);
+      border-color: var(--border-soft);
     }
     :host-context(body.dark-theme) ::ng-deep .perfil-selector label.selector-title,
     :host-context(body.dark-theme) ::ng-deep .perfil-radio-item label {
       color: #e2e8f0;
     }
     :host-context(body.dark-theme) ::ng-deep .mantenedor-datatable.p-datatable-sm {
-      background: linear-gradient(180deg, #2d3a4d, #1e293b);
+      background: linear-gradient(180deg, var(--surface-2), var(--surface-1));
     }
     :host-context(body.dark-theme) ::ng-deep .mantenedor-datatable .p-datatable-thead > tr > th {
       background: #3a4556 !important;
@@ -166,7 +166,7 @@ interface PermisoRow extends PermisoDto {
       border-color: #475569 !important;
     }
     :host-context(body.dark-theme) ::ng-deep .mantenedor-datatable .p-datatable-tbody > tr {
-      background: #2d3a4d !important;
+      background: #38434f !important;
       color: #e2e8f0 !important;
     }
     :host-context(body.dark-theme) ::ng-deep .mantenedor-datatable .p-datatable-tbody > tr:nth-child(even) {
@@ -193,39 +193,39 @@ interface PermisoRow extends PermisoDto {
     }
     /* Tabla wrapper y empty message en dark */
     :host-context(body.dark-theme) ::ng-deep .tabla-wrapper {
-      background: #1e293b !important;
+      background: var(--surface-1) !important;
       border-radius: 8px;
     }
     :host-context(body.dark-theme) ::ng-deep .p-datatable-wrapper {
-      background: #1e293b !important;
+      background: var(--surface-1) !important;
     }
     :host-context(body.dark-theme) ::ng-deep .p-datatable {
-      background: #1e293b !important;
+      background: var(--surface-1) !important;
     }
     :host-context(body.dark-theme) ::ng-deep .p-datatable .p-datatable-table {
-      background: #1e293b !important;
+      background: var(--surface-1) !important;
     }
     :host-context(body.dark-theme) ::ng-deep .p-datatable-emptymessage td {
-      background: #1e293b !important;
+      background: var(--surface-1) !important;
       color: #94a3b8 !important;
     }
     :host-context(body.dark-theme) ::ng-deep .p-datatable-emptymessage tr {
-      background: #1e293b !important;
+      background: var(--surface-1) !important;
     }
     :host-context(body.dark-theme) ::ng-deep .p-scroller,
     :host-context(body.dark-theme) ::ng-deep .p-scroller-viewport,
     :host-context(body.dark-theme) ::ng-deep .p-virtualscroller,
     :host-context(body.dark-theme) ::ng-deep .p-scroller-content {
-      background: #1e293b !important;
+      background: var(--surface-1) !important;
     }
     :host-context(body.dark-theme) ::ng-deep .p-datatable-scrollable .p-datatable-wrapper {
-      background: #1e293b !important;
+      background: var(--surface-1) !important;
     }
     :host-context(body.dark-theme) ::ng-deep .p-datatable-scrollable-body {
-      background: #1e293b !important;
+      background: var(--surface-1) !important;
     }
     :host-context(body.dark-theme) ::ng-deep table {
-      background: #1e293b !important;
+      background: var(--surface-1) !important;
     }
     :host-context(body.dark-theme) main {
       background: transparent;

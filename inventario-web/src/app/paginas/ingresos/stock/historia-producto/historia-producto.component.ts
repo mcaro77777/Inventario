@@ -67,9 +67,9 @@ import { ProveedorService } from '../../../../core/services/proveedor.service';
     :host ::ng-deep .doc-name { font-size: 0.75rem; color: #16a34a; }
     :host ::ng-deep .readonly-input .p-inputnumber-input { background: #f8fafc; color: #64748b; }
     /* Modo oscuro para paneles de edición */
-    body.dark-theme :host ::ng-deep .edit-panel { background: #1e293b; border-color: #475569; }
-    body.dark-theme :host ::ng-deep .edit-panel .panel-header { background: linear-gradient(180deg, #334155 0%, #1e293b 100%); color: #f1f5f9; border-color: #475569; }
-    body.dark-theme :host ::ng-deep .edit-panel .panel-content { background: #1e293b; }
+    body.dark-theme :host ::ng-deep .edit-panel { background: var(--surface-1); border-color: var(--border-soft); }
+    body.dark-theme :host ::ng-deep .edit-panel .panel-header { background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface-1) 100%); color: #f1f5f9; border-color: var(--border-soft); }
+    body.dark-theme :host ::ng-deep .edit-panel .panel-content { background: var(--surface-1); }
     body.dark-theme :host ::ng-deep .form-label { color: #cbd5e1; }
     body.dark-theme :host ::ng-deep .doc-item label { color: #cbd5e1; }
     `

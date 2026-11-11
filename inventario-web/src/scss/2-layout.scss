@@ -712,12 +712,12 @@ body.dark-theme .misat-actions-buttons-row .p-button-rounded.p-button-sm:active{
 
 /* Variantes más claras para Dashboard en modo oscuro */
 body.dark-theme .dashboard-chart-card--primary{
-  background:linear-gradient(135deg,#0f172a 0%, #020617 55%, #020617 100%);
+  background:linear-gradient(135deg,var(--surface-2) 0%, var(--surface-1) 55%, var(--surface-1) 100%);
   border-color:rgba(148,163,184,0.55);
 }
 
 body.dark-theme .dashboard-chart-card--light{
-  background:linear-gradient(135deg,#020617 0%, #020617 60%, #020617 100%);
+  background:linear-gradient(135deg,var(--surface-1) 0%, var(--surface-1) 60%, var(--surface-2) 100%);
   border-color:rgba(148,163,184,0.55);
 }
 
@@ -736,7 +736,7 @@ body.dark-theme .dashboard-chart-title{
 
 /* Panel grande inferior del Dashboard: suavizar fondo en modo oscuro */
 body.dark-theme .dashboard-chart-card--blend{
-  background:linear-gradient(180deg, rgba(15,23,42,0.45), rgba(15,23,42,0.25));
+  background:linear-gradient(180deg, color-mix(in oklab, var(--surface-2) 88%, transparent), color-mix(in oklab, var(--surface-1) 92%, transparent));
   box-shadow:0 12px 30px rgba(0,0,0,0.45);
 }
 
