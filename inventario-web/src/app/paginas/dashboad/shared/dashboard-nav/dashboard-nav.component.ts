@@ -3,8 +3,8 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DashboardFiltersService } from '../../../../core/services/dashboard-filters.service';
+import { DashboardLoaderComponent } from '../dashboard-loader/dashboard-loader.component';
 
 interface NavItem {
   label: string;
@@ -16,7 +16,7 @@ interface NavGroup { label:string; icon:string; route?:string; items?:NavItem[];
 @Component({
   selector: 'app-dashboard-nav',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, ProgressSpinnerModule],
+  imports: [CommonModule, RouterLink, RouterLinkActive, DashboardLoaderComponent],
   template: `
     <div class="nav-wrapper">
       <nav class="mode-nav" aria-label="Nivel de dashboard">
@@ -51,10 +51,7 @@ interface NavGroup { label:string; icon:string; route?:string; items?:NavItem[];
       </nav>
       
       <!-- Loading overlay -->
-      <div class="loading-overlay" *ngIf="filtersService.loading()">
-        <p-progressSpinner strokeWidth="4" animationDuration="0.8s"></p-progressSpinner>
-        <span>Cargando...</span>
-      </div>
+      <app-dashboard-loader *ngIf="filtersService.loading()" label="Cambiando vista"></app-dashboard-loader>
     </div>
   `,
   styles: [`
@@ -151,23 +148,6 @@ interface NavGroup { label:string; icon:string; route?:string; items?:NavItem[];
     }
     .nav-wrapper {
       position: relative;
-    }
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      z-index: 9999;
-      color: white;
-      font-weight: 600;
-      font-size: 1rem;
     }
   `]
 })

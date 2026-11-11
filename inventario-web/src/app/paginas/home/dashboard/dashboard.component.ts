@@ -21,6 +21,7 @@ import { DashboardApiService, DashboardKpisDto, LabeledValueDto, TimeseriesDualD
 import { CategoriaService, CategoriaDto } from '../../../core/services/categoria.service';
 import { ThemeService } from '../../../core/services/theme.service';
 import { DashboardNavComponent } from '../../dashboad/shared/dashboard-nav/dashboard-nav.component';
+import { DashboardLoaderComponent } from '../../dashboad/shared/dashboard-loader/dashboard-loader.component';
 
 /* Chart.js */
 import {
@@ -59,7 +60,7 @@ interface ChartCfg<T extends ChartType = ChartType>{
   imports:[
     CommonModule,
     FormsModule,
-    BaseChartComponent, DashboardNavComponent,
+    BaseChartComponent, DashboardNavComponent, DashboardLoaderComponent,
     TableModule, ButtonModule, TagModule, RippleModule, DynamicDialogModule
   ],
   providers:[DialogService]

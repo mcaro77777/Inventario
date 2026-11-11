@@ -10,6 +10,7 @@ import { finalize } from 'rxjs/operators';
 
 import { FilterBarComponent } from '../shared/filter-bar/filter-bar.component';
 import { DashboardNavComponent } from '../shared/dashboard-nav/dashboard-nav.component';
+import { DashboardLoaderComponent } from '../shared/dashboard-loader/dashboard-loader.component';
 import { BaseChartComponent } from '../../../shared/base-chart/base-chart.component';
 import { KpiCardComponent, KpiData } from '../shared/kpi-card/kpi-card.component';
 import { DashboardFiltersService } from '../../../core/services/dashboard-filters.service';
@@ -36,7 +37,7 @@ interface StockRow {
 @Component({
   selector: 'app-dashboard-stock-riesgo',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, TooltipModule, FilterBarComponent, BaseChartComponent, DashboardNavComponent, KpiCardComponent],
+  imports: [CommonModule, FormsModule, TableModule, TooltipModule, FilterBarComponent, BaseChartComponent, DashboardNavComponent, DashboardLoaderComponent, KpiCardComponent],
   template: `
     <div class="dashboard-page">
       <header class="page-header">
@@ -181,7 +182,7 @@ interface StockRow {
         </p-table>
       </section>
 
-      <div class="loading-overlay" *ngIf="loading"><i class="pi pi-spin pi-spinner"></i></div>
+      <app-dashboard-loader *ngIf="loading" label="Analizando stock y riesgos"></app-dashboard-loader>
     </div>
   `,
   styles: [`

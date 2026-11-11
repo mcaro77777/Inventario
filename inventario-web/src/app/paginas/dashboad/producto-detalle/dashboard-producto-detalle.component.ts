@@ -8,6 +8,7 @@ import { finalize } from 'rxjs/operators';
 
 import { KpiCardComponent, KpiData } from '../shared/kpi-card/kpi-card.component';
 import { BaseChartComponent } from '../../../shared/base-chart/base-chart.component';
+import { DashboardLoaderComponent } from '../shared/dashboard-loader/dashboard-loader.component';
 import { DashboardApiService } from '../../../core/services/dashboard-api.service';
 
 import { ChartData, ChartOptions } from 'chart.js';
@@ -15,7 +16,7 @@ import { ChartData, ChartOptions } from 'chart.js';
 @Component({
   selector: 'app-dashboard-producto-detalle',
   standalone: true,
-  imports: [CommonModule, TableModule, KpiCardComponent, BaseChartComponent],
+  imports: [CommonModule, TableModule, KpiCardComponent, BaseChartComponent, DashboardLoaderComponent],
   template: `
     <div class="dashboard-page">
       <header class="page-header">
@@ -90,7 +91,7 @@ import { ChartData, ChartOptions } from 'chart.js';
         </p-table>
       </section>
 
-      <div class="loading-overlay" *ngIf="loading"><i class="pi pi-spin pi-spinner"></i></div>
+      <app-dashboard-loader *ngIf="loading" label="Preparando producto"></app-dashboard-loader>
     </div>
   `,
   styles: [`

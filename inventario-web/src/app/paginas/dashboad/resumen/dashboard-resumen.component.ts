@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { ChartData, ChartOptions } from 'chart.js';
 import { DashboardNavComponent } from '../shared/dashboard-nav/dashboard-nav.component';
+import { DashboardLoaderComponent } from '../shared/dashboard-loader/dashboard-loader.component';
 import { FilterBarComponent } from '../shared/filter-bar/filter-bar.component';
 import { KpiCardComponent, KpiData } from '../shared/kpi-card/kpi-card.component';
 import { AlertRow, AlertTableComponent } from '../shared/alert-table/alert-table.component';
@@ -16,7 +17,7 @@ interface PriorityItem { tone:'danger'|'warning'|'info'; icon:string; title:stri
 
 @Component({
   selector:'app-dashboard-resumen', standalone:true,
-  imports:[CommonModule,DashboardNavComponent,FilterBarComponent,KpiCardComponent,AlertTableComponent,BaseChartComponent],
+  imports:[CommonModule,DashboardNavComponent,DashboardLoaderComponent,FilterBarComponent,KpiCardComponent,AlertTableComponent,BaseChartComponent],
   template:`
   <main class="dashboard-page">
     <header class="page-header">
@@ -63,7 +64,7 @@ interface PriorityItem { tone:'danger'|'warning'|'info'; icon:string; title:stri
       <div class="section-heading"><div><span class="section-kicker danger">EXCEPCIONES</span><h2>Productos que requieren una decisión</h2><p>Los cinco casos más urgentes; el detalle completo está en Stock y riesgos.</p></div><button class="text-button" (click)="navigateTo('stock-riesgo')">Ver todos los riesgos <i class="pi pi-arrow-right"></i></button></div>
       <app-alert-table [title]="'Excepciones prioritarias'" [rows]="priorityAlerts" (rowClicked)="openProduct($event)"></app-alert-table>
     </section>
-    <div class="loading-overlay" *ngIf="loading"><i class="pi pi-spin pi-spinner"></i><span>Preparando análisis…</span></div>
+    <app-dashboard-loader *ngIf="loading" label="Preparando análisis"></app-dashboard-loader>
   </main>`,
   styles:[`
     :host{display:block;min-width:0}.dashboard-page{position:relative;max-width:1680px;margin:auto;padding:clamp(1rem,2vw,1.75rem);color:var(--text-color)}

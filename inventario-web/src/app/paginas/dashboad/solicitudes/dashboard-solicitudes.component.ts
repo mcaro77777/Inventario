@@ -11,6 +11,7 @@ import { finalize } from 'rxjs/operators';
 import { KpiCardComponent, KpiData } from '../shared/kpi-card/kpi-card.component';
 import { FilterBarComponent } from '../shared/filter-bar/filter-bar.component';
 import { DashboardNavComponent } from '../shared/dashboard-nav/dashboard-nav.component';
+import { DashboardLoaderComponent } from '../shared/dashboard-loader/dashboard-loader.component';
 import { BaseChartComponent } from '../../../shared/base-chart/base-chart.component';
 import { DashboardFiltersService } from '../../../core/services/dashboard-filters.service';
 import { DashboardApiService } from '../../../core/services/dashboard-api.service';
@@ -31,7 +32,7 @@ interface SolicitudRow {
 @Component({
   selector: 'app-dashboard-solicitudes',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, TooltipModule, KpiCardComponent, FilterBarComponent, BaseChartComponent, DashboardNavComponent],
+  imports: [CommonModule, FormsModule, TableModule, TooltipModule, KpiCardComponent, FilterBarComponent, BaseChartComponent, DashboardNavComponent, DashboardLoaderComponent],
   template: `
     <div class="dashboard-page">
       <header class="page-header">
@@ -118,7 +119,7 @@ interface SolicitudRow {
         </p-table>
       </section>
 
-      <div class="loading-overlay" *ngIf="loading"><i class="pi pi-spin pi-spinner"></i></div>
+      <app-dashboard-loader *ngIf="loading" label="Actualizando solicitudes"></app-dashboard-loader>
     </div>
   `,
   styles: [`
