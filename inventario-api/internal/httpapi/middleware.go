@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"log/slog"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -74,7 +75,7 @@ func middlewareBase(logger *slog.Logger, urlBase string, desarrollo bool, siguie
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		inicio := time.Now()
 		origen := r.Header.Get("Origin")
-		permitido := origen == "" || desarrollo || strings.TrimRight(origen, "/") == strings.TrimRight(urlBase, "/")
+		permitido := origenPermitido(origen, r.Host, urlBase, desarrollo)
 		if origen != "" && permitido {
 			w.Header().Set("Access-Control-Allow-Origin", origen)
 			w.Header().Set("Vary", "Origin")
@@ -98,4 +99,12 @@ func middlewareBase(logger *slog.Logger, urlBase string, desarrollo bool, siguie
 		siguiente.ServeHTTP(w, r)
 		logger.Info("solicitud HTTP", "metodo", r.Method, "ruta", r.URL.Path, "duracion", time.Since(inicio))
 	})
+}
+
+func origenPermitido(origen, hostSolicitud, urlBase string, desarrollo bool) bool {
+	if origen == "" || desarrollo || strings.EqualFold(strings.TrimRight(origen, "/"), strings.TrimRight(urlBase, "/")) {
+		return true
+	}
+	u, err := url.ParseRequestURI(origen)
+	return err == nil && u.Scheme != "" && u.Host != "" && strings.EqualFold(u.Host, hostSolicitud)
 }
