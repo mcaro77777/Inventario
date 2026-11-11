@@ -9,6 +9,7 @@ import { finalize } from 'rxjs/operators';
 import { BaseChartComponent } from '../../../shared/base-chart/base-chart.component';
 import { DashboardFiltersService } from '../../../core/services/dashboard-filters.service';
 import { DashboardApiService } from '../../../core/services/dashboard-api.service';
+import { DashboardNavComponent } from '../shared/dashboard-nav/dashboard-nav.component';
 
 import { ChartData, ChartOptions } from 'chart.js';
 
@@ -24,14 +25,14 @@ interface KpiCard {
 @Component({
   selector: 'app-dashboard-ejecutivo',
   standalone: true,
-  imports: [CommonModule, FormsModule, TooltipModule, BaseChartComponent],
+  imports: [CommonModule, FormsModule, TooltipModule, BaseChartComponent, DashboardNavComponent],
   template: `
     <div class="dashboard-ejecutivo">
       <!-- Header -->
       <header class="exec-header">
         <div class="header-left">
-          <h1><i class="pi pi-chart-bar"></i> Dashboard BI</h1>
-          <p class="subtitle">Resumen ejecutivo estilo Power BI</p>
+          <h1><i class="pi pi-chart-bar"></i> Tendencias BI</h1>
+          <p class="subtitle">Evolución ejecutiva del inventario y la inversión</p>
         </div>
         <div class="header-right">
           <div class="year-selector">
@@ -41,6 +42,8 @@ interface KpiCard {
           </div>
         </div>
       </header>
+
+      <app-dashboard-nav></app-dashboard-nav>
 
       <!-- SECCIÓN 1: KPIs Ejecutivos -->
       <section class="kpi-section">
@@ -470,7 +473,7 @@ export class DashboardEjecutivoComponent implements OnInit {
     this.dashboardApi.tablaResumen2().pipe(
       finalize(() => {
         this.loading = false;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       })
     ).subscribe({
       next: (data) => {

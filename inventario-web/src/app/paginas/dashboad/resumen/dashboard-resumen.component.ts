@@ -25,8 +25,9 @@ import { TooltipModule } from 'primeng/tooltip';
       <!-- Header -->
       <header class="page-header">
         <div>
-          <h1>Resumen Ejecutivo</h1>
-          <p class="subtitle">Gestión y control de inventario en tiempo real</p>
+          <span class="eyebrow">ANÁLISIS AVANZADO</span>
+          <h1>Panorama del inventario</h1>
+          <p class="subtitle">Explora tendencias, costos, riesgos y comportamiento operacional</p>
         </div>
       </header>
 
@@ -157,6 +158,14 @@ import { TooltipModule } from 'primeng/tooltip';
       font-size: 1.75rem;
       font-weight: 700;
     }
+    .eyebrow {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--primary-color);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+    }
     .subtitle {
       margin: 0.25rem 0 0;
       opacity: 0.7;
@@ -188,7 +197,7 @@ import { TooltipModule } from 'primeng/tooltip';
     /* KPI Grid */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
@@ -424,7 +433,7 @@ export class DashboardResumenComponent implements OnInit {
   loadData(): void {
     this.loading = true;
     this.dashboardApi.tablaResumen2().pipe(
-      finalize(() => this.loading = false)
+      finalize(() => { this.loading = false; this.cdr.markForCheck(); })
     ).subscribe({
       next: (data) => {
         console.log('Dashboard data loaded:', data?.length, 'records');
@@ -456,6 +465,8 @@ export class DashboardResumenComponent implements OnInit {
         const catNombre = r.categoria_nombre || r.categoria || '';
         if (catNombre.toLowerCase() !== filters.categoriaNombre.toLowerCase()) return false;
       }
+
+      if (filters.productoId && Number(r.id_producto || r.producto_id) !== filters.productoId) return false;
       
       // Filtro por proveedor
       if (filters.proveedorNombre) {
@@ -491,6 +502,16 @@ export class DashboardResumenComponent implements OnInit {
     this.buildAlertTable(filtered);
   }
 
+  private numero(value: unknown): number {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  private totalMovimiento(row: any): number {
+    const total = this.numero(row.total);
+    return total !== 0 ? total : this.numero(row.cantidad) * this.numero(row.valor_unitario);
+  }
+
   private calculateKpis(data: any[]): void {
     // Agrupar por producto para calcular stock
     const productMap = new Map<string, { ingresado: number; reservado: number; consumido: number; minimo: number; valorUnitario: number; ultimoConsumo: Date | null }>();
@@ -498,13 +519,13 @@ export class DashboardResumenComponent implements OnInit {
     data.forEach(r => {
       const key = r.producto_nombre || r.producto || 'Sin producto';
       const tipo = r.tipo_id ?? r.tipo;
-      const minimo = r.producto_stock_minimo || r.minimo || 0;
-      const valorUnit = r.valor_unitario || r.precio_unitario || 0;
+      const minimo = this.numero(r.producto_stock_minimo ?? r.minimo);
+      const valorUnit = this.numero(r.valor_unitario ?? r.precio_unitario);
       if (!productMap.has(key)) {
         productMap.set(key, { ingresado: 0, reservado: 0, consumido: 0, minimo, valorUnitario: valorUnit, ultimoConsumo: null });
       }
       const p = productMap.get(key)!;
-      const qty = r.cantidad || 0;
+      const qty = this.numero(r.cantidad);
       if (tipo === 0) {
         p.ingresado += qty;
         if (valorUnit > 0) p.valorUnitario = valorUnit; // Actualizar precio más reciente
@@ -545,7 +566,7 @@ export class DashboardResumenComponent implements OnInit {
     const stockDisponible = stockIngresado - stockReservado - stockConsumido;
 
     // Gasto total (usar campo 'total' del DTO que ya está calculado)
-    const gastoTotal = data.filter(r => (r.tipo_id ?? r.tipo) === 2).reduce((sum, r) => sum + (r.total || (r.cantidad || 0) * (r.valor_unitario || 0)), 0);
+    const gastoTotal = data.filter(r => (r.tipo_id ?? r.tipo) === 2).reduce((sum, r) => sum + this.totalMovimiento(r), 0);
 
     // Pendientes actuales
     const pendientes = data.filter(r => (r.tipo_id ?? r.tipo) === 1).length;
@@ -556,8 +577,8 @@ export class DashboardResumenComponent implements OnInit {
       const fecha = new Date(r.fecha);
       return fecha >= prevStart && fecha <= prevEnd;
     });
-    const prevConsumo = prevData.filter(r => (r.tipo_id ?? r.tipo) === 2).reduce((s, r) => s + (r.cantidad || 0), 0);
-    const prevGasto = prevData.filter(r => (r.tipo_id ?? r.tipo) === 2).reduce((s, r) => s + (r.total || (r.cantidad || 0) * (r.valor_unitario || 0)), 0);
+    const prevConsumo = prevData.filter(r => (r.tipo_id ?? r.tipo) === 2).reduce((s, r) => s + this.numero(r.cantidad), 0);
+    const prevGasto = prevData.filter(r => (r.tipo_id ?? r.tipo) === 2).reduce((s, r) => s + this.totalMovimiento(r), 0);
 
     const consumoVar = prevConsumo > 0 ? ((stockConsumido - prevConsumo) / prevConsumo) * 100 : 0;
     const gastoVar = prevGasto > 0 ? ((gastoTotal - prevGasto) / prevGasto) * 100 : 0;
@@ -600,8 +621,8 @@ export class DashboardResumenComponent implements OnInit {
         key = `${fecha.getFullYear()}`;
       }
 
-      const cantidad = r.cantidad || 0;
-      const valor = r.total || cantidad * (r.valor_unitario || 0);
+      const cantidad = this.numero(r.cantidad);
+      const valor = this.totalMovimiento(r);
 
       if (tipo === 0) { // Ingreso
         ingresoUnidMap.set(key, (ingresoUnidMap.get(key) || 0) + cantidad);
@@ -669,8 +690,8 @@ export class DashboardResumenComponent implements OnInit {
 
     data.filter(r => (r.tipo_id ?? r.tipo) === 2).forEach(r => {
       const prod = r.producto_nombre || r.producto || 'Sin producto';
-      gastoByProd.set(prod, (gastoByProd.get(prod) || 0) + (r.total || (r.cantidad || 0) * (r.valor_unitario || 0)));
-      volumenByProd.set(prod, (volumenByProd.get(prod) || 0) + (r.cantidad || 0));
+      gastoByProd.set(prod, (gastoByProd.get(prod) || 0) + this.totalMovimiento(r));
+      volumenByProd.set(prod, (volumenByProd.get(prod) || 0) + this.numero(r.cantidad));
     });
 
     const topGasto = Array.from(gastoByProd.entries()).sort((a, b) => b[1] - a[1]).slice(0, 10);
@@ -691,7 +712,7 @@ export class DashboardResumenComponent implements OnInit {
     const gastoByCat = new Map<string, number>();
     data.filter(r => (r.tipo_id ?? r.tipo) === 2).forEach(r => {
       const cat = r.categoria_nombre || r.categoria || 'Sin categoría';
-      gastoByCat.set(cat, (gastoByCat.get(cat) || 0) + (r.total || (r.cantidad || 0) * (r.valor_unitario || 0)));
+      gastoByCat.set(cat, (gastoByCat.get(cat) || 0) + this.totalMovimiento(r));
     });
 
     const sorted = Array.from(gastoByCat.entries()).sort((a, b) => b[1] - a[1]);
@@ -728,7 +749,7 @@ export class DashboardResumenComponent implements OnInit {
         productMap.set(key, { cat, ingresado: 0, reservado: 0, consumido: 0, minimo, dias: 0 });
       }
       const p = productMap.get(key)!;
-      const qty = r.cantidad || 0;
+      const qty = this.numero(r.cantidad);
       if (tipo === 0) p.ingresado += qty;
       else if (tipo === 1) p.reservado += qty;
       else if (tipo === 2) { p.consumido += qty; p.dias++; }

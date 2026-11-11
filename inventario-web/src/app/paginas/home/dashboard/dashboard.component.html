@@ -1,52 +1,119 @@
-<div class="progressbar" *ngIf="isLoading"></div>
+<div class="progressbar" *ngIf="isLoading" aria-label="Actualizando dashboard"></div>
 
-<div class="dashboard" style="--gap:1rem">
+<main class="simple-dashboard">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">INVENTARIO AL DÍA</span>
+      <h1>Lo importante de hoy</h1>
+      <p>Una vista rápida para saber qué requiere atención y actuar de inmediato.</p>
+    </div>
+    <div class="header-actions">
+      <button class="action secondary" type="button" (click)="irA('/menu/stock')">
+        <i class="pi pi-box"></i><span>Ver stock</span>
+      </button>
+      <button class="action primary" type="button" (click)="irA('/menu/solicitar-productos')">
+        <i class="pi pi-plus"></i><span>Solicitar producto</span>
+      </button>
+    </div>
+  </header>
 
-  <!-- Toolbar de filtros -->
-  <div class="toolbar">
-    <label for="f-cat">Categoría</label>
-    <select id="f-cat" [(ngModel)]="categoriaSeleccionada" (change)="onCategoriaChange()">
-      <option *ngFor="let c of categorias" [ngValue]="c.value">{{ c.label }}</option>
-    </select>
-  </div>
+  <app-dashboard-nav></app-dashboard-nav>
 
-  <!-- KPIs -->
-  <section class="kpi-section">
-    <app-base-card-grid [items]="stats" (itemClick)="onStatClick($event)"></app-base-card-grid>
+  <section class="context-bar" aria-label="Filtro del resumen">
+    <div class="context-copy">
+      <i class="pi pi-filter"></i>
+      <span>Mostrando</span>
+    </div>
+    <label class="category-filter" for="f-cat">
+      <span class="sr-only">Categoría</span>
+      <select id="f-cat" [(ngModel)]="categoriaSeleccionada" (change)="onCategoriaChange()">
+        <option *ngFor="let c of categorias" [ngValue]="c.value">{{ c.label }}</option>
+      </select>
+    </label>
+    <span class="updated-label"><i class="pi pi-clock"></i> Información en tiempo real</span>
   </section>
 
-  <!-- GRAFICOS: un solo contenedor para mantener 2 por fila -->
-  <div class="charts-row">
-    <app-base-chart *ngFor="let c of chartsRow1"
-                    [title]="c.title"
-                    [type]="c.type"
-                    [data]="c.data"
-                    [options]="c.options"
-                    [helpText]="c.helpText || ''">
-    </app-base-chart>
-    <app-base-chart [title]="consumptionChart.title"
-                    [type]="consumptionChart.type"
-                    [data]="consumptionChart.data"
-                    [options]="consumptionChart.options"
-                    [helpText]="consumptionChart.helpText || ''">
-    </app-base-chart>
-  </div>
+  <section class="kpi-grid" aria-label="Indicadores principales">
+    <button class="kpi-card" type="button" *ngFor="let stat of stats"
+            [attr.data-tone]="stat.colorKey" (click)="onStatClick(stat)">
+      <span class="kpi-icon"><i [class]="stat.icon"></i></span>
+      <span class="kpi-copy">
+        <span class="kpi-label">{{ stat.label }}</span>
+        <strong class="kpi-value">{{ stat.value }}</strong>
+        <span class="kpi-hint">
+          {{ stat.label === 'Sin Stock' || stat.label === 'Bajo Mínimo' ? 'Revisar productos' : 'Ver detalle' }}
+          <i class="pi pi-arrow-right"></i>
+        </span>
+      </span>
+    </button>
+  </section>
 
-  <!-- Órdenes en curso -->
-  <!--<app-base-table title="Órdenes en Curso"
-                  [columns]="poColumns"
-                  [data]="pos"
-                  scrollHeight="180px">
-  </app-base-table>-->
+  <section class="content-grid">
+    <article class="panel movement-panel">
+      <div class="panel-header">
+        <div>
+          <span class="panel-kicker">ÚLTIMOS 7 DÍAS</span>
+          <h2>Entradas y salidas</h2>
+          <p>Compara el movimiento reciente para anticipar faltantes.</p>
+        </div>
+        <button class="text-link" type="button" (click)="irA('/menu/dashboard-bi/movimientos')">
+          Analizar <i class="pi pi-arrow-up-right"></i>
+        </button>
+      </div>
+      <div class="chart-wrap">
+        <app-base-chart [title]="''" [type]="salesChart.type" [data]="salesChart.data"
+                        [options]="salesChart.options"></app-base-chart>
+      </div>
+    </article>
 
-  <!-- CTA flotante -->
-  <!--<footer class="action-bar">
-    <button pButton pRipple icon="pi pi-plus" label="Ingresar Stock"
-            class="p-button-primary p-button-lg"
-            (click)="abrirDialogoIngreso()"></button>
+    <article class="panel attention-panel">
+      <div class="panel-header">
+        <div>
+          <span class="panel-kicker danger">REQUIERE ATENCIÓN</span>
+          <h2>Stock crítico</h2>
+          <p>Productos sin stock o bajo el mínimo configurado.</p>
+        </div>
+        <span class="count-badge">{{ criticalItems.length }}</span>
+      </div>
 
-    <button pButton pRipple icon="pi pi-envelope" label="Solicitar Reposición"
-            class="p-button-secondary p-button-lg"
-            (click)="abrirWizardReposicion()"></button>
-  </footer>-->
-</div>
+      <div class="attention-list" *ngIf="criticalItems.length; else criticalState">
+        <button class="attention-row" type="button" *ngFor="let item of criticalItems" (click)="abrirProducto(item)">
+          <span class="status-dot" [class.zero]="item.stock <= 0"></span>
+          <span class="product-copy">
+            <strong>{{ item.nombre }}</strong>
+            <small>{{ item.categoria || 'Sin categoría' }}</small>
+          </span>
+          <span class="stock-copy">
+            <strong [class.zero]="item.stock <= 0">{{ item.stock }}</strong>
+            <small>mín. {{ item.min }}</small>
+          </span>
+          <i class="pi pi-chevron-right row-arrow"></i>
+        </button>
+      </div>
+
+      <ng-template #criticalState>
+        <div class="empty-state" [class.error]="criticalLoadError">
+          <i [class]="criticalLoadError ? 'pi pi-exclamation-circle' : 'pi pi-check-circle'"></i>
+          <strong>{{ criticalLoadError ? 'No pudimos cargar las alertas' : 'Todo está bajo control' }}</strong>
+          <span>{{ criticalLoadError ? 'Intenta actualizar nuevamente.' : 'No hay productos bajo el mínimo.' }}</span>
+        </div>
+      </ng-template>
+
+      <button class="panel-action" type="button" (click)="irA('/menu/dashboard-bi/stock-riesgo')">
+        Ver todos los riesgos <i class="pi pi-arrow-right"></i>
+      </button>
+    </article>
+  </section>
+
+  <section class="quick-actions" aria-label="Acciones frecuentes">
+    <div>
+      <span class="panel-kicker">ACCESOS RÁPIDOS</span>
+      <h2>¿Qué necesitas hacer?</h2>
+    </div>
+    <div class="quick-buttons">
+      <button type="button" (click)="irA('/menu/estado-solicitudes')"><i class="pi pi-check-square"></i><span>Gestionar solicitudes</span></button>
+      <button type="button" (click)="irA('/menu/mis-solicitudes')"><i class="pi pi-inbox"></i><span>Mis solicitudes</span></button>
+      <button type="button" (click)="irA('/menu/productos')"><i class="pi pi-tags"></i><span>Administrar productos</span></button>
+    </div>
+  </section>
+</main>

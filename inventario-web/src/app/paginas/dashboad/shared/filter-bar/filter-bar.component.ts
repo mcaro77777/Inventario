@@ -327,6 +327,7 @@ export class FilterBarComponent implements OnInit {
 
   // Métodos para periodo y chips
   getPeriodLabel(): string {
+    if (this.filtersService.filters().bookmark === 'all') return 'Todo el historial';
     const { start, end } = this.filtersService.dateRange();
     const fmt = (d: Date) => d.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit' });
     const bookmark = this.filtersService.filters().bookmark;

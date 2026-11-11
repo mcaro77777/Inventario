@@ -373,7 +373,7 @@ export class DashboardStockRiesgoComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    this.dashboardApi.tablaResumen2().pipe(finalize(() => this.loading = false)).subscribe({
+    this.dashboardApi.tablaResumen2().pipe(finalize(() => { this.loading = false; this.cdr.markForCheck(); })).subscribe({
       next: (data) => {
         console.log('StockRiesgo data loaded:', data?.length, 'records');
         this.rawData = data || [];

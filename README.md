@@ -47,3 +47,10 @@ DB_CONN_MAX_LIFETIME_MINUTES=30
 ```
 
 El directorio `inventario-api` tiene la misma estructura de despliegue que `crm-api`: código Go, Dockerfile y `ClientApp` compilado en una sola raíz. El contenedor ejecuta con un usuario sin privilegios, sirve Angular y API desde el mismo origen y expone el healthcheck en `/api/health`.
+
+## Dashboard
+
+- `Simple`: vista predeterminada con cuatro indicadores, movimientos de siete días, stock crítico y accesos rápidos.
+- `Avanzado`: filtros multidimensionales, riesgos, movimientos, solicitudes, compras, clientes y tendencias BI.
+
+La preferencia se selecciona desde el mismo módulo Dashboard y ambas vistas son responsive.

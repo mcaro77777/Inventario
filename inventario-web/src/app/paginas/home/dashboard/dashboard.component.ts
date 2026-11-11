@@ -4,10 +4,10 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule }      from '@angular/common';
 import { FormsModule }       from '@angular/forms';
+import { Router }            from '@angular/router';
 import { finalize }          from 'rxjs/operators';
 
 /* componentes base */
-import { BaseCardGridComponent } from '../../../shared/base/card-grid/base-card-grid.component';
 import { BaseChartComponent }    from '../../../shared/base-chart/base-chart.component';
 // BaseTableComponent removed for now (template usage is commented out). Define TableColumn locally below.
 
@@ -20,6 +20,7 @@ import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { DashboardApiService, DashboardKpisDto, LabeledValueDto, TimeseriesDualDto } from '../../../core/services/dashboard-api.service';
 import { CategoriaService, CategoriaDto } from '../../../core/services/categoria.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { DashboardNavComponent } from '../../dashboad/shared/dashboard-nav/dashboard-nav.component';
 
 /* Chart.js */
 import {
@@ -36,12 +37,12 @@ import { ValorInventarioDialogComponent } from './valor-inventario-dialog.compon
 /* ─── Tipos locales ─── */
 interface Stat {
   label:string; value:string; icon:string;
-  colorKey:'blue'|'green'|'purple'|'amber';
+  colorKey:'blue'|'green'|'purple'|'amber'|'red';
   trend:string; trendPositive:boolean;
 }
 // Local definition replacing the missing shared Table component types
 interface TableColumn { field:string; header:string; type?: 'action' | 'currency' | string }
-interface Producto { nombre:string; codigo:string; stock:number; min:number; }
+interface Producto { id:number; nombre:string; categoria?:string|null; stock:number; min:number; }
 interface PurchaseOrder { oc:string; proveedor:string; dias:number; monto:number; }
 interface ChartCfg<T extends ChartType = ChartType>{
   title:string; type:T;
@@ -58,7 +59,7 @@ interface ChartCfg<T extends ChartType = ChartType>{
   imports:[
     CommonModule,
     FormsModule,
-    BaseCardGridComponent, BaseChartComponent,
+    BaseChartComponent, DashboardNavComponent,
     TableModule, ButtonModule, TagModule, RippleModule, DynamicDialogModule
   ],
   providers:[DialogService]
@@ -74,7 +75,7 @@ export class DashboardComponent implements OnInit {
   /* ═════ KPIs ═════ */
   stats: Stat[] = [
     { label:'Productos en Stock', value:'Cargando…', icon:'pi pi-box',    colorKey:'blue',   trend:'', trendPositive:true },
-    { label:'Sin Stock',          value:'Cargando…', icon:'pi pi-times',  colorKey:'amber',  trend:'', trendPositive:true },
+    { label:'Sin Stock',          value:'Cargando…', icon:'pi pi-times',  colorKey:'red',    trend:'', trendPositive:true },
     { label:'Bajo Mínimo',        value:'Cargando…', icon:'pi pi-warning',colorKey:'amber',  trend:'', trendPositive:true },
     { label:'Valor Inventario',   value:'Cargando…', icon:'pi pi-wallet', colorKey:'purple', trend:'', trendPositive:true }
   ];
@@ -87,11 +88,8 @@ export class DashboardComponent implements OnInit {
     { field:'min',    header:'Mínimo' },
     { field:'',       header:'', type:'action' }
   ];
-  criticalItems: Producto[] = [
-    { nombre:'Válvula tubular tractor', codigo:'JDA-TR618A', stock:0, min:4 },
-    { nombre:'Memoria 8 GB 2666',       codigo:'KINGSTON',   stock:3, min:5 },
-    { nombre:'Memoria 16 GB 4800',      codigo:'N/A',        stock:2, min:6 }
-  ];
+  criticalItems: Producto[] = [];
+  criticalLoadError = false;
 
   /* ═════ Órdenes en curso ═════ */
   poColumns: TableColumn[] = [
@@ -222,7 +220,16 @@ export class DashboardComponent implements OnInit {
               private dash:DashboardApiService,
               private cdr: ChangeDetectorRef,
               private categoriasSvc: CategoriaService,
-              private theme: ThemeService){}
+              private theme: ThemeService,
+              private router: Router){}
+
+  irA(ruta: string): void {
+    void this.router.navigateByUrl(ruta);
+  }
+
+  abrirProducto(producto: Producto): void {
+    void this.router.navigate(['/menu', 'dashboard-bi', 'producto', producto.nombre]);
+  }
 
   abrirDialogoIngreso(){
     this.dialog.open(IngresadorStockComponent,{
@@ -365,14 +372,15 @@ export class DashboardComponent implements OnInit {
   }
 
   private reloadAll(){
-    // 5 cargas en paralelo
+    // Cargas independientes para mantener la pantalla útil aunque una falle.
     this.isLoading = true;
-    this.pending = 5;
+    this.pending = 6;
     this.loadKpis();
     this.loadMovements7d();
     this.loadValue6m();
     this.loadStockByCategory();
     this.loadConsumptionByDept();
+    this.loadCriticalItems();
   }
 
   private onReqDone(){
@@ -520,6 +528,29 @@ export class DashboardComponent implements OnInit {
         }
       };
     });
+  }
+
+  private loadCriticalItems(): void {
+    this.criticalLoadError = false;
+    this.dash.bajoMinimo(6, this.categoriaSeleccionada)
+      .pipe(finalize(() => this.onReqDone()))
+      .subscribe({
+        next: rows => {
+          this.criticalItems = (Array.isArray(rows) ? rows : []).map(row => ({
+            id: Number(row.productoId),
+            nombre: row.nombre,
+            categoria: row.categoria,
+            stock: Number(row.stockActual),
+            min: Number(row.stockMinimo)
+          }));
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.criticalItems = [];
+          this.criticalLoadError = true;
+          this.cdr.markForCheck();
+        }
+      });
   }
 
   private refreshRow1(){

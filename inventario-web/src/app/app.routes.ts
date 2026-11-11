@@ -27,8 +27,8 @@ export const routes: Routes = [
       },
       {
         path: 'dashboard',
-        loadComponent: () =>
-          import('./paginas/home/dashboard/dashboard.component').then(m => m.DashboardComponent)
+        redirectTo: 'dashboard-bi/simple',
+        pathMatch: 'full'
       },
       {
         path: 'tabla-resumen2',
@@ -39,7 +39,12 @@ export const routes: Routes = [
       {
         path: 'dashboard-bi',
         children: [
-          { path: '', redirectTo: 'resumen', pathMatch: 'full' },
+          { path: '', redirectTo: 'simple', pathMatch: 'full' },
+          {
+            path: 'simple',
+            loadComponent: () =>
+              import('./paginas/home/dashboard/dashboard.component').then(m => m.DashboardComponent)
+          },
           {
             path: 'resumen',
             loadComponent: () =>

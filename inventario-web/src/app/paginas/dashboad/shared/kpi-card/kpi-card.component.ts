@@ -66,6 +66,7 @@ export interface KpiData {
       border: 1px solid var(--surface-border);
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
+      min-width: 0;
     }
     .kpi-card:hover {
       transform: translateY(-2px);
@@ -84,6 +85,7 @@ export interface KpiData {
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
+      min-width: 0;
     }
     .kpi-label {
       font-size: 0.85rem;
@@ -91,9 +93,12 @@ export interface KpiData {
       font-weight: 500;
     }
     .kpi-value {
-      font-size: 1.5rem;
+      overflow: hidden;
+      font-size: clamp(1.15rem, 1.6vw, 1.5rem);
       font-weight: 700;
       line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .kpi-trend {
       font-size: 0.8rem;

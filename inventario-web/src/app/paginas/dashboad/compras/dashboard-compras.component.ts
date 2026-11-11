@@ -204,7 +204,7 @@ export class DashboardComprasComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    this.dashboardApi.tablaResumen2().pipe(finalize(() => this.loading = false)).subscribe({
+    this.dashboardApi.tablaResumen2().pipe(finalize(() => { this.loading = false; this.cdr.markForCheck(); })).subscribe({
       next: (data) => { this.rawData = data || []; this.applyFilters(); this.cdr.detectChanges(); setTimeout(() => window.dispatchEvent(new Event('resize')), 100); },
       error: (err) => { console.error('Error:', err); this.rawData = []; }
     });
