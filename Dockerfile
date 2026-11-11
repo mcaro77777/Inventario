@@ -1,14 +1,5 @@
 # syntax=docker/dockerfile:1.7
 
-FROM node:22-alpine AS web-dependencias
-WORKDIR /web
-COPY inventario-web/package.json inventario-web/package-lock.json ./
-RUN npm ci --no-audit --no-fund
-
-FROM web-dependencias AS web-compilacion
-COPY inventario-web/ ./
-RUN npm run build
-
 FROM golang:1.24-alpine AS api-dependencias
 WORKDIR /api
 COPY inventario-api/go.mod inventario-api/go.sum ./
@@ -32,7 +23,7 @@ RUN apk add --no-cache ca-certificates tzdata wget \
 
 WORKDIR /app
 COPY --from=api-compilacion --chown=inventario:inventario /salida/inventario-api /app/inventario-api
-COPY --from=web-compilacion --chown=inventario:inventario /web/dist/inventario-web/browser/ /app/ClientApp/
+COPY --chown=inventario:inventario inventario-api/ClientApp/ /app/ClientApp/
 
 USER inventario
 ENV APP_ENV=production

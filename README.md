@@ -5,7 +5,7 @@ Migración completa del sistema de inventario:
 - `inventario-api`: API Go 1.24 conectada a PostgreSQL, esquema `inv`.
 - `inventario-web`: frontend Angular 20 responsive.
 - `inventario-api/ClientApp`: frontend Angular compilado y versionado para desplegar con el mismo patrón autónomo de CRM.
-- `Dockerfile`: alternativa para construir Angular y Go desde la raíz del repositorio.
+- `Dockerfile`: despliegue desde la raíz usando el mismo `ClientApp` compilado y validado de la API.
 
 ## Construcción local
 

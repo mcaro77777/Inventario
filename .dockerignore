@@ -6,7 +6,6 @@ documentacion
 inventario-web/node_modules
 inventario-web/dist
 inventario-web/.angular
-inventario-api/ClientApp
 inventario-api/.dev-uploads
 **/.env
 **/coverage
