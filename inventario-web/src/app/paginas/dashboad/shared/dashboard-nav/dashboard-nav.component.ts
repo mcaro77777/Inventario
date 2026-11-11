@@ -11,6 +11,7 @@ interface NavItem {
   route: string;
   icon: string;
 }
+interface NavGroup { label:string; icon:string; route?:string; items?:NavItem[]; }
 
 @Component({
   selector: 'app-dashboard-nav',
@@ -36,14 +37,17 @@ interface NavItem {
       </nav>
 
       <nav class="dashboard-nav" *ngIf="advancedMode" aria-label="Secciones del análisis avanzado">
-        <a *ngFor="let item of advancedItems"
-           [routerLink]="['/menu', 'dashboard-bi', item.route]"
-           routerLinkActive="active"
-           class="nav-tab"
-           (click)="onNavClick()">
-          <i [class]="item.icon"></i>
-          <span>{{ item.label }}</span>
-        </a>
+        <ng-container *ngFor="let group of advancedGroups">
+          <a *ngIf="group.route" [routerLink]="['/menu','dashboard-bi',group.route]" routerLinkActive="active" class="nav-group direct" (click)="onNavClick()">
+            <i [class]="group.icon"></i><span>{{group.label}}</span>
+          </a>
+          <div *ngIf="group.items" class="nav-group">
+            <span class="group-label"><i [class]="group.icon"></i>{{group.label}}</span>
+            <span class="group-links">
+              <a *ngFor="let item of group.items" [routerLink]="['/menu','dashboard-bi',item.route]" routerLinkActive="active" (click)="onNavClick()">{{item.label}}</a>
+            </span>
+          </div>
+        </ng-container>
       </nav>
       
       <!-- Loading overlay -->
@@ -56,7 +60,7 @@ interface NavItem {
   styles: [`
     .dashboard-nav {
       display: flex;
-      gap: 0.15rem;
+      gap: 0.45rem;
       padding: 0.5rem;
       background: var(--surface-card);
       border-radius: 12px;
@@ -65,6 +69,14 @@ interface NavItem {
       overflow-x: auto;
       scrollbar-width: thin;
     }
+    .nav-group { display:flex; align-items:center; gap:.4rem; min-height:42px; padding:.3rem .45rem; border:1px solid var(--surface-border); border-radius:9px; background:var(--surface-ground); white-space:nowrap; }
+    .nav-group.direct { padding:.55rem .75rem; color:var(--text-color-secondary); text-decoration:none; font-size:.78rem; font-weight:750; }
+    .nav-group.direct:hover,.nav-group.direct.active { color:var(--primary-color); background:var(--surface-card); border-color:color-mix(in srgb,var(--primary-color) 45%,var(--surface-border)); }
+    .group-label { display:flex; align-items:center; gap:.35rem; padding:0 .3rem; color:var(--text-color-secondary); font-size:.67rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
+    .group-links { display:flex; gap:.15rem; }
+    .group-links a { padding:.4rem .5rem; color:var(--text-color-secondary); border-radius:6px; text-decoration:none; font-size:.74rem; }
+    .group-links a:hover { color:var(--text-color); background:var(--surface-hover); }
+    .group-links a.active { color:var(--primary-color); background:var(--surface-card); box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--primary-color) 35%,transparent); font-weight:750; }
     .mode-nav {
       display: inline-grid;
       grid-template-columns: repeat(2, minmax(180px, 1fr));
@@ -132,12 +144,7 @@ interface NavItem {
       font-size: 1rem;
     }
     @media (max-width: 768px) {
-      .nav-tab span {
-        display: none;
-      }
-      .nav-tab {
-        padding: 0.75rem;
-      }
+      .dashboard-nav{align-items:stretch}.nav-group{flex:0 0 auto}.group-label{display:none}
       .mode-nav { display: grid; width: 100%; grid-template-columns: 1fr 1fr; }
       .mode-tab { min-width: 0; padding: 0.55rem 0.7rem; }
       .mode-tab small { display: none; }
@@ -170,14 +177,15 @@ export class DashboardNavComponent {
 
   advancedMode = false;
 
-  advancedItems: NavItem[] = [
-    { label: 'Panorama', route: 'resumen', icon: 'pi pi-home' },
-    { label: 'Stock y riesgos', route: 'stock-riesgo', icon: 'pi pi-exclamation-triangle' },
-    { label: 'Movimientos', route: 'movimientos', icon: 'pi pi-chart-line' },
-    { label: 'Solicitudes', route: 'solicitudes', icon: 'pi pi-inbox' },
-    { label: 'Compras', route: 'compras', icon: 'pi pi-shopping-cart' },
-    { label: 'Clientes', route: 'clientes-deptos', icon: 'pi pi-users' },
-    { label: 'Tendencias', route: 'ejecutivo', icon: 'pi pi-chart-bar' }
+  advancedGroups: NavGroup[] = [
+    { label:'Panorama', icon:'pi pi-home', route:'resumen' },
+    { label:'Stock y riesgos', icon:'pi pi-exclamation-triangle', route:'stock-riesgo' },
+    { label:'Flujo operativo', icon:'pi pi-sync', items:[
+      { label:'Movimientos', route:'movimientos', icon:'' }, { label:'Solicitudes', route:'solicitudes', icon:'' }, { label:'Compras', route:'compras', icon:'' }
+    ]},
+    { label:'Análisis', icon:'pi pi-chart-bar', items:[
+      { label:'Clientes', route:'clientes-deptos', icon:'' }, { label:'Tendencias', route:'ejecutivo', icon:'' }
+    ]}
   ];
 
   constructor() {

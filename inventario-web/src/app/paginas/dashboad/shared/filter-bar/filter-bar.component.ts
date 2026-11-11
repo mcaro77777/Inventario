@@ -28,13 +28,19 @@ import { DashboardApiService } from '../../../../core/services/dashboard-api.ser
         </div>
       </div>
 
-      <div class="filter-selects">
+      <div class="filter-selects primary-filters">
         <p-select [options]="categorias()" [(ngModel)]="selectedCategoria"
                    (onChange)="onCategoriaChange($event)"
                    optionLabel="nombre" optionValue="id"
                    [filter]="true" filterPlaceHolder="Buscar..."
                    placeholder="Categoría" [showClear]="true"
                    styleClass="filter-select-sm"></p-select>
+        <button type="button" class="more-filters" [class.active]="showMoreFilters" (click)="showMoreFilters = !showMoreFilters">
+          <i class="pi pi-sliders-h"></i> Más filtros <span *ngIf="advancedFilterCount">{{ advancedFilterCount }}</span>
+        </button>
+      </div>
+
+      <div class="filter-selects advanced-filters" *ngIf="showMoreFilters">
         <p-select [options]="productosFiltrados" [(ngModel)]="selectedProducto"
                    (onChange)="onProductoChange($event)"
                    optionLabel="nombre" optionValue="id"
@@ -55,7 +61,7 @@ import { DashboardApiService } from '../../../../core/services/dashboard-api.ser
                    styleClass="filter-select-sm"></p-select>
       </div>
 
-      <button pButton icon="pi pi-filter-slash" 
+      <button pButton icon="pi pi-filter-slash"
               class="p-button-text p-button-secondary p-button-sm btn-clear"
               (click)="resetFilters()" [disabled]="!hasActiveFilters()" pTooltip="Limpiar filtros"></button>
     </div>
@@ -115,6 +121,31 @@ import { DashboardApiService } from '../../../../core/services/dashboard-api.ser
       gap: 0.5rem;
       flex-wrap: wrap;
     }
+    .primary-filters { min-width: 210px; }
+    .advanced-filters {
+      flex-basis: 100%;
+      margin-left: auto;
+      padding-top: 0.55rem;
+      border-top: 1px solid var(--surface-border);
+    }
+    .more-filters {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      min-height: 36px;
+      padding: 0 0.75rem;
+      color: var(--text-color-secondary);
+      background: var(--surface-ground);
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .more-filters:hover,.more-filters.active { color: var(--primary-color); border-color: color-mix(in srgb,var(--primary-color) 45%,var(--surface-border)); }
+    .more-filters span { display:grid; min-width:18px; height:18px; place-items:center; color:#fff; background:var(--primary-color); border-radius:99px; font-size:.65rem; }
     :host ::ng-deep .filter-select-sm {
       min-width: 140px;
       flex: 1;
@@ -170,19 +201,15 @@ import { DashboardApiService } from '../../../../core/services/dashboard-api.ser
       opacity: 1;
     }
     @media (max-width: 768px) {
-      .filter-bar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .filter-group {
-        width: 100%;
-      }
-      :host ::ng-deep .filter-dropdown {
-        width: 100%;
-      }
-      .search input {
-        width: 100%;
-      }
+      .filter-bar-compact { align-items: stretch; overflow: hidden; }
+      .filter-left { width: 100%; min-width: 0; flex-wrap: wrap; }
+      .bookmarks { flex: 1 1 220px; min-width: 0; overflow-x: auto; }
+      .bookmark-btn { flex: 0 0 auto; }
+      .filter-selects { width: 100%; min-width: 0; flex: none; }
+      .primary-filters { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+      .advanced-filters { display: grid; grid-template-columns: 1fr; }
+      :host ::ng-deep .filter-select-sm { width: 100%; min-width: 0; }
+      .btn-clear:disabled { display: none; }
     }
   `]
 })
@@ -207,6 +234,11 @@ export class FilterBarComponent implements OnInit {
   selectedProveedor: number | null = null;
   selectedDepartamento: number | null = null;
   selectedProducto: number | null = null;
+  showMoreFilters = false;
+
+  get advancedFilterCount(): number {
+    return [this.selectedProducto, this.selectedProveedor, this.selectedDepartamento].filter(Boolean).length;
+  }
 
   // Productos filtrados por categoría seleccionada (usa el servicio)
   get productosFiltrados(): any[] {
@@ -224,6 +256,7 @@ export class FilterBarComponent implements OnInit {
     this.selectedProveedor = f.proveedorId;
     this.selectedDepartamento = f.departamentoId;
     this.selectedProducto = f.productoId;
+    this.showMoreFilters = this.advancedFilterCount > 0;
   }
 
   private loadFilterOptions(): void {

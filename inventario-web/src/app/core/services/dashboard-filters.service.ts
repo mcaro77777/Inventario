@@ -31,7 +31,7 @@ export interface DashboardFilters {
 const defaultFilters: DashboardFilters = {
   fechaInicio: null,
   fechaFin: null,
-  bookmark: 'all',
+  bookmark: '30d',
   categoriaId: null,
   categoriaNombre: null,
   productoId: null,
